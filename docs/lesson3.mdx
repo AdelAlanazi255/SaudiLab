@@ -1,0 +1,79 @@
+---
+id: lesson3
+title: "Lesson 3: Text Formatting"
+---
+
+import LessonGate from '@site/src/components/LessonGate';
+import LessonProgress from '@site/src/components/LessonProgress';
+import CompleteButton from '@site/src/components/CompleteButton';
+import Link from '@docusaurus/Link';
+
+<LessonGate requireLessonId="lesson2">
+
+<LessonProgress current={3} total={10} />
+
+# Lesson 3: Text Formatting
+
+## Bold and Strong
+
+```html
+<p>This is <b>bold</b> text.</p>
+<p>This is <strong>important</strong> text.</p>
+```
+
+---
+
+## Italic and Emphasis
+
+```html
+<p>This is <i>italic</i> text.</p>
+<p>This is <em>emphasized</em> text.</p>
+```
+
+---
+
+## Line Break
+
+```html
+<p>Line one<br>Line two</p>
+```
+
+---
+
+## Horizontal Line
+
+```html
+<hr>
+```
+
+---
+
+## Full Example
+
+```html
+<p>This is <strong>important</strong> text.</p>
+<hr>
+<p>This is <em>emphasized</em> text.</p>
+```
+
+<CompleteButton lessonId="lesson3" />
+
+<h2>Ready to Practice?</h2>
+
+<Link
+  to="/lesson3/try"
+  style={{
+    padding: '0.8rem 1.5rem',
+    backgroundColor: 'black',
+    color: 'white',
+    borderRadius: '6px',
+    textDecoration: 'none',
+    display: 'inline-block',
+    marginTop: '1rem',
+    fontWeight: 800
+  }}
+>
+  Try It →
+</Link>
+
+</LessonGate>

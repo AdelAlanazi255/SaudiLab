@@ -1,0 +1,76 @@
+---
+id: lesson2
+title: "Lesson 2: Headings and Paragraphs"
+---
+
+import LessonGate from '@site/src/components/LessonGate';
+import LessonProgress from '@site/src/components/LessonProgress';
+import CompleteButton from '@site/src/components/CompleteButton';
+import Link from '@docusaurus/Link';
+
+<LessonGate requireLessonId="lesson1">
+
+<LessonProgress current={2} total={10} />
+
+# Lesson 2: Headings and Paragraphs
+
+## Headings
+
+HTML provides six levels of headings:
+
+```html
+<h1>Main Heading</h1>
+<h2>Sub Heading</h2>
+<h3>Smaller Heading</h3>
+```
+
+- `h1` is the most important
+- `h6` is the least important
+
+---
+
+## Paragraphs
+
+Paragraphs are created with the `p` tag.
+
+```html
+<p>This is a paragraph.</p>
+<p>This is another paragraph.</p>
+```
+
+---
+
+## Full Example
+
+```html
+<!DOCTYPE html>
+<html>
+  <body>
+    <h1>My Website</h1>
+    <h2>Welcome</h2>
+    <p>This is my first real content.</p>
+  </body>
+</html>
+```
+
+<CompleteButton lessonId="lesson2" />
+
+<h2>Ready to Practice?</h2>
+
+<Link
+  to="/lesson2/try"
+  style={{
+    padding: '0.8rem 1.5rem',
+    backgroundColor: 'black',
+    color: 'white',
+    borderRadius: '6px',
+    textDecoration: 'none',
+    display: 'inline-block',
+    marginTop: '1rem',
+    fontWeight: 800
+  }}
+>
+  Try It →
+</Link>
+
+</LessonGate>

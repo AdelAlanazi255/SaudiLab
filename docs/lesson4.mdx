@@ -1,0 +1,58 @@
+---
+id: lesson4
+title: "Lesson 4: Links"
+---
+
+
+import LessonGate from '@site/src/components/LessonGate';
+import LessonProgress from '@site/src/components/LessonProgress';
+import CompleteButton from '@site/src/components/CompleteButton';
+import Link from '@docusaurus/Link';
+
+<LessonGate requireLessonId="lesson3" paid={true}>
+
+
+<LessonProgress current={4} total={10} />
+
+
+# Lesson 4: Links
+
+## What is a Link?
+Links allow users to move between pages.
+
+```html
+<a href="https://google.com">Go to Google</a>
+```
+
+## Open link in a new tab
+```html
+<a href="https://google.com" target="_blank" rel="noopener noreferrer">Open Google</a>
+```
+
+## Internal link
+```html
+<a href="/docs/lesson1">Go to Lesson 1</a>
+```
+
+
+<CompleteButton lessonId="lesson4" />
+
+<h2>Ready to Practice?</h2>
+
+<Link
+  to="/lesson4/try"
+  style={{
+    padding: '0.8rem 1.5rem',
+    backgroundColor: 'black',
+    color: 'white',
+    borderRadius: '6px',
+    textDecoration: 'none',
+    display: 'inline-block',
+    marginTop: '1rem',
+    fontWeight: 800
+  }}
+>
+  Try It →
+</Link>
+
+</LessonGate>

@@ -1,0 +1,58 @@
+---
+id: lesson9
+title: "Lesson 9: Form inputs"
+---
+
+import LessonGate from '@site/src/components/LessonGate';
+import LessonProgress from '@site/src/components/LessonProgress';
+import CompleteButton from '@site/src/components/CompleteButton';
+import Link from '@docusaurus/Link';
+
+<LessonGate requireLessonId="lesson8" paid={true}>
+
+<LessonProgress current={9} total={10} />
+
+
+# Lesson 9: Form Inputs
+
+## Checkbox
+```html
+<label>
+  <input type="checkbox" name="agree">
+  I agree
+</label>
+```
+
+## Radio buttons
+```html
+<label><input type="radio" name="gender" value="male"> Male</label>
+<label><input type="radio" name="gender" value="female"> Female</label>
+```
+
+## Textarea
+```html
+<textarea name="message" rows="4" cols="30"></textarea>
+```
+
+
+<CompleteButton lessonId="lesson9" />
+
+<h2>Ready to Practice?</h2>
+
+<Link
+  to="/lesson9/try"
+  style={{
+    padding: '0.8rem 1.5rem',
+    backgroundColor: 'black',
+    color: 'white',
+    borderRadius: '6px',
+    textDecoration: 'none',
+    display: 'inline-block',
+    marginTop: '1rem',
+    fontWeight: 800
+  }}
+>
+  Try It →
+</Link>
+
+</LessonGate>

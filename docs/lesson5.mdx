@@ -1,0 +1,54 @@
+---
+id: lesson5
+title: "Lesson 5: Images"
+---
+
+import LessonGate from '@site/src/components/LessonGate';
+import LessonProgress from '@site/src/components/LessonProgress';
+import CompleteButton from '@site/src/components/CompleteButton';
+import Link from '@docusaurus/Link';
+
+<LessonGate requireLessonId="lesson4" paid={true}>
+
+<LessonProgress current={5} total={10} />
+
+
+# Lesson 5: Images
+
+## Adding an image
+```html
+<img src="https://via.placeholder.com/320x180" alt="Placeholder image">
+```
+
+## Image with size
+```html
+<img src="https://via.placeholder.com/320x180" alt="Placeholder image" width="200">
+```
+
+## Why alt text matters
+- Accessibility
+- SEO
+- Shows if image fails
+
+
+<CompleteButton lessonId="lesson5" />
+
+<h2>Ready to Practice?</h2>
+
+<Link
+  to="/lesson5/try"
+  style={{
+    padding: '0.8rem 1.5rem',
+    backgroundColor: 'black',
+    color: 'white',
+    borderRadius: '6px',
+    textDecoration: 'none',
+    display: 'inline-block',
+    marginTop: '1rem',
+    fontWeight: 800
+  }}
+>
+  Try It →
+</Link>
+
+</LessonGate>
