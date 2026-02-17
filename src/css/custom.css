@@ -65,3 +65,59 @@ body {
     0 0 80px rgba(124, 242, 176, 0.22);
   transform: translateY(-4px);
 }
+
+/* =========================
+   SaudiLab Navbar hard-fix
+   ========================= */
+
+/* Force navbar background + height */
+.navbar.navbar--fixed-top {
+  background: rgba(0, 0, 0, 0.72) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255,255,255,0.10) !important;
+}
+
+/* Keep height sane (prevents giant empty bar) */
+:root {
+  --ifm-navbar-height: 64px;
+}
+
+/* Make sure contents are vertically centered */
+.navbar .navbar__inner {
+  min-height: var(--ifm-navbar-height) !important;
+  align-items: center !important;
+}
+
+/* Make default Docusaurus navbar links visible */
+.navbar .navbar__link,
+.navbar .navbar__brand {
+  color: #ffffff !important;
+}
+
+/* Ensure Login looks like a real button (not invisible) */
+.navbar .navbar__items--right .navbar__link {
+  padding: 8px 10px !important;
+  border-radius: 10px !important;
+  background: rgba(255,255,255,0.06) !important;
+  border: 1px solid rgba(255,255,255,0.10) !important;
+  font-weight: 900 !important;
+}
+
+/* Smooth hover */
+.navbar .navbar__items--right .navbar__link:hover {
+  background: rgba(255,255,255,0.10) !important;
+}
+
+/* Force Sign Up (your inline styles should already work, this just guarantees it) */
+.navbar a[href="/signup"] {
+  background: #ffffff !important;
+  color: #111827 !important;
+  border: 1px solid rgba(255,255,255,0.18) !important;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.25) !important;
+}
+
+/* Brand text always visible even if theme overrides */
+.navbar .navbar__brand span {
+  color: #ffffff !important;
+}
