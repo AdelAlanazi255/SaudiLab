@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:5000';
+const API_URL = 'https://saudilab-api.onrender.com';
 
 export function setToken(token) {
   localStorage.setItem('saudilab_token_v1', token);
