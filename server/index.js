@@ -24,26 +24,37 @@ if (!process.env.JWT_SECRET || process.env.JWT_SECRET.length < 16) {
 app.use(helmet());
 app.use(express.json({ limit: '25kb' }));
 
-// CORS (dev)
+// CORS (dev + production)
 const allowedOrigins = [
   'http://localhost:3000',
   'http://localhost:3001',
-  'https://saudilab.io',          // later
-  'https://www.saudilab.io',      // later
+  'https://saudilab.io',
+  'https://www.saudilab.io',
+  'https://saudilab.vercel.app',
 ];
 
 app.use(
   cors({
-    origin: function (origin, callback) {
-      // allow requests with no origin (like curl/postman)
-      if (!origin) return callback(null, true);
-      if (allowedOrigins.includes(origin)) return callback(null, true);
-      return callback(new Error('Not allowed by CORS'));
+    origin: (origin, cb) => {
+      // allow server-to-server / tools without Origin header
+      if (!origin) return cb(null, true);
+
+      // allow exact matches
+      if (allowedOrigins.includes(origin)) return cb(null, true);
+
+      // allow Vercel preview deployments: https://xxxx.vercel.app
+      if (origin.endsWith('.vercel.app')) return cb(null, true);
+
+      return cb(new Error('Not allowed by CORS'));
     },
-    methods: ['GET', 'POST'],
-    credentials: false,
+    methods: ['GET', 'POST', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
   })
 );
+
+// handle preflight
+app.options('*', cors());
+
 
 
 // ===== rate limits =====
