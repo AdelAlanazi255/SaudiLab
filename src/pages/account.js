@@ -6,7 +6,7 @@ import { api } from '@site/src/utils/auth';
 import { resetProgress } from '@site/src/utils/progress';
 import ConfirmModal from '@site/src/components/ConfirmModal';
 import CircleProgress from '@site/src/components/CircleProgress';
-import { getCourseProgress } from '@site/src/utils/progressDashboard';
+import { getCourseProgress } from '@site/src/utils/progress';
 
 export default function Account() {
   const auth = useAuth();

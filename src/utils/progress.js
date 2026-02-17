@@ -21,15 +21,28 @@ export function markCompleted(lessonId) {
   localStorage.setItem(COURSE_KEY, JSON.stringify(p));
 }
 
-export function isLessonComplete(lessonId) {
-  try {
-    const completed = JSON.parse(localStorage.getItem('saudilab_completed_lessons') || '[]');
-    return completed.includes(lessonId);
-  } catch {
-    return false;
-  }
+export function resetProgress() {
+  if (typeof window === 'undefined') return;
+  localStorage.removeItem(COURSE_KEY);
 }
 
-export function resetProgress() {
-  localStorage.removeItem('saudilab_progress_v1');
+/**
+ * Returns overall course progress
+ */
+export function getCourseProgress(totalLessons = 10) {
+  const progress = getProgress();
+  const completedIds = Object.keys(progress).filter((k) => progress[k]);
+
+  const completedCount = completedIds.length;
+  const percent =
+    totalLessons > 0
+      ? Math.round((completedCount / totalLessons) * 100)
+      : 0;
+
+  return {
+    completedCount,
+    total: totalLessons,
+    percent,
+    completedIds,
+  };
 }
