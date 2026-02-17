@@ -5,6 +5,26 @@ import { useLocation } from '@docusaurus/router';
 import { useAuth } from '@site/src/utils/authState';
 import { api } from '@site/src/utils/auth';
 
+function loadScript(src) {
+  return new Promise((resolve, reject) => {
+    if (document.querySelector(`script[src="${src}"]`)) return resolve();
+    const s = document.createElement('script');
+    s.src = src;
+    s.async = true;
+    s.onload = resolve;
+    s.onerror = reject;
+    document.body.appendChild(s);
+  });
+}
+
+function loadCss(href) {
+  if (document.querySelector(`link[href="${href}"]`)) return;
+  const l = document.createElement('link');
+  l.rel = 'stylesheet';
+  l.href = href;
+  document.head.appendChild(l);
+}
+
 export default function Checkout() {
   const auth = useAuth();
   const location = useLocation();
@@ -15,20 +35,10 @@ export default function Checkout() {
   const [msg, setMsg] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // keep these inputs for later (UI), but we won't send them anymore
-  const [name, setName] = useState('SaudiLab User');
-  const [number, setNumber] = useState('4111111111111111');
-  const [month, setMonth] = useState('12');
-  const [year, setYear] = useState('28');
-  const [cvc, setCvc] = useState('123');
-
-  const [publicKey, setPublicKey] = useState(null);
-
+  // OPTIONAL: preload moyasar assets only on checkout page
   useEffect(() => {
-    fetch('http://localhost:5000/billing/moyasar/pk')
-      .then((r) => r.json())
-      .then((d) => setPublicKey(d.pk))
-      .catch(() => setPublicKey(null));
+    loadCss('https://cdn.moyasar.com/mpf/1.6.0/moyasar.css');
+    loadScript('https://cdn.moyasar.com/mpf/1.6.0/moyasar.js').catch(() => {});
   }, []);
 
   const pay = async () => {
@@ -36,11 +46,13 @@ export default function Checkout() {
     setLoading(true);
 
     try {
-      if (!publicKey) throw new Error('Missing Moyasar public key');
       if (!auth || auth.loading) throw new Error('Auth not ready yet');
-      if (!auth.isLoggedIn) throw new Error('You must be logged in');
+      if (!auth.isLoggedIn) {
+        window.location.href = '/login';
+        return;
+      }
 
-      // ✅ call backend to create hosted payment page (no tokens)
+      // create hosted payment page on backend (no tokens on frontend)
       const out = await api('/billing/moyasar/hosted', {
         method: 'POST',
         body: JSON.stringify({ plan }),
@@ -61,48 +73,36 @@ export default function Checkout() {
   return (
     <Layout title="Checkout">
       <div style={{ padding: '2rem', maxWidth: 520, margin: '0 auto' }}>
-        <h1>Checkout (Test)</h1>
-        <p>
+        <h1 style={{ fontWeight: 950 }}>Checkout</h1>
+        <p style={{ opacity: 0.8 }}>
           Plan: <b>{plan}</b>
         </p>
 
-        <div style={{ display: 'grid', gap: '0.75rem', marginTop: '1rem' }}>
-          {/* UI only for now */}
-          <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Name" />
-          <input value={number} onChange={(e) => setNumber(e.target.value)} placeholder="Card Number" />
-          <div style={{ display: 'flex', gap: '0.5rem' }}>
-            <input style={{ flex: 1 }} value={month} onChange={(e) => setMonth(e.target.value)} placeholder="MM" />
-            <input style={{ flex: 1 }} value={year} onChange={(e) => setYear(e.target.value)} placeholder="YY" />
-            <input style={{ flex: 1 }} value={cvc} onChange={(e) => setCvc(e.target.value)} placeholder="CVC" />
+        <button
+          onClick={pay}
+          disabled={loading}
+          style={{
+            marginTop: '1rem',
+            padding: '0.85rem 1.1rem',
+            background: 'white',
+            color: 'black',
+            border: 'none',
+            borderRadius: '12px',
+            fontWeight: 950,
+            cursor: loading ? 'not-allowed' : 'pointer',
+            width: '100%',
+          }}
+        >
+          {loading ? 'Redirecting…' : 'Pay (Test)'}
+        </button>
+
+        {msg ? (
+          <div style={{ marginTop: '1rem', color: '#ffb4b4', fontWeight: 900 }}>
+            {msg}
           </div>
+        ) : null}
 
-          <button
-            onClick={pay}
-            disabled={loading}
-            style={{
-              marginTop: '0.5rem',
-              padding: '0.8rem 1rem',
-              background: 'white',
-              color: 'black',
-              border: 'none',
-              borderRadius: '10px',
-              fontWeight: 900,
-              cursor: 'pointer',
-            }}
-          >
-            {loading ? 'Redirecting...' : 'Pay (Test)'}
-          </button>
-
-          <div style={{ fontWeight: 800, opacity: 0.8 }}>
-            PK loaded: {publicKey ? '✅' : '❌'}
-          </div>
-
-          {msg && (
-            <div style={{ marginTop: '0.5rem', color: '#ffb4b4', fontWeight: 800 }}>
-              {msg}
-            </div>
-          )}
-
+        <div style={{ marginTop: '1.25rem' }}>
           <Link to="/account">← Back to Account</Link>
         </div>
       </div>

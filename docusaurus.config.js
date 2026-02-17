@@ -27,12 +27,8 @@ module.exports = {
     defer: false,
     async: false,
   },
-  'https://cdn.moyasar.com/mpf/1.6.0/moyasar.js',
 ],
 
-stylesheets: [
-  'https://cdn.moyasar.com/mpf/1.6.0/moyasar.css',
-],
 
 
 
