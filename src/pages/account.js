@@ -154,15 +154,7 @@ export default function Account() {
             </div>
           </div>
 
-          {/* Coming soon block */}
-          <div style={{ ...card, marginTop: '1.2rem' }}>
-            <div style={cardTitle}>Next (later)</div>
-            <div style={{ opacity: 0.8, fontWeight: 800, lineHeight: 1.6 }}>
-              • CSS course progress (locked until we add lessons)<br />
-              • Supabase migration (users + subscriptions + progress synced across devices)<br />
-              • Real Moyasar live activation + webhooks + refund/cancel handling
-            </div>
-          </div>
+          
         </div>
       </Layout>
 
