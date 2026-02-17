@@ -1,16 +1,23 @@
-// src/pages/account.js
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
 import { useAuth } from '@site/src/utils/authState';
 import { api } from '@site/src/utils/auth';
 import { resetProgress } from '@site/src/utils/progress';
 import ConfirmModal from '@site/src/components/ConfirmModal';
+import CircleProgress from '@site/src/components/CircleProgress';
+import { getCourseProgress } from '@site/src/utils/progressDashboard';
 
 export default function Account() {
   const auth = useAuth();
+
   const [msg, setMsg] = useState('');
   const [openReset, setOpenReset] = useState(false);
+
+  const progress = useMemo(() => {
+    if (typeof window === 'undefined') return { total: 10, completedCount: 0, percent: 0 };
+    return getCourseProgress();
+  }, [auth?.subscribed, auth?.isLoggedIn]); // recompute on auth changes
 
   useEffect(() => {
     if (!auth) return;
@@ -21,9 +28,20 @@ export default function Account() {
 
   if (!auth || auth.loading) return null;
 
-  // ✅ Step 4 change: go to our checkout page (token flow)
-  const doSubscribe = (plan) => {
-    window.location.href = `/checkout?plan=${encodeURIComponent(plan)}`;
+  const doSubscribe = async (plan) => {
+    setMsg('');
+    try {
+      // hosted payment create
+      const out = await api('/billing/moyasar/hosted', {
+        method: 'POST',
+        body: JSON.stringify({ plan }),
+      });
+
+      if (!out?.transactionUrl) throw new Error('No transaction URL returned');
+      window.location.href = out.transactionUrl;
+    } catch (e) {
+      setMsg(e.message);
+    }
   };
 
   const doUnsubscribe = async () => {
@@ -39,65 +57,111 @@ export default function Account() {
 
   const doResetProgress = () => {
     resetProgress();
-    setMsg('Progress reset ✅');
+    setMsg('Progress reset ✅ (refresh page)');
   };
+
+  const nextLesson = progress.completedCount < 10 ? `/docs/lesson${Math.max(1, progress.completedCount + 1)}` : '/docs/lesson10';
 
   return (
     <>
       <Layout title="Account">
-        <div style={{ padding: '4rem 1.5rem', maxWidth: 900, margin: '0 auto' }}>
-          <h1 style={{ fontWeight: 950, marginBottom: '0.5rem' }}>Account</h1>
+        <div style={{ padding: '4rem 1.5rem', maxWidth: 980, margin: '0 auto' }}>
+          <h1 style={{ fontWeight: 950, marginBottom: '0.5rem' }}>Dashboard</h1>
           <p style={{ opacity: 0.75, marginTop: 0 }}>
-            Manage your profile, subscription and progress.
+            Progress, subscription, and account settings.
           </p>
 
-          <div style={card}>
-            <div style={{ display: 'grid', gap: '0.6rem' }}>
-              <div>
-                <div style={label}>Username</div>
-                <div style={value}>{auth.user?.username}</div>
-              </div>
+          {/* TOP GRID */}
+          <div style={grid}>
+            {/* Progress card */}
+            <div style={card}>
+              <div style={cardTitle}>HTML Course</div>
 
-              <div>
-                <div style={label}>Email</div>
-                <div style={value}>{auth.user?.email}</div>
-              </div>
+              <div style={{ display: 'flex', gap: '1.4rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                <CircleProgress percent={progress.percent} label={`${progress.completedCount}/${progress.total} lessons`} />
 
-              <div>
-                <div style={label}>Subscription</div>
-                <div style={value}>
-                  {auth.subscribed ? (
-                    <span style={{ color: '#7cf2b0', fontWeight: 900 }}>Active</span>
-                  ) : (
-                    <span style={{ color: 'rgba(255,255,255,0.75)', fontWeight: 900 }}>
-                      Not active
-                    </span>
-                  )}
+                <div style={{ flex: 1, minWidth: 240 }}>
+                  <div style={{ fontWeight: 950, fontSize: '1.15rem' }}>
+                    {progress.completedCount === 10 ? 'Course completed ✅' : 'Keep going'}
+                  </div>
+
+                  <div style={{ marginTop: '0.35rem', opacity: 0.8, fontWeight: 800 }}>
+                    Next: <span style={{ color: '#7cf2b0' }}>{progress.completedCount === 10 ? 'Review Lesson 10' : `Lesson ${progress.completedCount + 1}`}</span>
+                  </div>
+
+                  <div style={{ marginTop: '1rem', display: 'flex', gap: '0.7rem', flexWrap: 'wrap' }}>
+                    <Link to={nextLesson} style={primaryLink}>
+                      {progress.completedCount === 10 ? 'Open Lesson 10' : 'Continue →'}
+                    </Link>
+
+                    <Link to="/docs/lesson1" style={ghostLink}>
+                      Lessons
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <div style={{ display: 'flex', gap: '0.8rem', flexWrap: 'wrap', marginTop: '1.2rem' }}>
-              <button onClick={() => doSubscribe('student')} style={primaryBtn}>
-                Subscribe Student (test)
-              </button>
+            {/* Account card */}
+            <div style={card}>
+              <div style={cardTitle}>Your Account</div>
 
-              <button onClick={() => doSubscribe('normal')} style={ghostBtn}>
-                Subscribe Normal (test)
-              </button>
+              <div style={{ display: 'grid', gap: '0.7rem' }}>
+                <div>
+                  <div style={label}>Username</div>
+                  <div style={value}>{auth.user?.username}</div>
+                </div>
 
-              <button onClick={() => setOpenReset(true)} style={dangerBtn}>
-                Reset Progress (device)
-              </button>
+                <div>
+                  <div style={label}>Email</div>
+                  <div style={value}>{auth.user?.email}</div>
+                </div>
 
-              <Link to="/docs/lesson1" style={linkBtn}>
-                Go to Lessons →
-              </Link>
+                <div>
+                  <div style={label}>Subscription</div>
+                  <div style={value}>
+                    {auth.subscribed ? (
+                      <span style={{ color: '#7cf2b0', fontWeight: 950 }}>Active</span>
+                    ) : (
+                      <span style={{ color: 'rgba(255,255,255,0.75)', fontWeight: 950 }}>Not active</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', gap: '0.8rem', flexWrap: 'wrap', marginTop: '1.2rem' }}>
+                {!auth.subscribed ? (
+                  <>
+                    <button onClick={() => doSubscribe('student')} style={primaryBtn}>
+                      Subscribe Student (test)
+                    </button>
+                    <button onClick={() => doSubscribe('normal')} style={ghostBtn}>
+                      Subscribe Normal (test)
+                    </button>
+                  </>
+                ) : (
+                  <button onClick={doUnsubscribe} style={ghostBtn}>
+                    Unsubscribe (test)
+                  </button>
+                )}
+
+                <button onClick={() => setOpenReset(true)} style={dangerBtn}>
+                  Reset Progress (device)
+                </button>
+              </div>
+
+              {msg ? <div style={{ marginTop: '1rem', fontWeight: 900, opacity: 0.9 }}>{msg}</div> : null}
             </div>
+          </div>
 
-            {msg ? (
-              <div style={{ marginTop: '1rem', fontWeight: 800, opacity: 0.9 }}>{msg}</div>
-            ) : null}
+          {/* Coming soon block */}
+          <div style={{ ...card, marginTop: '1.2rem' }}>
+            <div style={cardTitle}>Next (later)</div>
+            <div style={{ opacity: 0.8, fontWeight: 800, lineHeight: 1.6 }}>
+              • CSS course progress (locked until we add lessons)<br />
+              • Supabase migration (users + subscriptions + progress synced across devices)<br />
+              • Real Moyasar live activation + webhooks + refund/cancel handling
+            </div>
           </div>
         </div>
       </Layout>
@@ -118,13 +182,25 @@ export default function Account() {
   );
 }
 
+const grid = {
+  display: 'grid',
+  gridTemplateColumns: '1.15fr 0.85fr',
+  gap: '1.2rem',
+};
+
 const card = {
-  marginTop: '1.5rem',
   padding: '1.4rem',
   borderRadius: 18,
   border: '1px solid rgba(255,255,255,0.12)',
   background: 'rgba(0,0,0,0.35)',
   boxShadow: '0 20px 60px rgba(0,0,0,0.45), 0 0 60px rgba(124, 242, 176, 0.08)',
+};
+
+const cardTitle = {
+  fontWeight: 950,
+  color: 'rgba(255,255,255,0.92)',
+  marginBottom: '0.9rem',
+  fontSize: '1.1rem',
 };
 
 const label = {
@@ -136,7 +212,7 @@ const label = {
 
 const value = {
   fontSize: '1.05rem',
-  fontWeight: 900,
+  fontWeight: 950,
 };
 
 const primaryBtn = {
@@ -169,7 +245,19 @@ const dangerBtn = {
   color: 'rgba(255,255,255,0.92)',
 };
 
-const linkBtn = {
+const primaryLink = {
+  padding: '0.75rem 1.1rem',
+  borderRadius: 14,
+  border: 'none',
+  fontWeight: 950,
+  textDecoration: 'none',
+  background: '#7cf2b0',
+  color: '#0b0f14',
+  display: 'inline-flex',
+  alignItems: 'center',
+};
+
+const ghostLink = {
   padding: '0.75rem 1.1rem',
   borderRadius: 14,
   border: '1px solid rgba(255,255,255,0.18)',
