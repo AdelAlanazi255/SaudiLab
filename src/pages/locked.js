@@ -6,28 +6,29 @@ import { useLocation } from '@docusaurus/router';
 function normalizeNeed(raw) {
   let s = String(raw || 'lesson1').trim();
 
-  // remove query-ish stuff if someone passed a full URL accidentally
+  // remove query/hash if someone passed a full url
   s = s.split('?')[0].split('#')[0];
 
   // strip leading slashes
   s = s.replace(/^\/+/, '');
 
-  // if they passed "docs/..." strip it
-  if (s.startsWith('docs/')) s = s.slice('docs/'.length);
+  // accept only:
+  // - lessonX
+  // - html/lessonX
+  // anything else -> lesson1
+  if (s.startsWith('html/')) {
+    const rest = s.slice('html/'.length);
+    if (/^lesson\d+$/i.test(rest)) return `/html/${rest.toLowerCase()}`;
+    return '/html/lesson1';
+  }
 
-  // if they passed "html/lessonX" keep it, otherwise build it
-  if (s.startsWith('html/')) return `/${s}`;
-
-  // if they passed just "lessonX"
   if (/^lesson\d+$/i.test(s)) return `/html/${s.toLowerCase()}`;
 
-  // fallback
   return '/html/lesson1';
 }
 
 function labelFromPath(path) {
-  // "/html/lesson4" -> "lesson4"
-  const parts = String(path || '').split('/');
+  const parts = String(path || '').split('/').filter(Boolean);
   return parts[parts.length - 1] || 'lesson1';
 }
 
