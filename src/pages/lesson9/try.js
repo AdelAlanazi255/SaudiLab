@@ -72,7 +72,7 @@ export default function Lesson9Try() {
 
         <div style={{ marginTop: '2rem' }}>
           <Link
-            to="/docs/lesson9"
+            to="/html/lesson9"
             style={{
               padding: '0.6rem 1.2rem',
               backgroundColor: '#eee',

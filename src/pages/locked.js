@@ -32,7 +32,7 @@ export default function Locked() {
           </Link>
 
           <Link
-            to="/docs/lesson1"
+            to="/html/lesson1"
             style={{
               padding: '0.75rem 1.2rem',
               borderRadius: 10,

@@ -76,7 +76,7 @@ export default function Checkout() {
               <Link to="/account" style={ghostLink}>
                 ← Back to Account
               </Link>
-              <Link to="/docs/lesson1" style={ghostLink}>
+              <Link to="/html/lesson1" style={ghostLink}>
                 Browse Lessons
               </Link>
             </div>

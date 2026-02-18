@@ -1,16 +1,36 @@
 import React, { useEffect, useState } from 'react';
-import { isCompleted, markCompleted } from '@site/src/utils/progress';
+import { isCompleted, markCompleted, COURSE_EVENT } from '@site/src/utils/progress';
 
 export default function CompleteButton({ lessonId }) {
   const [done, setDone] = useState(false);
 
   useEffect(() => {
     setDone(isCompleted(lessonId));
+
+    // Optional: keep button in sync if progress changes elsewhere
+    const onProgress = () => setDone(isCompleted(lessonId));
+
+    if (typeof window !== 'undefined') {
+      window.addEventListener(COURSE_EVENT, onProgress);
+      window.addEventListener('storage', onProgress);
+    }
+
+    return () => {
+      if (typeof window !== 'undefined') {
+        window.removeEventListener(COURSE_EVENT, onProgress);
+        window.removeEventListener('storage', onProgress);
+      }
+    };
   }, [lessonId]);
 
   const onClick = () => {
     markCompleted(lessonId);
     setDone(true);
+
+    // ✅ tell the rest of the app (Account dashboard) that progress changed
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new Event(COURSE_EVENT));
+    }
   };
 
   return (

@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import OriginalLink from '@theme-original/DocSidebarItem/Link';
-import { isLessonComplete } from '@site/src/utils/progress';
+import { useAuth } from '@site/src/utils/authState';
+import { isCompleted } from '@site/src/utils/progress';
 
-const PAID_DOC_IDS = new Set([
+// HTML paid lessons: 4–10
+const HTML_PAID = new Set([
   'lesson4',
   'lesson5',
   'lesson6',
@@ -12,77 +14,62 @@ const PAID_DOC_IDS = new Set([
   'lesson10',
 ]);
 
-const SUB_KEY = 'saudilab_subscription_v1';
+function getLastSegment(docId = '') {
+  const s = String(docId);
+  const parts = s.split('/').filter(Boolean);
+  return parts[parts.length - 1] || s;
+}
 
-function isSubscribed() {
-  try {
-    if (typeof window === 'undefined') return false;
+function isHtmlCompleteDoc(docId, href) {
+  // your doc id is: html/html-complete
+  return docId === 'html/html-complete' || String(href || '').includes('/html/html-complete');
+}
 
-    const raw = window.localStorage.getItem(SUB_KEY);
-    if (!raw) return false;
-
-    const s = String(raw).trim().toLowerCase();
-
-    // Common truthy strings
-    if (s === 'true' || s === '1' || s === 'yes' || s === 'active') return true;
-
-    // JSON support: {"active":true} etc
-    if (s.startsWith('{') || s.startsWith('[')) {
-      try {
-        const obj = JSON.parse(raw);
-        if (obj === true) return true;
-        if (obj?.active === true) return true;
-        if (obj?.subscribed === true) return true;
-        if (obj?.isSubscribed === true) return true;
-      } catch {}
-    }
-
-    return false;
-  } catch {
-    return false;
-  }
+function hasLesson10Completed() {
+  // support multiple possible keys (you changed ids over time)
+  return (
+    isCompleted('lesson10') ||
+    isCompleted('html/lesson10') ||
+    isCompleted('html-lesson10') ||
+    isCompleted('html_lesson10')
+  );
 }
 
 export default function DocSidebarItemLink(props) {
+  const auth = useAuth();
   const { item } = props;
-  const docId = item?.docId;
 
-  const isCompletePage =
-    docId === 'html-complete' || item?.href?.includes('/docs/html-complete');
+  const docId = item?.docId || '';
+  const href = item?.href || '';
 
-  const isPaidLesson = PAID_DOC_IDS.has(docId);
+  const last = useMemo(() => getLastSegment(docId), [docId]);
 
-  const [state, setState] = useState({
-    hydrated: false,
-    subscribed: false,
-    showComplete: true,
-  });
+  const isCSS = docId.startsWith('css/') || last.startsWith('css-') || docId.startsWith('css-');
+  const isHTML = docId.startsWith('html/') || docId.startsWith('html-');
+
+  const isPaidHtmlLesson = isHTML && HTML_PAID.has(last);
+
+  const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
-    const compute = () => {
-      const subscribed = isSubscribed();
+    setHydrated(true);
+  }, []);
 
-      let showComplete = true;
-      if (isCompletePage) showComplete = isLessonComplete('lesson10');
+  // Hide HTML completion page until lesson 10 completed
+  if (isHtmlCompleteDoc(docId, href) && hydrated && !hasLesson10Completed()) {
+    return null;
+  }
 
-      setState({ hydrated: true, subscribed, showComplete });
-    };
+  // LOCK RULES:
+  // - CSS: always locked unless subscribed
+  // - HTML lessons 4–10: locked unless subscribed
+  const locked =
+    hydrated &&
+    !auth?.loading &&
+    !auth?.subscribed &&
+    (isCSS || isPaidHtmlLesson);
 
-    compute();
-
-    // Update on storage events
-    const onStorage = () => compute();
-    window.addEventListener('storage', onStorage);
-
-    return () => window.removeEventListener('storage', onStorage);
-  }, [isCompletePage]);
-
-  // Hide Course Complete until lesson10 is completed
-  if (isCompletePage && state.hydrated && !state.showComplete) return null;
-
-  // 🔒 only depends on subscription (since you said "logged in OR subscribed" logic is fine)
-  const locked = isPaidLesson && state.hydrated && !state.subscribed;
-
+  // IMPORTANT: do NOT redirect, do NOT change href — only show 🔒
   if (!locked) return <OriginalLink {...props} />;
 
   const newItem = { ...item, label: `${item.label ?? ''} 🔒` };

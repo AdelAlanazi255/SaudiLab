@@ -85,7 +85,7 @@ export default function Lesson1Try() {
         {/* Back Button */}
         <div style={{ marginTop: '2rem' }}>
           <Link
-            to="/docs/lesson1"
+            to="/html/lesson1"
             style={{
               padding: '0.6rem 1.2rem',
               backgroundColor: '#eee',

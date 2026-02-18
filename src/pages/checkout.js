@@ -1,25 +1,18 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
-import { useLocation } from '@docusaurus/router';
 import { useAuth } from '@site/src/utils/authState';
 import { api } from '@site/src/utils/auth';
 
 export default function Checkout() {
   const auth = useAuth();
-  const location = useLocation();
-
-  const plan = useMemo(() => {
-    const params = new URLSearchParams(location.search);
-    const p = (params.get('plan') || 'student').toLowerCase();
-    return p === 'normal' ? 'normal' : 'student';
-  }, [location.search]);
-
   const [msg, setMsg] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const price = plan === 'student' ? 'SAR 1 / month' : 'SAR 1 / month';
-  const label = plan === 'student' ? 'Student Plan' : 'Normal Plan';
+  useEffect(() => {
+    if (!auth || auth.loading) return;
+    if (!auth.isLoggedIn) window.location.href = '/login';
+  }, [auth]);
 
   const pay = async () => {
     setMsg('');
@@ -27,17 +20,14 @@ export default function Checkout() {
 
     try {
       if (!auth || auth.loading) throw new Error('Auth not ready yet');
-      if (!auth.isLoggedIn) {
-        window.location.href = '/login';
-        return;
-      }
+      if (!auth.isLoggedIn) throw new Error('You must be logged in');
 
       const out = await api('/billing/moyasar/hosted', {
         method: 'POST',
-        body: JSON.stringify({ plan }),
+        body: JSON.stringify({}),
       });
 
-      if (!out?.transactionUrl) throw new Error('No payment URL returned');
+      if (!out?.transactionUrl) throw new Error('No checkout URL returned from server');
       window.location.href = out.transactionUrl;
     } catch (e) {
       setMsg(e.message);
@@ -50,38 +40,38 @@ export default function Checkout() {
     <Layout title="Checkout">
       <div style={wrap}>
         <div style={card}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
+          <div style={topRow}>
             <div>
               <div style={kicker}>Checkout</div>
-              <h1 style={title}>{label}</h1>
-              <div style={sub}>Secure payment powered by Moyasar (test mode).</div>
+              <h1 style={title}>SaudiLab Pro</h1>
+              <p style={sub}>
+                Full access to all lessons and future course updates.
+              </p>
             </div>
 
-            <div style={badge}>
-              <div style={{ fontWeight: 950, fontSize: '1.05rem' }}>{price}</div>
-              <div style={{ opacity: 0.75, fontWeight: 800, fontSize: '0.9rem' }}>
-                Cancel anytime
-              </div>
+            <div style={priceBox}>
+              <div style={price}>﷼14.99</div>
+              <div style={per}>per month</div>
             </div>
           </div>
 
           <div style={divider} />
 
-          <div style={{ display: 'grid', gap: '0.75rem' }}>
-            <button onClick={pay} disabled={loading} style={primaryBtn(loading)}>
-              {loading ? 'Redirecting…' : 'Continue to Payment'}
-            </button>
+          <ul style={list}>
+            <li style={li}>✅ Full HTML course access</li>
+            <li style={li}>✅ Full CSS course access</li>
+            <li style={li}>✅ Full JavaScript course access</li>
+          </ul>
 
-            <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-              <Link to="/account" style={ghostLink}>
-                ← Back to Account
-              </Link>
-              <Link to="/docs/lesson1" style={ghostLink}>
-                Browse Lessons
-              </Link>
-            </div>
+          <button onClick={pay} disabled={loading} style={{ ...cta, opacity: loading ? 0.75 : 1 }}>
+            {loading ? 'Opening payment…' : 'Subscribe'}
+          </button>
 
-            {msg ? <div style={errorBox}>{msg}</div> : null}
+          {msg ? <div style={error}>{msg}</div> : null}
+
+          <div style={bottomRow}>
+            <Link to="/account" style={backLink}>← Back to Account</Link>
+            <span style={hint}>Secure payment via Moyasar</span>
           </div>
         </div>
       </div>
@@ -90,98 +80,124 @@ export default function Checkout() {
 }
 
 const wrap = {
-  minHeight: 'calc(100vh - 60px)',
-  padding: '3.25rem 1.25rem',
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'flex-start',
+  padding: '3.5rem 1.25rem',
+  maxWidth: 860,
+  margin: '0 auto',
 };
 
 const card = {
-  width: '100%',
-  maxWidth: 860,
-  borderRadius: 22,
-  padding: '1.6rem',
+  borderRadius: 20,
   border: '1px solid rgba(255,255,255,0.12)',
-  background: 'rgba(0,0,0,0.40)',
-  boxShadow: '0 22px 70px rgba(0,0,0,0.55), 0 0 80px rgba(124, 242, 176, 0.12)',
-  backdropFilter: 'blur(8px)',
+  background: 'rgba(0,0,0,0.35)',
+  boxShadow: '0 20px 60px rgba(0,0,0,0.45), 0 0 60px rgba(124, 242, 176, 0.08)',
+  padding: '1.5rem',
+};
+
+const topRow = {
+  display: 'flex',
+  alignItems: 'flex-start',
+  justifyContent: 'space-between',
+  gap: '1.25rem',
+  flexWrap: 'wrap',
 };
 
 const kicker = {
-  fontWeight: 950,
+  fontWeight: 900,
   letterSpacing: '0.08em',
   textTransform: 'uppercase',
   fontSize: '0.8rem',
-  color: 'rgba(255,255,255,0.65)',
-  marginBottom: '0.35rem',
+  opacity: 0.65,
 };
 
 const title = {
-  margin: 0,
-  fontSize: '2.2rem',
+  margin: '0.35rem 0 0.35rem 0',
   fontWeight: 950,
-  color: 'rgba(255,255,255,0.95)',
+  fontSize: '2rem',
 };
 
 const sub = {
-  marginTop: '0.5rem',
-  color: 'rgba(255,255,255,0.7)',
-  fontWeight: 700,
-  lineHeight: 1.6,
+  margin: 0,
+  opacity: 0.75,
+  lineHeight: 1.55,
+  maxWidth: 520,
 };
 
-const badge = {
-  minWidth: 210,
-  alignSelf: 'flex-start',
-  padding: '0.9rem 1rem',
+const priceBox = {
+  textAlign: 'right',
+  padding: '0.75rem 0.95rem',
   borderRadius: 16,
   border: '1px solid rgba(255,255,255,0.14)',
   background: 'rgba(255,255,255,0.06)',
-  color: 'rgba(255,255,255,0.92)',
-  boxShadow: '0 10px 30px rgba(0,0,0,0.35)',
+  minWidth: 140,
+};
+
+const price = {
+  fontWeight: 950,
+  fontSize: '1.6rem',
+  lineHeight: 1.1,
+};
+
+const per = {
+  marginTop: '0.15rem',
+  opacity: 0.75,
+  fontWeight: 800,
+  fontSize: '0.9rem',
 };
 
 const divider = {
   height: 1,
-  background: 'rgba(255,255,255,0.12)',
+  background: 'rgba(255,255,255,0.10)',
   margin: '1.25rem 0',
 };
 
-const primaryBtn = (disabled) => ({
-  width: '100%',
-  padding: '0.95rem 1.1rem',
-  borderRadius: 14,
-  border: 'none',
-  fontWeight: 950,
-  cursor: disabled ? 'not-allowed' : 'pointer',
-  background: '#7cf2b0',
-  color: '#0b0f14',
-  boxShadow: '0 18px 55px rgba(0,0,0,0.45), 0 0 70px rgba(124, 242, 176, 0.18)',
-  transition: 'transform 180ms ease, box-shadow 250ms ease, filter 250ms ease',
-  filter: disabled ? 'grayscale(0.25) opacity(0.85)' : 'none',
-});
-
-const ghostLink = {
-  display: 'inline-flex',
-  alignItems: 'center',
-  gap: '0.4rem',
-  padding: '0.65rem 0.95rem',
-  borderRadius: 12,
-  border: '1px solid rgba(255,255,255,0.14)',
-  background: 'rgba(255,255,255,0.06)',
-  color: 'rgba(255,255,255,0.92)',
-  textDecoration: 'none',
-  fontWeight: 900,
+const list = {
+  margin: 0,
+  paddingLeft: '1.2rem',
+  display: 'grid',
+  gap: '0.5rem',
 };
 
-const errorBox = {
-  marginTop: '0.25rem',
-  padding: '0.85rem 1rem',
+const li = {
+  fontWeight: 850,
+  opacity: 0.9,
+};
+
+const cta = {
+  marginTop: '1.25rem',
+  width: '100%',
+  padding: '0.95rem 1rem',
   borderRadius: 14,
-  border: '1px solid rgba(255, 120, 120, 0.25)',
-  background: 'rgba(255, 80, 80, 0.10)',
-  color: 'rgba(255, 210, 210, 0.95)',
+  border: 'none',
+  background: '#7cf2b0',
+  color: '#0b0f14',
+  fontWeight: 950,
+  cursor: 'pointer',
+};
+
+const error = {
+  marginTop: '0.85rem',
+  color: '#ffb4b4',
+  fontWeight: 850,
+  whiteSpace: 'pre-wrap',
+};
+
+const bottomRow = {
+  marginTop: '1.1rem',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  gap: '0.75rem',
+  flexWrap: 'wrap',
+};
+
+const backLink = {
+  textDecoration: 'none',
   fontWeight: 900,
-  lineHeight: 1.4,
+  color: 'rgba(255,255,255,0.85)',
+};
+
+const hint = {
+  fontWeight: 800,
+  opacity: 0.6,
+  fontSize: '0.9rem',
 };

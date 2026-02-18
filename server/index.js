@@ -1,4 +1,3 @@
-
 require('dotenv').config();
 
 const express = require('express');
@@ -36,15 +35,9 @@ const allowedOrigins = [
 app.use(
   cors({
     origin: (origin, cb) => {
-      // allow server-to-server / tools without Origin header
       if (!origin) return cb(null, true);
-
-      // allow exact matches
       if (allowedOrigins.includes(origin)) return cb(null, true);
-
-      // allow Vercel preview deployments: https://xxxx.vercel.app
       if (origin.endsWith('.vercel.app')) return cb(null, true);
-
       return cb(new Error('Not allowed by CORS'));
     },
     methods: ['GET', 'POST', 'OPTIONS'],
@@ -52,10 +45,8 @@ app.use(
   })
 );
 
-// handle preflight
-app.options('*', cors());
-
-
+// handle preflight (safe with Express 5)
+app.options(/.*/, (req, res) => res.sendStatus(204));
 
 // ===== rate limits =====
 const authLimiter = rateLimit({
@@ -102,7 +93,6 @@ function authMiddleware(req, res, next) {
 
 function cleanUsername(u) {
   const s = (u || '').trim().toLowerCase();
-  // 3–20 chars: letters, numbers, dot, underscore
   if (!/^[a-z0-9._]{3,20}$/.test(s)) return null;
   return s;
 }
@@ -125,6 +115,16 @@ function passwordPolicy(pw) {
 
 function safeUser(u) {
   return { id: u.id, username: u.username, email: u.email };
+}
+
+// ✅ single subscription model (free vs subscribed)
+// Backward compatible: student/normal treated as "subscription"
+function resolveSubscription() {
+  return {
+    plan: 'subscription',
+    amount: 1499, // halalas (5 SAR). Change whenever you want.
+    description: 'SaudiLab subscription (test)',
+  };
 }
 
 // ===== routes =====
@@ -153,9 +153,7 @@ app.post('/auth/register', (req, res) => {
     const now = new Date().toISOString();
 
     const info = db
-      .prepare(
-        'INSERT INTO users (username, email, password_hash, created_at) VALUES (?, ?, ?, ?)'
-      )
+      .prepare('INSERT INTO users (username, email, password_hash, created_at) VALUES (?, ?, ?, ?)')
       .run(u, e, password_hash, now);
 
     const user = { id: info.lastInsertRowid, username: u, email: e };
@@ -168,7 +166,7 @@ app.post('/auth/register', (req, res) => {
   }
 });
 
-// LOGIN (rate limited, generic errors to avoid enumeration)
+// LOGIN
 app.post('/auth/login', loginLimiter, (req, res) => {
   try {
     const { usernameOrEmail, password } = req.body || {};
@@ -239,7 +237,7 @@ app.post('/billing/subscribe', authMiddleware, (req, res) => {
 app.post('/billing/unsubscribe', authMiddleware, (req, res) => {
   try {
     db.prepare('UPDATE users SET subscribed = 0 WHERE id = ?').run(req.user.id);
-    return res.status(500).json({ ok: true, subscribed: false });
+    return res.json({ ok: true, subscribed: false });
   } catch (err) {
     console.error('UNSUBSCRIBE ERROR:', err);
     return res.status(500).json({ error: 'Server error' });
@@ -250,22 +248,18 @@ app.post('/billing/unsubscribe', authMiddleware, (req, res) => {
 // MOYASAR TEST PAYMENT ROUTES
 // ============================
 
+// TOKEN FLOW (if you ever use tokens again)
 app.post('/billing/moyasar/create', authMiddleware, async (req, res) => {
   try {
-    const { plan, token } = req.body || {};
+    const { token } = req.body || {};
+    const { amount, description } = resolveSubscription();
 
-    const amount =
-      plan === 'student' ? 100 :
-      plan === 'normal' ? 500 :
-      null;
-
-    if (!amount) return res.status(400).json({ error: 'Invalid plan' });
     if (!token) return res.status(400).json({ error: 'Missing token' });
 
     const sk = process.env.MOYASAR_SECRET_KEY;
     if (!sk) return res.status(500).json({ error: 'Missing MOYASAR_SECRET_KEY in server/.env' });
 
-    // ✅ DEBUG: verify token belongs to this secret key/account
+    // verify token belongs to this secret key/account
     try {
       await axios.get(`https://api.moyasar.com/v1/tokens/${token}`, {
         auth: { username: sk, password: '' },
@@ -273,7 +267,6 @@ app.post('/billing/moyasar/create', authMiddleware, async (req, res) => {
     } catch (e) {
       const d = e.response?.data || { message: e.message };
       console.error('MOYASAR TOKEN FETCH FAILED:', d);
-
       return res.status(400).json({
         error: 'Token not valid for this secret key (sk mismatch)',
         details: d,
@@ -281,15 +274,15 @@ app.post('/billing/moyasar/create', authMiddleware, async (req, res) => {
       });
     }
 
-    // Create payment
     const resp = await axios.post(
       'https://api.moyasar.com/v1/payments',
       {
         amount,
         currency: 'SAR',
-        description: `SaudiLab ${plan} subscription (test)`,
-       callback_url: 'https://saudilab.io/payment-success',
-        metadata: { userId: String(req.user.id), plan: String(plan) },
+        description,
+        // ✅ local dev callback (change to https://saudilab.io/payment-success when live)
+        callback_url: 'http://localhost:3000/payment-success',
+        metadata: { userId: String(req.user.id), plan: 'subscription' },
         source: { type: 'token', token },
       },
       {
@@ -313,10 +306,7 @@ app.post('/billing/moyasar/create', authMiddleware, async (req, res) => {
   }
 });
 
-
-
-
-// Check Moyasar payment status + activate subscription if paid
+// Check payment status + activate subscription if paid
 app.get('/billing/moyasar/status/:paymentId', authMiddleware, async (req, res) => {
   try {
     const { paymentId } = req.params;
@@ -347,16 +337,10 @@ app.get('/billing/moyasar/pk', (req, res) => {
   return res.json({ pk: process.env.MOYASAR_PUBLIC_KEY || null });
 });
 
+// HOSTED FLOW (what you’re using now)
 app.post('/billing/moyasar/hosted', authMiddleware, async (req, res) => {
   try {
-    const { plan } = req.body || {};
-
-    const amount =
-      plan === 'student' ? 100 :
-      plan === 'normal' ? 500 :
-      null;
-
-    if (!amount) return res.status(400).json({ error: 'Invalid plan' });
+    const { amount, description } = resolveSubscription();
 
     const sk = process.env.MOYASAR_SECRET_KEY;
     const pk = process.env.MOYASAR_PUBLIC_KEY;
@@ -364,15 +348,15 @@ app.post('/billing/moyasar/hosted', authMiddleware, async (req, res) => {
     if (!sk) return res.status(500).json({ error: 'Missing MOYASAR_SECRET_KEY' });
     if (!pk) return res.status(500).json({ error: 'Missing MOYASAR_PUBLIC_KEY' });
 
-    // ✅ create a hosted payment page (Moyasar transaction_url)
     const resp = await axios.post(
       'https://api.moyasar.com/v1/payments',
       {
         amount,
         currency: 'SAR',
-        description: `SaudiLab ${plan} subscription (test)`,
-       callback_url: 'https://saudilab.io/payment-success',
-        metadata: { userId: String(req.user.id), plan },
+        description,
+        // ✅ local dev callback (change to https://saudilab.io/payment-success when live)
+        callback_url: 'http://localhost:3000/payment-success',
+        metadata: { userId: String(req.user.id), plan: 'subscription' },
         source: {
           type: 'creditcard',
           name: 'SaudiLab User',
@@ -385,7 +369,6 @@ app.post('/billing/moyasar/hosted', authMiddleware, async (req, res) => {
       { auth: { username: sk, password: '' } }
     );
 
-    // When hosted, Moyasar gives transaction_url
     const transactionUrl = resp.data?.source?.transaction_url || null;
 
     if (!transactionUrl) {
@@ -400,6 +383,7 @@ app.post('/billing/moyasar/hosted', authMiddleware, async (req, res) => {
   }
 });
 
+// optional finalize (keep)
 app.post('/billing/moyasar/finalize', authMiddleware, async (req, res) => {
   try {
     const { id } = req.body || {};
@@ -427,11 +411,9 @@ app.post('/billing/moyasar/finalize', authMiddleware, async (req, res) => {
   }
 });
 
-
 // 404 JSON
 app.use((req, res) => res.status(404).json({ error: 'Not found' }));
 
 app.listen(process.env.PORT || 5000, () => {
   console.log(`SaudiLab API running on http://localhost:${process.env.PORT || 5000}`);
 });
-

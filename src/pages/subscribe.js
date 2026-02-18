@@ -5,7 +5,7 @@ import { activateSubscription } from '@site/src/utils/subscription';
 export default function Subscribe() {
   const handleSubscribe = () => {
     activateSubscription();
-    window.location.href = '/docs/lesson4';
+    window.location.href = '/html/lesson4';
   };
 
   return (
@@ -25,7 +25,7 @@ export default function Subscribe() {
           }}
         >
           <h2>Full Access</h2>
-          <p style={{ fontSize: '2rem', fontWeight: 900 }}>$3/month</p>
+          <p style={{ fontSize: '2rem', fontWeight: 900 }}>14.99ريال/month</p>
 
           <button
             onClick={handleSubscribe}

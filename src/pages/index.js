@@ -25,39 +25,73 @@ export default function Home() {
       {/* HERO SECTION */}
       <section className="hero-section reveal">
         <h1 className="fade-up hero-title">
-  Saudi<span className="hero-accent">Lab</span>
-</h1>
-<p className="hero-subtitle fade-up">
-  Learn web development step by step — built for Saudi learners.
-</p>
+          Saudi<span className="hero-accent">Lab</span>
+        </h1>
+        <p className="hero-subtitle fade-up">
+          Learn web development step by step — built for Saudi learners.
+        </p>
 
-        <a href="/docs/lesson1" className="fade-up start-button">
-          Try out FREE 3 HTML Lessons!
+        <a href="/html/lesson1" className="fade-up start-button">
+          <b>Try The HTML Lessons !</b>
         </a>
       </section>
 
       {/* SUBSCRIPTION SECTION */}
-      <section className="subscription-section reveal">
-        <h2 className="subscription-title">Choose Your Plan</h2>
+<section className="subscription-section reveal">
+  <h2 className="subscription-title">Free vs Pro</h2>
 
-        <div className="plans-container">
-          <div className="plan-card reveal">
-            <h3>Student</h3>
-            <p className="price">
-              $1<span>/month</span>
-            </p>
-            <button className="plan-button">Subscribe</button>
-          </div>
+  <div className="plans-container">
+    {/* FREE PLAN */}
+    <div className="plan-card reveal">
+      <h3>Free</h3>
+      
 
-          <div className="plan-card reveal">
-            <h3>Normal User</h3>
-            <p className="price">
-              $1<span>/month</span>
-            </p>
-            <button className="plan-button">Subscribe</button>
-          </div>
-        </div>
-      </section>
+      <ul className="plan-features">
+        <li>✅ First 3 HTML lessons</li>
+        <li>❌ Full HTML course</li>
+        <li>❌ CSS course</li>
+        <li>❌ JavaScript course</li>
+      </ul>
+    </div>
+
+    {/* PRO PLAN */}
+    <div className="plan-card highlight reveal">
+      <h1>Pro</h1>
+      <p className="price">
+        14.99ريال <span>/month</span>
+      </p>
+
+      <ul className="plan-features">
+        <li>✅ Full HTML course</li>
+        <li>✅ Full CSS course</li>
+        <li>✅ Full JavaScript course</li>
+        <li>✅ Future course content</li>
+      </ul>
+
+      <a
+  href="/checkout"
+  style={{
+    display: 'inline-block',
+    marginTop: '1.2rem',
+    padding: '0.85rem 1.4rem',
+    borderRadius: '12px',
+    background: '#7cf2b0',
+    color: '#0b0f14',
+    fontWeight: 900,
+    textDecoration: 'none',
+    border: '2px solid #7cf2b0',
+    boxShadow: '0 0 0 0 rgba(124,242,176,0.4)',
+    transition: 'all 0.2s ease',
+  }}
+  className="pro-cta"
+>
+  Subscribe Now
+</a>
+
+    </div>
+  </div>
+</section>
+
 
       {/* HOW IT WORKS SECTION */}
       <section className="simple-section reveal">
@@ -85,7 +119,7 @@ export default function Home() {
           <div className="info-card reveal">
             <h3>HTML</h3>
             <p>Learn the structure of the web.</p>
-            <a href="/docs/lesson1" className="mini-button">
+            <a href="/html/lesson1" className="mini-button">
               Start
             </a>
           </div>

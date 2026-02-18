@@ -3,9 +3,9 @@ import Link from '@docusaurus/Link';
 
 export default function LessonSidebar({ currentLesson }) {
   const lessons = [
-    { name: 'Lesson 1', link: '/docs/lesson1' },
-    { name: 'Lesson 2', link: '/docs/lesson2' },
-    { name: 'Lesson 3', link: '/docs/lesson3' },
+    { name: 'Lesson 1', link: '/html/lesson1' },
+    { name: 'Lesson 2', link: '/html/lesson2' },
+    { name: 'Lesson 3', link: '/html/lesson3' },
   ];
 
   return (

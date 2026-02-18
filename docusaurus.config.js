@@ -20,25 +20,22 @@ module.exports = {
     },
   },
 
-  // ✅ add this: loads /static/js/custom.js in the browser
   scripts: [
-  {
-    src: '/js/custom.js',
-    defer: false,
-    async: false,
-  },
-],
+    { src: '/js/custom.js', defer: false, async: false },
+    'https://cdn.moyasar.com/mpf/1.6.0/moyasar.js',
+  ],
 
-
-
+  stylesheets: ['https://cdn.moyasar.com/mpf/1.6.0/moyasar.css'],
 
   presets: [
     [
       '@docusaurus/preset-classic',
       {
         docs: {
+          // ✅ HTML docs live at /html/*
+          path: 'docs/html',
+          routeBasePath: 'html',
           sidebarPath: require.resolve('./sidebars.js'),
-          routeBasePath: 'docs',
         },
         blog: false,
         theme: {
@@ -48,19 +45,27 @@ module.exports = {
     ],
   ],
 
+  // ✅ second docs plugin instance for CSS at /css/*
+  plugins: [
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'css',
+        path: 'docs/css',
+        routeBasePath: 'css',
+        sidebarPath: require.resolve('./sidebarsCss.js'),
+      },
+    ],
+  ],
+
   themeConfig: {
     navbar: {
-      items: [
-        {
-          type: 'localeDropdown',
-          position: 'right',
-        },
-      ],
+      items: [{ type: 'localeDropdown', position: 'right' }],
     },
     footer: {
       style: 'dark',
       links: [],
-      copyright: ' ', // MUST NOT be empty string
+      copyright: ' ',
     },
   },
 };

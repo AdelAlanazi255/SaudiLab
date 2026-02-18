@@ -55,7 +55,7 @@ export default function PaymentSuccess() {
         <p>{msg}</p>
 
         <div style={{ marginTop: '1.5rem', display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-          <Link className="button button--primary" to="/docs/lesson4">
+          <Link className="button button--primary" to="/html/lesson4">
             Go to Lesson 4
           </Link>
           <Link className="button button--secondary" to="/account">
