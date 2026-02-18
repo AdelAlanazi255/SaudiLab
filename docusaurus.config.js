@@ -32,11 +32,10 @@ module.exports = {
       '@docusaurus/preset-classic',
       {
         docs: {
-          // ✅ HTML docs live at /html/*
-          path: 'docs/html',
-          routeBasePath: 'html',
-          sidebarPath: require.resolve('./sidebars.js'),
-        },
+  sidebarPath: require.resolve('./sidebars.js'),
+  routeBasePath: '', // so /html/lesson1 not /docs/html/lesson1
+},
+
         blog: false,
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
