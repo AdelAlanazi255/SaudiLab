@@ -39,9 +39,7 @@ export default function Home() {
           <a href="/html/lesson1" className="start-button">
             <b>Start Learning</b>
           </a>
-          <a href="/#courses" className="secondary-button">
-            Explore Courses
-          </a>
+          
         </div>
       </section>
 
@@ -102,24 +100,7 @@ export default function Home() {
 </section>
 
 
-      {/* HOW IT WORKS SECTION */}
-      <section id="courses" className="simple-section reveal">
-        <h2 className="section-title">How It Works</h2>
-        <div className="three-grid">
-          <div className="info-card reveal">
-            <h3>1. Start Free</h3>
-            <p>Try the first 3 HTML lessons with the built-in editor.</p>
-          </div>
-          <div className="info-card reveal">
-            <h3>2. Subscribe</h3>
-            <p>Unlock the full course and continue learning.</p>
-          </div>
-          <div className="info-card reveal">
-            <h3>3. Build Skills</h3>
-            <p>Practice directly in the browser with real code.</p>
-          </div>
-        </div>
-      </section>
+     
 
       {/* COURSES SECTION */}
       <section className="simple-section reveal">
