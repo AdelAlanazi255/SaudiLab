@@ -2,8 +2,10 @@ import React, { useEffect, useMemo, useState } from 'react';
 import OriginalLink from '@theme-original/DocSidebarItem/Link';
 import { useAuth } from '@site/src/utils/authState';
 import { isCompleted } from '@site/src/utils/progress';
+import { CSS_FREE_MODE } from '@site/src/components/CssGate';
+import { HTML_FREE_MODE } from '@site/src/components/LessonGate';
 
-// HTML paid lessons: 4–10
+// HTML paid lessons: 4-10
 const HTML_PAID = new Set([
   'lesson4',
   'lesson5',
@@ -21,12 +23,10 @@ function getLastSegment(docId = '') {
 }
 
 function isHtmlCompleteDoc(docId, href) {
-  // your doc id is: html/html-complete
   return docId === 'html/html-complete' || String(href || '').includes('/html/html-complete');
 }
 
 function hasLesson10Completed() {
-  // support multiple possible keys (you changed ids over time)
   return (
     isCompleted('lesson10') ||
     isCompleted('html/lesson10') ||
@@ -46,7 +46,6 @@ export default function DocSidebarItemLink(props) {
 
   const isCSS = docId.startsWith('css/') || last.startsWith('css-') || docId.startsWith('css-');
   const isHTML = docId.startsWith('html/') || docId.startsWith('html-');
-
   const isPaidHtmlLesson = isHTML && HTML_PAID.has(last);
 
   const [hydrated, setHydrated] = useState(false);
@@ -55,21 +54,16 @@ export default function DocSidebarItemLink(props) {
     setHydrated(true);
   }, []);
 
-  // Hide HTML completion page until lesson 10 completed
   if (isHtmlCompleteDoc(docId, href) && hydrated && !hasLesson10Completed()) {
     return null;
   }
 
-  // LOCK RULES:
-  // - CSS: always locked unless subscribed
-  // - HTML lessons 4–10: locked unless subscribed
   const locked =
     hydrated &&
     !auth?.loading &&
     !auth?.subscribed &&
-    (isCSS || isPaidHtmlLesson);
+    ((isCSS && !CSS_FREE_MODE) || (isPaidHtmlLesson && !HTML_FREE_MODE));
 
-  // IMPORTANT: do NOT redirect, do NOT change href — only show 🔒
   if (!locked) return <OriginalLink {...props} />;
 
   const newItem = { ...item, label: `${item.label ?? ''} 🔒` };

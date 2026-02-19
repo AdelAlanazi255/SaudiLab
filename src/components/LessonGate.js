@@ -3,6 +3,9 @@ import Link from '@docusaurus/Link';
 import { useAuth } from '@site/src/utils/authState';
 import { isCompleted } from '@site/src/utils/progress';
 
+// TODO BEFORE LAUNCH: disable HTML_FREE_MODE and re-enable paid gating for HTML lessons 4–10.
+export const HTML_FREE_MODE = true;
+
 export default function LessonGate({ requireLessonId, paid = false, children }) {
   const auth = useAuth();
 
@@ -36,7 +39,7 @@ export default function LessonGate({ requireLessonId, paid = false, children }) 
   }
 
   // Paid gate (HTML lessons 4-10)
-  if (paid && (!auth.isLoggedIn || !auth.subscribed)) {
+  if (paid && !HTML_FREE_MODE && (!auth.isLoggedIn || !auth.subscribed)) {
     return (
       <div style={wrap}>
         <div style={card}>
