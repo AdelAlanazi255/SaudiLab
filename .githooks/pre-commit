@@ -1,0 +1,14 @@
+#!/usr/bin/env sh
+node scripts/check-mojibake.js
+RESULT=$?
+if [ $RESULT -ne 0 ]; then
+  echo "Commit blocked: mojibake patterns detected."
+  exit $RESULT
+fi
+
+node scripts/check-course-labels.js
+RESULT=$?
+if [ $RESULT -ne 0 ]; then
+  echo "Commit blocked: invalid course label unicode detected."
+  exit $RESULT
+fi

@@ -1,26 +1,70 @@
----
+﻿---
 id: lesson7
-title: CSS Lesson 7
+title: "CSS Lesson 7: Buttons and Hover"
 ---
 
 import CssGate from '@site/src/components/CssGate';
+import LessonProgress from '@site/src/components/LessonProgress';
+import CompleteButton from '@site/src/components/CompleteButton';
 import Link from '@docusaurus/Link';
 
 <CssGate>
 
-# CSS Lesson 7
+# CSS Lesson 7: Buttons and Hover
 
-This is CSS lesson 7. This section will teach you core CSS concepts.
+<LessonProgress current={7} total={10} />
 
-## Example
+What You'll Learn
+- Core CSS concept for lesson 7
+- How this pattern is used in real pages
+- How to practice it in the try editor
 
-```css
-body {
-  background: #0b0f14;
+---
+
+Lesson Overview
+
+This lesson focuses on practical CSS you can apply immediately.
+
+---
+
+Example
+
+~~~css
+button {
+  background: #2563eb;
   color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 18px;
 }
-```
 
+button:hover {
+  background: #1d4ed8;
+}
+~~~
 
+<h2>Ready to Practice?</h2>
+
+<Link
+  to="/css/lesson7/try"
+  style={{
+    padding: '0.8rem 1.5rem',
+    backgroundColor: 'white',
+    color: 'black',
+    borderRadius: '6px',
+    textDecoration: 'none',
+    display: 'inline-block',
+    marginTop: '1rem',
+    fontWeight: 400
+  }}
+>
+  <b>Try It Yourself -></b>
+</Link>
+
+---
+
+<CompleteButton lessonId="lesson7" />
+
+---
 
 </CssGate>

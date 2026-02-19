@@ -1,26 +1,67 @@
----
+﻿---
 id: lesson1
-title: "CSS Lesson 1"
+title: "CSS Lesson 1: Introduction to CSS"
 ---
 
 import CssGate from '@site/src/components/CssGate';
+import LessonProgress from '@site/src/components/LessonProgress';
+import CompleteButton from '@site/src/components/CompleteButton';
 import Link from '@docusaurus/Link';
 
 <CssGate>
 
-# CSS Lesson 1
+# CSS Lesson 1: Introduction to CSS
 
-This is CSS lesson 1. This section will teach you core CSS concepts.
+<LessonProgress current={1} total={10} />
 
-## Example
+What You'll Learn
+- Core CSS concept for lesson 1
+- How this pattern is used in real pages
+- How to practice it in the try editor
 
-```css
+---
+
+Lesson Overview
+
+This lesson focuses on practical CSS you can apply immediately.
+
+---
+
+Example
+
+~~~css
 body {
-  background: #0b0f14;
-  color: white;
+  font-family: Arial, sans-serif;
+  background: #f8fafc;
 }
-```
 
+h1 {
+  color: #2563eb;
+}
+~~~
 
+<h2>Ready to Practice?</h2>
+
+<Link
+  to="/css/lesson1/try"
+  style={{
+    padding: '0.8rem 1.5rem',
+    backgroundColor: 'white',
+    color: 'black',
+    borderRadius: '6px',
+    textDecoration: 'none',
+    display: 'inline-block',
+    marginTop: '1rem',
+    fontWeight: 400
+  }}
+>
+  <b>Try It Yourself -></b>
+</Link>
+
+---
+
+<CompleteButton lessonId="lesson1" />
+
+---
 
 </CssGate>

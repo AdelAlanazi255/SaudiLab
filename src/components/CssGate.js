@@ -2,9 +2,12 @@ import React from 'react';
 import Link from '@docusaurus/Link';
 import { useAuth } from '@site/src/utils/authState';
 
+export const CSS_FREE_MODE = true;
+
 export default function CssGate({ children }) {
   const auth = useAuth();
 
+  if (CSS_FREE_MODE) return <>{children}</>;
   if (typeof window === 'undefined') return <>{children}</>;
   if (!auth || auth.loading) return null;
 

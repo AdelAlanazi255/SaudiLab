@@ -1,27 +1,69 @@
----
+﻿---
 id: lesson10
-title: CSS Lesson 10
+title: "CSS Lesson 10: Mini Page Layout"
 ---
 
 import CssGate from '@site/src/components/CssGate';
+import LessonProgress from '@site/src/components/LessonProgress';
+import CompleteButton from '@site/src/components/CompleteButton';
 import Link from '@docusaurus/Link';
 
 <CssGate>
 
-# CSS Lesson 10
+# CSS Lesson 10: Mini Page Layout
 
-This is CSS lesson 10. This section will teach you core CSS concepts.
+<LessonProgress current={10} total={10} />
 
-## Example
+What You'll Learn
+- Core CSS concept for lesson 10
+- How this pattern is used in real pages
+- How to practice it in the try editor
 
-```css
-body {
-  background: #0b0f14;
-  color: white;
+---
+
+Lesson Overview
+
+This lesson focuses on practical CSS you can apply immediately.
+
+---
+
+Example
+
+~~~css
+header,
+footer {
+  background: #111827;
+  color: #fff;
+  padding: 16px;
 }
-```
 
+main {
+  padding: 24px;
+}
+~~~
 
+<h2>Ready to Practice?</h2>
+
+<Link
+  to="/css/lesson10/try"
+  style={{
+    padding: '0.8rem 1.5rem',
+    backgroundColor: 'white',
+    color: 'black',
+    borderRadius: '6px',
+    textDecoration: 'none',
+    display: 'inline-block',
+    marginTop: '1rem',
+    fontWeight: 400
+  }}
+>
+  <b>Try It Yourself -></b>
+</Link>
+
+---
+
+<CompleteButton lessonId="lesson10" />
+
+---
 
 </CssGate>
-

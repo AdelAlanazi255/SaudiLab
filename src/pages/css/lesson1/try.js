@@ -1,8 +1,6 @@
 import React from 'react';
-import TryPage from '../_TryPage';
-import { cssTryData } from '../_tryData';
+import TryPage from '@site/src/pages/_TryPage';
 
-export default function Lesson1Try() {
-  const d = cssTryData.lesson1;
-  return <TryPage title={d.title} backTo={d.backTo} initialCode={d.code} />;
+export default function CssLesson1Try() {
+  return <TryPage course="css" lessonId="lesson1" />;
 }

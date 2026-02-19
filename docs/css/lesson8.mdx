@@ -1,27 +1,70 @@
----
+﻿---
 id: lesson8
-title: CSS Lesson 8
+title: "CSS Lesson 8: Form Styling"
 ---
 
 import CssGate from '@site/src/components/CssGate';
+import LessonProgress from '@site/src/components/LessonProgress';
+import CompleteButton from '@site/src/components/CompleteButton';
 import Link from '@docusaurus/Link';
 
 <CssGate>
 
-# CSS Lesson 8
+# CSS Lesson 8: Form Styling
 
-This is CSS lesson 8. This section will teach you core CSS concepts.
+<LessonProgress current={8} total={10} />
 
-## Example
+What You'll Learn
+- Core CSS concept for lesson 8
+- How this pattern is used in real pages
+- How to practice it in the try editor
 
-```css
-body {
-  background: #0b0f14;
-  color: white;
+---
+
+Lesson Overview
+
+This lesson focuses on practical CSS you can apply immediately.
+
+---
+
+Example
+
+~~~css
+input,
+textarea {
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 10px;
 }
-```
 
+input:focus,
+textarea:focus {
+  outline: 2px solid #60a5fa;
+}
+~~~
 
+<h2>Ready to Practice?</h2>
+
+<Link
+  to="/css/lesson8/try"
+  style={{
+    padding: '0.8rem 1.5rem',
+    backgroundColor: 'white',
+    color: 'black',
+    borderRadius: '6px',
+    textDecoration: 'none',
+    display: 'inline-block',
+    marginTop: '1rem',
+    fontWeight: 400
+  }}
+>
+  <b>Try It Yourself -></b>
+</Link>
+
+---
+
+<CompleteButton lessonId="lesson8" />
+
+---
 
 </CssGate>
-

@@ -1,13 +1,12 @@
+// server/index.js
 require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
-const rateLimit = require('express-rate-limit');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const validator = require('validator');
-const axios = require('axios');
 
 const db = require('./db');
 
@@ -45,28 +44,8 @@ app.use(
   })
 );
 
-// handle preflight (safe with Express 5)
+// handle preflight
 app.options(/.*/, (req, res) => res.sendStatus(204));
-
-// ===== rate limits =====
-const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 30,
-  standardHeaders: true,
-  legacyHeaders: false,
-  message: { error: 'Too many requests. Try again later.' },
-});
-
-const loginLimiter = rateLimit({
-  windowMs: 10 * 60 * 1000,
-  max: 10,
-  standardHeaders: true,
-  legacyHeaders: false,
-  message: { error: 'Too many login attempts. Try again later.' },
-});
-
-// apply to /auth
-app.use('/auth', authLimiter);
 
 // ===== helpers =====
 function signToken(user) {
@@ -117,16 +96,6 @@ function safeUser(u) {
   return { id: u.id, username: u.username, email: u.email };
 }
 
-// ✅ single subscription model (free vs subscribed)
-// Backward compatible: student/normal treated as "subscription"
-function resolveSubscription() {
-  return {
-    plan: 'subscription',
-    amount: 1499, // halalas (5 SAR). Change whenever you want.
-    description: 'SaudiLab subscription (test)',
-  };
-}
-
 // ===== routes =====
 app.get('/health', (req, res) => res.json({ ok: true }));
 
@@ -167,7 +136,7 @@ app.post('/auth/register', (req, res) => {
 });
 
 // LOGIN
-app.post('/auth/login', loginLimiter, (req, res) => {
+app.post('/auth/login', (req, res) => {
   try {
     const { usernameOrEmail, password } = req.body || {};
     const key = (usernameOrEmail || '').trim().toLowerCase();
@@ -212,206 +181,43 @@ app.get('/auth/me', authMiddleware, (req, res) => {
   }
 });
 
-// SUBSCRIPTION STATUS
 app.get('/billing/status', authMiddleware, (req, res) => {
-  try {
-    const u = db.prepare('SELECT subscribed FROM users WHERE id = ?').get(req.user.id);
-    return res.json({ subscribed: !!(u && u.subscribed) });
-  } catch (err) {
-    console.error('STATUS ERROR:', err);
-    return res.status(500).json({ error: 'Server error' });
-  }
+  const row = db.prepare('SELECT subscribed FROM users WHERE id = ?').get(req.user.id);
+  return res.json({ subscribed: !!row?.subscribed });
 });
 
-// TEST subscribe/unsubscribe (temporary)
-app.post('/billing/subscribe', authMiddleware, (req, res) => {
-  try {
-    db.prepare('UPDATE users SET subscribed = 1 WHERE id = ?').run(req.user.id);
-    return res.json({ ok: true, subscribed: true });
-  } catch (err) {
-    console.error('SUBSCRIBE ERROR:', err);
-    return res.status(500).json({ error: 'Server error' });
-  }
+app.post('/billing/checkout/start', authMiddleware, (req, res) => {
+  // TODO: Replace with Lemon Squeezy integration
+  return res.json({ ok: true, checkoutUrl: '/payment-success' });
 });
 
-app.post('/billing/unsubscribe', authMiddleware, (req, res) => {
-  try {
-    db.prepare('UPDATE users SET subscribed = 0 WHERE id = ?').run(req.user.id);
-    return res.json({ ok: true, subscribed: false });
-  } catch (err) {
-    console.error('UNSUBSCRIBE ERROR:', err);
-    return res.status(500).json({ error: 'Server error' });
-  }
+app.get('/billing/checkout/status/:id', authMiddleware, (req, res) => {
+  // TODO: Replace with Lemon Squeezy integration
+  db.prepare('UPDATE users SET subscribed = 1 WHERE id = ?').run(req.user.id);
+  return res.json({ paid: true });
 });
 
-// ============================
-// MOYASAR TEST PAYMENT ROUTES
-// ============================
+app.post('/api/paypal/create-order', authMiddleware, (req, res) => {
+  const hasConfig = Boolean(process.env.PAYPAL_CLIENT_ID && process.env.PAYPAL_CLIENT_SECRET);
+  if (!hasConfig) return res.status(501).json({ error: 'PayPal not configured' });
 
-// TOKEN FLOW (if you ever use tokens again)
-app.post('/billing/moyasar/create', authMiddleware, async (req, res) => {
-  try {
-    const { token } = req.body || {};
-    const { amount, description } = resolveSubscription();
-
-    if (!token) return res.status(400).json({ error: 'Missing token' });
-
-    const sk = process.env.MOYASAR_SECRET_KEY;
-    if (!sk) return res.status(500).json({ error: 'Missing MOYASAR_SECRET_KEY in server/.env' });
-
-    // verify token belongs to this secret key/account
-    try {
-      await axios.get(`https://api.moyasar.com/v1/tokens/${token}`, {
-        auth: { username: sk, password: '' },
-      });
-    } catch (e) {
-      const d = e.response?.data || { message: e.message };
-      console.error('MOYASAR TOKEN FETCH FAILED:', d);
-      return res.status(400).json({
-        error: 'Token not valid for this secret key (sk mismatch)',
-        details: d,
-        hint: 'Make sure pk_test and sk_test are from the SAME Moyasar account/test mode.',
-      });
-    }
-
-    const resp = await axios.post(
-      'https://api.moyasar.com/v1/payments',
-      {
-        amount,
-        currency: 'SAR',
-        description,
-        // ✅ local dev callback (change to https://saudilab.io/payment-success when live)
-        callback_url: 'http://localhost:3000/payment-success',
-        metadata: { userId: String(req.user.id), plan: 'subscription' },
-        source: { type: 'token', token },
-      },
-      {
-        auth: { username: sk, password: '' },
-        headers: { 'Content-Type': 'application/json' },
-      }
-    );
-
-    return res.json({
-      paymentId: resp.data.id,
-      status: resp.data.status,
-      redirectUrl: resp.data.source?.transaction_url || null,
-    });
-  } catch (err) {
-    const details = err.response?.data || { message: err.message };
-    console.error('MOYASAR CREATE ERROR DETAILS:', details);
-    return res.status(400).json({
-      error: details.message || 'Payment create failed',
-      details: details.errors || details,
-    });
-  }
+  // TODO: Replace with real PayPal order creation flow.
+  return res.json({ orderId: `stub-order-${Date.now()}` });
 });
 
-// Check payment status + activate subscription if paid
-app.get('/billing/moyasar/status/:paymentId', authMiddleware, async (req, res) => {
-  try {
-    const { paymentId } = req.params;
+app.post('/api/paypal/capture-order', authMiddleware, (req, res) => {
+  const hasConfig = Boolean(process.env.PAYPAL_CLIENT_ID && process.env.PAYPAL_CLIENT_SECRET);
+  if (!hasConfig) return res.status(501).json({ error: 'PayPal not configured' });
 
-    if (!process.env.MOYASAR_SECRET_KEY) {
-      return res.status(500).json({ error: 'Missing MOYASAR_SECRET_KEY in server/.env' });
-    }
+  const { orderId } = req.body || {};
+  if (!orderId) return res.status(400).json({ error: 'orderId is required' });
 
-    const resp = await axios.get(`https://api.moyasar.com/v1/payments/${paymentId}`, {
-      auth: { username: process.env.MOYASAR_SECRET_KEY, password: '' },
-    });
-
-    const p = resp.data;
-    const isPaid = p.status === 'paid';
-
-    if (isPaid) {
-      db.prepare('UPDATE users SET subscribed = 1 WHERE id = ?').run(req.user.id);
-    }
-
-    return res.json({ status: p.status, paid: isPaid });
-  } catch (err) {
-    console.error('MOYASAR STATUS ERROR:', err.response?.data || err.message);
-    return res.status(500).json({ error: 'Payment status check failed' });
-  }
+  // TODO: Replace with real PayPal capture flow.
+  db.prepare('UPDATE users SET subscribed = 1 WHERE id = ?').run(req.user.id);
+  return res.json({ ok: true, orderId, status: 'captured_placeholder' });
 });
 
-app.get('/billing/moyasar/pk', (req, res) => {
-  return res.json({ pk: process.env.MOYASAR_PUBLIC_KEY || null });
-});
-
-// HOSTED FLOW (what you’re using now)
-app.post('/billing/moyasar/hosted', authMiddleware, async (req, res) => {
-  try {
-    const { amount, description } = resolveSubscription();
-
-    const sk = process.env.MOYASAR_SECRET_KEY;
-    const pk = process.env.MOYASAR_PUBLIC_KEY;
-
-    if (!sk) return res.status(500).json({ error: 'Missing MOYASAR_SECRET_KEY' });
-    if (!pk) return res.status(500).json({ error: 'Missing MOYASAR_PUBLIC_KEY' });
-
-    const resp = await axios.post(
-      'https://api.moyasar.com/v1/payments',
-      {
-        amount,
-        currency: 'SAR',
-        description,
-        // ✅ local dev callback (change to https://saudilab.io/payment-success when live)
-        callback_url: 'http://localhost:3000/payment-success',
-        metadata: { userId: String(req.user.id), plan: 'subscription' },
-        source: {
-          type: 'creditcard',
-          name: 'SaudiLab User',
-          number: '4111111111111111',
-          month: '12',
-          year: '28',
-          cvc: '123',
-        },
-      },
-      { auth: { username: sk, password: '' } }
-    );
-
-    const transactionUrl = resp.data?.source?.transaction_url || null;
-
-    if (!transactionUrl) {
-      return res.status(400).json({ error: 'No transaction_url returned', details: resp.data });
-    }
-
-    return res.json({ transactionUrl, paymentId: resp.data.id });
-  } catch (err) {
-    const details = err.response?.data || { message: err.message };
-    console.error('MOYASAR HOSTED ERROR:', details);
-    return res.status(400).json({ error: details.message || 'Hosted payment failed', details });
-  }
-});
-
-// optional finalize (keep)
-app.post('/billing/moyasar/finalize', authMiddleware, async (req, res) => {
-  try {
-    const { id } = req.body || {};
-    if (!id) return res.status(400).json({ error: 'Missing payment id' });
-
-    const sk = process.env.MOYASAR_SECRET_KEY;
-    if (!sk) return res.status(500).json({ error: 'Missing MOYASAR_SECRET_KEY' });
-
-    const r = await axios.get(`https://api.moyasar.com/v1/payments/${id}`, {
-      auth: { username: sk, password: '' },
-    });
-
-    const status = r.data?.status;
-
-    if (status === 'paid') {
-      db.prepare('UPDATE users SET subscribed = 1 WHERE id = ?').run(req.user.id);
-      return res.json({ ok: true, paid: true, status });
-    }
-
-    return res.json({ ok: true, paid: false, status });
-  } catch (err) {
-    const details = err.response?.data || { message: err.message };
-    console.error('FINALIZE ERROR:', details);
-    return res.status(400).json({ error: details.message || 'Finalize failed', details });
-  }
-});
-
-// 404 JSON
+// 404
 app.use((req, res) => res.status(404).json({ error: 'Not found' }));
 
 app.listen(process.env.PORT || 5000, () => {

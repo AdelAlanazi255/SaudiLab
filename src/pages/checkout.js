@@ -2,86 +2,129 @@ import React, { useEffect, useState } from 'react';
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
 import { useAuth } from '@site/src/utils/authState';
-import { api } from '@site/src/utils/auth';
+import PayPalButtonPlaceholder from '@site/src/components/PayPalButtonPlaceholder';
 
 export default function Checkout() {
   const auth = useAuth();
   const [msg, setMsg] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedMethod, setSelectedMethod] = useState('');
+  const [cardMsg, setCardMsg] = useState('');
 
   useEffect(() => {
     if (!auth || auth.loading) return;
     if (!auth.isLoggedIn) window.location.href = '/login';
   }, [auth]);
 
-  const pay = async () => {
+  const openPaymentMethodPicker = () => {
     setMsg('');
-    setLoading(true);
+    setCardMsg('');
+    setSelectedMethod('');
+    setModalOpen(true);
+  };
 
-    try {
-      if (!auth || auth.loading) throw new Error('Auth not ready yet');
-      if (!auth.isLoggedIn) throw new Error('You must be logged in');
+  const closeModal = () => {
+    setModalOpen(false);
+    setSelectedMethod('');
+    setCardMsg('');
+  };
 
-      const out = await api('/billing/moyasar/hosted', {
-        method: 'POST',
-        body: JSON.stringify({}),
-      });
-
-      if (!out?.transactionUrl) throw new Error('No checkout URL returned from server');
-      window.location.href = out.transactionUrl;
-    } catch (e) {
-      setMsg(e.message);
-    } finally {
-      setLoading(false);
-    }
+  const selectCard = () => {
+    setSelectedMethod('card');
+    setCardMsg('Card checkout coming soon');
   };
 
   return (
-    <Layout title="Checkout">
+    <Layout title="Subscribe">
       <div style={wrap}>
         <div style={card}>
-          <div style={topRow}>
+          <div style={headerRow}>
             <div>
-              <div style={kicker}>Checkout</div>
+              <div style={kicker}>Subscribe</div>
               <h1 style={title}>SaudiLab Pro</h1>
-              <p style={sub}>
-                Full access to all lessons and future course updates.
-              </p>
+              <p style={sub}>Unlock all lessons and upcoming premium content.</p>
             </div>
 
             <div style={priceBox}>
-              <div style={price}>﷼14.99</div>
-              <div style={per}>per month</div>
+              <div style={price}>19 SAR</div>
+              <div style={per}>/ month</div>
             </div>
           </div>
 
           <div style={divider} />
 
-          <ul style={list}>
-            <li style={li}>✅ Full HTML course access</li>
-            <li style={li}>✅ Full CSS course access</li>
-            <li style={li}>✅ Full JavaScript course access</li>
-          </ul>
+          <div style={summaryCard}>
+            <div style={summaryTitle}>Plan Summary</div>
+            <ul style={list}>
+              <li style={li}>Full access to HTML course</li>
+              <li style={li}>Full access to CSS course</li>
+              <li style={li}>Full access to JavaScript course (coming soon)</li>
+            </ul>
+          </div>
 
-          <button onClick={pay} disabled={loading} style={{ ...cta, opacity: loading ? 0.75 : 1 }}>
-            {loading ? 'Opening payment…' : 'Subscribe'}
+          <button onClick={openPaymentMethodPicker} style={cta}>
+            Subscribe
           </button>
+
+          <div style={microcopyWrap}>
+            <span style={hint}>Secure checkout (placeholder)</span>
+            <span style={hint}>Payment provider (placeholder)</span>
+            <span style={hint}>Cancel anytime</span>
+          </div>
 
           {msg ? <div style={error}>{msg}</div> : null}
 
-          <div style={bottomRow}>
-            <Link to="/account" style={backLink}>← Back to Account</Link>
-            <span style={hint}>Secure payment via Moyasar</span>
+          <div style={footerRow}>
+            <Link to="/account" style={backLink}>
+              Back to Account
+            </Link>
           </div>
         </div>
       </div>
+      {modalOpen ? (
+        <div style={overlay} onClick={closeModal} role="presentation">
+          <div style={modal} onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true">
+            <div style={modalHeader}>
+              <h2 style={modalTitle}>Choose a payment method</h2>
+              <button type="button" onClick={closeModal} style={closeBtn} aria-label="Close payment method picker">
+                X
+              </button>
+            </div>
+
+            <div style={methodGrid}>
+              <button
+                type="button"
+                style={{ ...methodBtn, ...(selectedMethod === 'paypal' ? methodBtnActive : null) }}
+                onClick={() => {
+                  setSelectedMethod('paypal');
+                  setCardMsg('');
+                }}
+              >
+                PayPal
+              </button>
+              <button
+                type="button"
+                style={{ ...methodBtn, ...(selectedMethod === 'card' ? methodBtnActive : null) }}
+                onClick={selectCard}
+              >
+                Card
+              </button>
+            </div>
+
+            {selectedMethod === 'paypal' ? <PayPalButtonPlaceholder /> : null}
+            {selectedMethod === 'card' && cardMsg ? <p style={modalMsg}>{cardMsg}</p> : null}
+            {!selectedMethod ? <p style={modalHint}>Select a method to continue.</p> : null}
+            {msg ? <p style={error}>{msg}</p> : null}
+          </div>
+        </div>
+      ) : null}
     </Layout>
   );
 }
 
 const wrap = {
-  padding: '3.5rem 1.25rem',
-  maxWidth: 860,
+  padding: '3.2rem 1.2rem',
+  maxWidth: 900,
   margin: '0 auto',
 };
 
@@ -93,11 +136,11 @@ const card = {
   padding: '1.5rem',
 };
 
-const topRow = {
+const headerRow = {
   display: 'flex',
   alignItems: 'flex-start',
   justifyContent: 'space-between',
-  gap: '1.25rem',
+  gap: '1rem',
   flexWrap: 'wrap',
 };
 
@@ -105,7 +148,7 @@ const kicker = {
   fontWeight: 900,
   letterSpacing: '0.08em',
   textTransform: 'uppercase',
-  fontSize: '0.8rem',
+  fontSize: '0.78rem',
   opacity: 0.65,
 };
 
@@ -117,7 +160,7 @@ const title = {
 
 const sub = {
   margin: 0,
-  opacity: 0.75,
+  opacity: 0.78,
   lineHeight: 1.55,
   maxWidth: 520,
 };
@@ -128,17 +171,17 @@ const priceBox = {
   borderRadius: 16,
   border: '1px solid rgba(255,255,255,0.14)',
   background: 'rgba(255,255,255,0.06)',
-  minWidth: 140,
+  minWidth: 170,
 };
 
 const price = {
   fontWeight: 950,
-  fontSize: '1.6rem',
+  fontSize: '1.5rem',
   lineHeight: 1.1,
 };
 
 const per = {
-  marginTop: '0.15rem',
+  marginTop: '0.2rem',
   opacity: 0.75,
   fontWeight: 800,
   fontSize: '0.9rem',
@@ -147,31 +190,58 @@ const per = {
 const divider = {
   height: 1,
   background: 'rgba(255,255,255,0.10)',
-  margin: '1.25rem 0',
+  margin: '1.2rem 0',
+};
+
+const summaryCard = {
+  borderRadius: 14,
+  border: '1px solid rgba(255,255,255,0.12)',
+  background: 'rgba(255,255,255,0.04)',
+  padding: '0.95rem 1rem',
+};
+
+const summaryTitle = {
+  fontWeight: 900,
+  marginBottom: '0.55rem',
 };
 
 const list = {
   margin: 0,
-  paddingLeft: '1.2rem',
+  paddingLeft: '1.15rem',
   display: 'grid',
   gap: '0.5rem',
 };
 
 const li = {
-  fontWeight: 850,
+  fontWeight: 800,
   opacity: 0.9,
 };
 
 const cta = {
   marginTop: '1.25rem',
   width: '100%',
-  padding: '0.95rem 1rem',
+  padding: '1rem',
   borderRadius: 14,
   border: 'none',
   background: '#7cf2b0',
   color: '#0b0f14',
   fontWeight: 950,
+  fontSize: '1rem',
   cursor: 'pointer',
+  boxShadow: '0 14px 38px rgba(124, 242, 176, 0.26)',
+};
+
+const microcopyWrap = {
+  marginTop: '0.8rem',
+  display: 'flex',
+  flexWrap: 'wrap',
+  gap: '0.65rem 1rem',
+};
+
+const hint = {
+  fontWeight: 800,
+  opacity: 0.68,
+  fontSize: '0.9rem',
 };
 
 const error = {
@@ -181,23 +251,96 @@ const error = {
   whiteSpace: 'pre-wrap',
 };
 
-const bottomRow = {
-  marginTop: '1.1rem',
+const footerRow = {
+  marginTop: '1.15rem',
   display: 'flex',
   alignItems: 'center',
-  justifyContent: 'space-between',
-  gap: '0.75rem',
-  flexWrap: 'wrap',
+  justifyContent: 'flex-start',
 };
 
 const backLink = {
   textDecoration: 'none',
   fontWeight: 900,
-  color: 'rgba(255,255,255,0.85)',
+  color: 'rgba(255,255,255,0.9)',
+  padding: '0.62rem 0.9rem',
+  borderRadius: 10,
+  border: '1px solid rgba(255,255,255,0.16)',
+  background: 'rgba(255,255,255,0.05)',
 };
 
-const hint = {
+const overlay = {
+  position: 'fixed',
+  inset: 0,
+  background: 'rgba(0,0,0,0.7)',
+  display: 'grid',
+  placeItems: 'center',
+  zIndex: 999,
+  padding: '1rem',
+};
+
+const modal = {
+  width: 'min(560px, 100%)',
+  borderRadius: 16,
+  border: '1px solid rgba(255,255,255,0.14)',
+  background: '#0d1117',
+  padding: '1rem',
+  boxShadow: '0 24px 70px rgba(0,0,0,0.45)',
+};
+
+const modalHeader = {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  gap: '0.75rem',
+};
+
+const modalTitle = {
+  margin: 0,
+  fontSize: '1.2rem',
+  fontWeight: 900,
+};
+
+const closeBtn = {
+  border: '1px solid rgba(255,255,255,0.2)',
+  borderRadius: 10,
+  background: 'transparent',
+  color: 'rgba(255,255,255,0.92)',
+  cursor: 'pointer',
+  padding: '0.35rem 0.55rem',
+  fontWeight: 900,
+};
+
+const methodGrid = {
+  marginTop: '1rem',
+  display: 'grid',
+  gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+  gap: '0.65rem',
+};
+
+const methodBtn = {
+  borderRadius: 12,
+  border: '1px solid rgba(255,255,255,0.16)',
+  background: 'rgba(255,255,255,0.04)',
+  color: '#fff',
+  padding: '0.8rem',
+  fontWeight: 850,
+  cursor: 'pointer',
+  textAlign: 'left',
+};
+
+const methodBtnActive = {
+  border: '1px solid rgba(124, 242, 176, 0.8)',
+  background: 'rgba(124, 242, 176, 0.12)',
+};
+
+const modalHint = {
+  marginTop: '0.95rem',
+  opacity: 0.75,
+  fontWeight: 700,
+};
+
+const modalMsg = {
+  marginTop: '0.95rem',
   fontWeight: 800,
-  opacity: 0.6,
-  fontSize: '0.9rem',
+  opacity: 0.86,
 };

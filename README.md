@@ -24,6 +24,15 @@ yarn build
 
 This command generates static content into the `build` directory and can be served using any static contents hosting service.
 
+## Optional PayPal Placeholder Env Vars
+
+For the checkout payment-method placeholder flow:
+
+- `PAYPAL_CLIENT_ID`
+- `PAYPAL_CLIENT_SECRET`
+
+If these are missing, backend `/api/paypal/*` endpoints return `501 PayPal not configured`, and frontend shows the safe placeholder state.
+
 ## Deployment
 
 Using SSH:

@@ -20,25 +20,15 @@ export default function PaymentSuccess() {
         }
 
         const params = new URLSearchParams(location.search);
-        const paymentId = params.get('id') || params.get('payment_id');
-        const status = params.get('status'); // optional
-
-        if (!paymentId) {
-          setMsg('Missing payment id.');
-          return;
-        }
-
-        // ✅ finalize: backend verifies with Moyasar + activates subscription
-        const out = await api('/billing/moyasar/finalize', {
-          method: 'POST',
-          body: JSON.stringify({ id: paymentId }),
-        });
+        const checkoutId = params.get('id') || 'placeholder';
+        // TODO: Replace with Lemon Squeezy integration
+        const out = await api(`/billing/checkout/status/${encodeURIComponent(checkoutId)}`);
 
         if (out.paid) {
           await auth.refresh();
-          setMsg('Payment confirmed ✅ Subscription activated.');
+          setMsg('Payment confirmed. Subscription activated.');
         } else {
-          setMsg(`Payment status: ${out.status || status || 'unknown'}.`);
+          setMsg('Payment status: unpaid.');
         }
       } catch (e) {
         setMsg(e.message);

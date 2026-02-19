@@ -10,6 +10,19 @@ module.exports = {
 
   organizationName: 'my-org',
   projectName: 'learn-html',
+  customFields: {
+    API_BASE_URL: process.env.API_BASE_URL || 'http://localhost:5000',
+  },
+
+  // ✅ correct shape (object) — OR you can delete this whole markdown block
+  markdown: {
+    mdx1Compat: {
+      // keep MDX2 behavior (no MDX1 "loose" parsing)
+      comments: false,
+      admonitions: false,
+      headingIds: false,
+    },
+  },
 
   i18n: {
     defaultLocale: 'en',
@@ -22,20 +35,19 @@ module.exports = {
 
   scripts: [
     { src: '/js/custom.js', defer: false, async: false },
-    'https://cdn.moyasar.com/mpf/1.6.0/moyasar.js',
   ],
 
-  stylesheets: ['https://cdn.moyasar.com/mpf/1.6.0/moyasar.css'],
+  stylesheets: [],
 
   presets: [
     [
       '@docusaurus/preset-classic',
       {
         docs: {
-  sidebarPath: require.resolve('./sidebars.js'),
-  routeBasePath: '', // so /html/lesson1 not /docs/html/lesson1
-},
-
+          path: 'docs/html',
+          routeBasePath: 'html',
+          sidebarPath: require.resolve('./sidebars.js'),
+        },
         blog: false,
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
@@ -44,7 +56,6 @@ module.exports = {
     ],
   ],
 
-  // ✅ second docs plugin instance for CSS at /css/*
   plugins: [
     [
       '@docusaurus/plugin-content-docs',

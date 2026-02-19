@@ -1,26 +1,65 @@
----
+﻿---
 id: lesson4
-title: CSS Lesson 4
+title: "CSS Lesson 4: Backgrounds and Borders"
 ---
 
 import CssGate from '@site/src/components/CssGate';
+import LessonProgress from '@site/src/components/LessonProgress';
+import CompleteButton from '@site/src/components/CompleteButton';
 import Link from '@docusaurus/Link';
 
 <CssGate>
 
-# CSS Lesson 4
+# CSS Lesson 4: Backgrounds and Borders
 
-This is CSS lesson 4. This section will teach you core CSS concepts.
+<LessonProgress current={4} total={10} />
 
-## Example
+What You'll Learn
+- Core CSS concept for lesson 4
+- How this pattern is used in real pages
+- How to practice it in the try editor
 
-```css
-body {
-  background: #0b0f14;
-  color: white;
+---
+
+Lesson Overview
+
+This lesson focuses on practical CSS you can apply immediately.
+
+---
+
+Example
+
+~~~css
+.hero {
+  border: 2px dashed #1d4ed8;
+  border-radius: 12px;
+  background: linear-gradient(90deg, #dbeafe, #bfdbfe);
+  padding: 20px;
 }
-```
+~~~
 
+<h2>Ready to Practice?</h2>
 
+<Link
+  to="/css/lesson4/try"
+  style={{
+    padding: '0.8rem 1.5rem',
+    backgroundColor: 'white',
+    color: 'black',
+    borderRadius: '6px',
+    textDecoration: 'none',
+    display: 'inline-block',
+    marginTop: '1rem',
+    fontWeight: 400
+  }}
+>
+  <b>Try It Yourself -></b>
+</Link>
+
+---
+
+<CompleteButton lessonId="lesson4" />
+
+---
 
 </CssGate>

@@ -1,26 +1,65 @@
----
+﻿---
 id: lesson6
-title: CSS Lesson 6
+title: "CSS Lesson 6: Spacing and Sizing"
 ---
 
 import CssGate from '@site/src/components/CssGate';
+import LessonProgress from '@site/src/components/LessonProgress';
+import CompleteButton from '@site/src/components/CompleteButton';
 import Link from '@docusaurus/Link';
 
 <CssGate>
 
-# CSS Lesson 6
+# CSS Lesson 6: Spacing and Sizing
 
-This is CSS lesson 6. This section will teach you core CSS concepts.
+<LessonProgress current={6} total={10} />
 
-## Example
+What You'll Learn
+- Core CSS concept for lesson 6
+- How this pattern is used in real pages
+- How to practice it in the try editor
 
-```css
-body {
-  background: #0b0f14;
-  color: white;
+---
+
+Lesson Overview
+
+This lesson focuses on practical CSS you can apply immediately.
+
+---
+
+Example
+
+~~~css
+.panel {
+  max-width: 360px;
+  margin: 40px auto;
+  padding: 24px;
+  border-radius: 16px;
 }
-```
+~~~
 
+<h2>Ready to Practice?</h2>
 
+<Link
+  to="/css/lesson6/try"
+  style={{
+    padding: '0.8rem 1.5rem',
+    backgroundColor: 'white',
+    color: 'black',
+    borderRadius: '6px',
+    textDecoration: 'none',
+    display: 'inline-block',
+    marginTop: '1rem',
+    fontWeight: 400
+  }}
+>
+  <b>Try It Yourself -></b>
+</Link>
+
+---
+
+<CompleteButton lessonId="lesson6" />
+
+---
 
 </CssGate>

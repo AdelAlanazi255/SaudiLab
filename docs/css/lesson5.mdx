@@ -1,26 +1,67 @@
----
+﻿---
 id: lesson5
-title: CSS Lesson 5
+title: "CSS Lesson 5: Flexbox Basics"
 ---
 
 import CssGate from '@site/src/components/CssGate';
+import LessonProgress from '@site/src/components/LessonProgress';
+import CompleteButton from '@site/src/components/CompleteButton';
 import Link from '@docusaurus/Link';
 
 <CssGate>
 
-# CSS Lesson 5
+# CSS Lesson 5: Flexbox Basics
 
-This is CSS lesson 5. This section will teach you core CSS concepts.
+<LessonProgress current={5} total={10} />
 
-## Example
+What You'll Learn
+- Core CSS concept for lesson 5
+- How this pattern is used in real pages
+- How to practice it in the try editor
 
-```css
-body {
-  background: #0b0f14;
-  color: white;
+---
+
+Lesson Overview
+
+This lesson focuses on practical CSS you can apply immediately.
+
+---
+
+Example
+
+~~~css
+.container {
+  display: flex;
+  gap: 12px;
 }
-```
 
+.box {
+  flex: 1;
+}
+~~~
 
+<h2>Ready to Practice?</h2>
+
+<Link
+  to="/css/lesson5/try"
+  style={{
+    padding: '0.8rem 1.5rem',
+    backgroundColor: 'white',
+    color: 'black',
+    borderRadius: '6px',
+    textDecoration: 'none',
+    display: 'inline-block',
+    marginTop: '1rem',
+    fontWeight: 400
+  }}
+>
+  <b>Try It Yourself -></b>
+</Link>
+
+---
+
+<CompleteButton lessonId="lesson5" />
+
+---
 
 </CssGate>

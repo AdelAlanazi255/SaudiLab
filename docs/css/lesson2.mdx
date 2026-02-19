@@ -1,27 +1,67 @@
----
+﻿---
 id: lesson2
-title: CSS Lesson 2
+title: "CSS Lesson 2: Selectors and Text"
 ---
 
 import CssGate from '@site/src/components/CssGate';
+import LessonProgress from '@site/src/components/LessonProgress';
+import CompleteButton from '@site/src/components/CompleteButton';
 import Link from '@docusaurus/Link';
 
 <CssGate>
 
-# CSS Lesson 2
+# CSS Lesson 2: Selectors and Text
 
-This is CSS lesson 2. This section will teach you core CSS concepts.
+<LessonProgress current={2} total={10} />
 
-## Example
+What You'll Learn
+- Core CSS concept for lesson 2
+- How this pattern is used in real pages
+- How to practice it in the try editor
 
-```css
-body {
-  background: #0b0f14;
-  color: white;
+---
+
+Lesson Overview
+
+This lesson focuses on practical CSS you can apply immediately.
+
+---
+
+Example
+
+~~~css
+h2 {
+  font-size: 32px;
+  text-transform: uppercase;
 }
-```
 
+p {
+  line-height: 1.7;
+}
+~~~
 
+<h2>Ready to Practice?</h2>
+
+<Link
+  to="/css/lesson2/try"
+  style={{
+    padding: '0.8rem 1.5rem',
+    backgroundColor: 'white',
+    color: 'black',
+    borderRadius: '6px',
+    textDecoration: 'none',
+    display: 'inline-block',
+    marginTop: '1rem',
+    fontWeight: 400
+  }}
+>
+  <b>Try It Yourself -></b>
+</Link>
+
+---
+
+<CompleteButton lessonId="lesson2" />
+
+---
 
 </CssGate>
-
