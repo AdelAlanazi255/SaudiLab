@@ -384,7 +384,11 @@ const FAQ_ITEMS = [
   },
   {
     q: 'What can I try for free?',
-    a: 'You can access the first lessons for free. Full courses unlock with subscription.',
+    a: 'You can access the first 3 HTML lessons for free. Full courses unlock with subscription.',
+  },
+  {
+    q: 'Will my price change after more courses are added?',
+    a: 'No. Your 19 SAR rate stays locked in while your subscription is active. If you cancel and re-subscribe later, you may be charged the current price.',
   },
   {
     q: 'Do I need to install anything?',
