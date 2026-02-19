@@ -103,222 +103,49 @@ export default function Home() {
      
 
       {/* COURSES SECTION */}
-      <section className="simple-section reveal">
+      <section className="simple-section courses-section reveal">
         <h2 className="section-title">Courses</h2>
         <div className="three-grid">
-          <div className="info-card reveal">
-            <h3>HTML</h3>
-            <p>Learn the structure of the web.</p>
-            <a href="/html/lesson1" className="mini-button">
-              Start
-            </a>
-          </div>
-
-          <div className="info-card locked reveal">
-            <h3><span dir="ltr" style={{ unicodeBidi: 'isolate' }}>CSS</span></h3>
-            <p>Style and layout your websites.</p>
-            <a href="/css/lesson1" className="mini-button">
-              Start
-            </a>
-          </div>
-
-          <div className="info-card locked reveal">
-            <h3><span dir="ltr" style={{ unicodeBidi: 'isolate' }}>JavaScript</span></h3>
-            <p>Make your websites interactive.</p>
-            <span className="coming-soon">Coming soon</span>
-          </div>
-
-          <div className="info-card locked reveal" style={{ position: 'relative' }}>
-            <span
-              style={{
-                position: 'absolute',
-                top: '0.75rem',
-                right: '0.75rem',
-                fontSize: '0.68rem',
-                fontWeight: 800,
-                padding: '0.2rem 0.45rem',
-                borderRadius: '999px',
-                border: '1px solid rgba(255,255,255,0.2)',
-                opacity: 0.75,
-              }}
+          {COURSES.map((course) => (
+            <div
+              key={course.title}
+              className={`info-card courseCard ${course.active ? 'courseCard--active' : 'courseCard--inactive'} ${course.active ? '' : 'locked'} reveal`}
+              style={course.notify ? { position: 'relative' } : undefined}
             >
-              Soon
-            </span>
-            <h3>Cyber Security Essentials</h3>
-            <p>Learn core security concepts, threats, and safe practices.</p>
-            <span className="coming-soon">Coming soon</span>
-            <a href="/account" style={{ marginTop: '0.42rem', fontSize: '0.86rem', opacity: 0.8, textDecoration: 'none' }}>
-              Notify me →
-            </a>
-          </div>
-
-          <div className="info-card locked reveal" style={{ position: 'relative' }}>
-            <span
-              style={{
-                position: 'absolute',
-                top: '0.75rem',
-                right: '0.75rem',
-                fontSize: '0.68rem',
-                fontWeight: 800,
-                padding: '0.2rem 0.45rem',
-                borderRadius: '999px',
-                border: '1px solid rgba(255,255,255,0.2)',
-                opacity: 0.75,
-              }}
-            >
-              Soon
-            </span>
-            <h3>Applied Cryptography</h3>
-            <p>Understand encryption, hashing, and real-world crypto usage.</p>
-            <span className="coming-soon">Coming soon</span>
-            <a href="/account" style={{ marginTop: '0.42rem', fontSize: '0.86rem', opacity: 0.8, textDecoration: 'none' }}>
-              Notify me →
-            </a>
-          </div>
-
-          <div className="info-card locked reveal" style={{ position: 'relative' }}>
-            <span
-              style={{
-                position: 'absolute',
-                top: '0.75rem',
-                right: '0.75rem',
-                fontSize: '0.68rem',
-                fontWeight: 800,
-                padding: '0.2rem 0.45rem',
-                borderRadius: '999px',
-                border: '1px solid rgba(255,255,255,0.2)',
-                opacity: 0.75,
-              }}
-            >
-              Soon
-            </span>
-            <h3>Web Security</h3>
-            <p>Learn how websites are protected against real attacks.</p>
-            <span className="coming-soon">Coming soon</span>
-            <a href="/account" style={{ marginTop: '0.42rem', fontSize: '0.86rem', opacity: 0.8, textDecoration: 'none' }}>
-              Notify me →
-            </a>
-          </div>
-
-          <div className="info-card locked reveal" style={{ position: 'relative' }}>
-            <span
-              style={{
-                position: 'absolute',
-                top: '0.75rem',
-                right: '0.75rem',
-                fontSize: '0.68rem',
-                fontWeight: 800,
-                padding: '0.2rem 0.45rem',
-                borderRadius: '999px',
-                border: '1px solid rgba(255,255,255,0.2)',
-                opacity: 0.75,
-              }}
-            >
-              Soon
-            </span>
-            <h3>Network Basics</h3>
-            <p>Learn how the internet works: IP, DNS, HTTP/S, and routing.</p>
-            <span className="coming-soon">Coming soon</span>
-            <a href="/account" style={{ marginTop: '0.42rem', fontSize: '0.86rem', opacity: 0.8, textDecoration: 'none' }}>
-              Notify me →
-            </a>
-          </div>
-
-          <div className="info-card locked reveal" style={{ position: 'relative' }}>
-            <span
-              style={{
-                position: 'absolute',
-                top: '0.75rem',
-                right: '0.75rem',
-                fontSize: '0.68rem',
-                fontWeight: 800,
-                padding: '0.2rem 0.45rem',
-                borderRadius: '999px',
-                border: '1px solid rgba(255,255,255,0.2)',
-                opacity: 0.75,
-              }}
-            >
-              Soon
-            </span>
-            <h3>JavaScript Advanced</h3>
-            <p>Go deeper into modern JavaScript and real projects.</p>
-            <span className="coming-soon">Coming soon</span>
-            <a href="/account" style={{ marginTop: '0.42rem', fontSize: '0.86rem', opacity: 0.8, textDecoration: 'none' }}>
-              Notify me →
-            </a>
-          </div>
-
-          <div className="info-card locked reveal" style={{ position: 'relative' }}>
-            <span
-              style={{
-                position: 'absolute',
-                top: '0.75rem',
-                right: '0.75rem',
-                fontSize: '0.68rem',
-                fontWeight: 800,
-                padding: '0.2rem 0.45rem',
-                borderRadius: '999px',
-                border: '1px solid rgba(255,255,255,0.2)',
-                opacity: 0.75,
-              }}
-            >
-              Soon
-            </span>
-            <h3>Backend Fundamentals</h3>
-            <p>APIs, databases, authentication, and server basics.</p>
-            <span className="coming-soon">Coming soon</span>
-            <a href="/account" style={{ marginTop: '0.42rem', fontSize: '0.86rem', opacity: 0.8, textDecoration: 'none' }}>
-              Notify me →
-            </a>
-          </div>
-
-          <div className="info-card locked reveal" style={{ position: 'relative' }}>
-            <span
-              style={{
-                position: 'absolute',
-                top: '0.75rem',
-                right: '0.75rem',
-                fontSize: '0.68rem',
-                fontWeight: 800,
-                padding: '0.2rem 0.45rem',
-                borderRadius: '999px',
-                border: '1px solid rgba(255,255,255,0.2)',
-                opacity: 0.75,
-              }}
-            >
-              Soon
-            </span>
-            <h3>React Fundamentals</h3>
-            <p>Build modern UIs with components, state, and routing.</p>
-            <span className="coming-soon">Coming soon</span>
-            <a href="/account" style={{ marginTop: '0.42rem', fontSize: '0.86rem', opacity: 0.8, textDecoration: 'none' }}>
-              Notify me →
-            </a>
-          </div>
-
-          <div className="info-card locked reveal" style={{ position: 'relative' }}>
-            <span
-              style={{
-                position: 'absolute',
-                top: '0.75rem',
-                right: '0.75rem',
-                fontSize: '0.68rem',
-                fontWeight: 800,
-                padding: '0.2rem 0.45rem',
-                borderRadius: '999px',
-                border: '1px solid rgba(255,255,255,0.2)',
-                opacity: 0.75,
-              }}
-            >
-              Soon
-            </span>
-            <h3>TypeScript Basics</h3>
-            <p>Safer JavaScript with types, interfaces, and tooling.</p>
-            <span className="coming-soon">Coming soon</span>
-            <a href="/account" style={{ marginTop: '0.42rem', fontSize: '0.86rem', opacity: 0.8, textDecoration: 'none' }}>
-              Notify me →
-            </a>
-          </div>
+              {course.notify ? (
+                <span
+                  style={{
+                    position: 'absolute',
+                    top: '0.75rem',
+                    right: '0.75rem',
+                    fontSize: '0.68rem',
+                    fontWeight: 800,
+                    padding: '0.2rem 0.45rem',
+                    borderRadius: '999px',
+                    border: '1px solid rgba(255,255,255,0.2)',
+                    opacity: 0.75,
+                  }}
+                >
+                  Soon
+                </span>
+              ) : null}
+              <h3>
+                {course.ltr ? <span dir="ltr" style={{ unicodeBidi: 'isolate' }}>{course.title}</span> : course.title}
+              </h3>
+              <p>{course.description}</p>
+              {course.ctaHref ? (
+                <a href={course.ctaHref} className="mini-button">
+                  Start
+                </a>
+              ) : null}
+              {!course.ctaHref ? <span className="coming-soon">Coming soon</span> : null}
+              {course.notify ? (
+                <a href="/account" style={{ marginTop: '0.42rem', fontSize: '0.86rem', opacity: 0.8, textDecoration: 'none' }}>
+                  Notify me →
+                </a>
+              ) : null}
+            </div>
+          ))}
         </div>
       </section>
 
@@ -401,6 +228,77 @@ const FAQ_ITEMS = [
   {
     q: 'How do subscriptions work?',
     a: 'One subscription unlocks all current and upcoming premium courses.',
+  },
+];
+
+const COURSES = [
+  {
+    title: 'HTML',
+    description: 'Learn the structure of the web.',
+    active: true,
+    ctaHref: '/html/lesson1',
+  },
+  {
+    title: 'CSS',
+    description: 'Style and layout your websites.',
+    active: true,
+    ctaHref: '/css/lesson1',
+    ltr: true,
+  },
+  {
+    title: 'JavaScript',
+    description: 'Make your websites interactive.',
+    active: false,
+    ltr: true,
+    notify: true,
+  },
+  {
+    title: 'Cyber Security Essentials',
+    description: 'Learn core security concepts, threats, and safe practices.',
+    active: false,
+    notify: true,
+  },
+  {
+    title: 'Applied Cryptography',
+    description: 'Understand encryption, hashing, and real-world crypto usage.',
+    active: false,
+    notify: true,
+  },
+  {
+    title: 'Web Security',
+    description: 'Learn how websites are protected against real attacks.',
+    active: false,
+    notify: true,
+  },
+  {
+    title: 'Network Basics',
+    description: 'Learn how the internet works: IP, DNS, HTTP/S, and routing.',
+    active: false,
+    notify: true,
+  },
+  {
+    title: 'JavaScript Advanced',
+    description: 'Go deeper into modern JavaScript and real projects.',
+    active: false,
+    notify: true,
+  },
+  {
+    title: 'Backend Fundamentals',
+    description: 'APIs, databases, authentication, and server basics.',
+    active: false,
+    notify: true,
+  },
+  {
+    title: 'React Fundamentals',
+    description: 'Build modern UIs with components, state, and routing.',
+    active: false,
+    notify: true,
+  },
+  {
+    title: 'TypeScript Basics',
+    description: 'Safer JavaScript with types, interfaces, and tooling.',
+    active: false,
+    notify: true,
   },
 ];
 
