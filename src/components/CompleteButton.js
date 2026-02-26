@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Link from '@docusaurus/Link';
-import { isCompleted, markCompleted, COURSE_EVENT } from '@site/src/utils/progress';
+import { COURSE_EVENT, isCompleted, markCompleted } from '@site/src/utils/progressKeys';
 
 function sanitizeNextPath(value) {
   if (!value || typeof value !== 'string') return null;
@@ -14,14 +14,14 @@ export default function CompleteButton({ lessonId, course = 'html' }) {
   const [nextPath, setNextPath] = useState(null);
 
   useEffect(() => {
-    setDone(isCompleted(lessonId, course));
+    setDone(isCompleted(course, lessonId));
 
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
       setNextPath(sanitizeNextPath(params.get('next')));
     }
 
-    const onProgress = () => setDone(isCompleted(lessonId, course));
+    const onProgress = () => setDone(isCompleted(course, lessonId));
 
     if (typeof window !== 'undefined') {
       window.addEventListener(COURSE_EVENT, onProgress);
@@ -37,7 +37,7 @@ export default function CompleteButton({ lessonId, course = 'html' }) {
   }, [lessonId, course]);
 
   const onClick = () => {
-    markCompleted(lessonId, course);
+    markCompleted(course, lessonId);
     setDone(true);
 
     if (typeof window !== 'undefined') {

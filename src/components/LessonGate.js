@@ -1,74 +1,53 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Link from '@docusaurus/Link';
-import { useAuth } from '@site/src/utils/authState';
-import { isCompleted } from '@site/src/utils/progress';
+import useLessonAccess from '@site/src/hooks/useLessonAccess';
+import { COURSES } from '@site/src/course/courseMap';
 
-// TODO BEFORE LAUNCH: disable HTML_FREE_MODE and re-enable paid gating for HTML lessons 4-10.
-export const HTML_FREE_MODE = true;
+// Kept for compatibility with older imports.
+export const HTML_FREE_MODE = COURSES.html.access.freeMode;
 
-export default function LessonGate({ requireLessonId, paid = false, children }) {
-  const auth = useAuth();
-  const blockedByPrereq = Boolean(requireLessonId) && !isCompleted(requireLessonId, 'html');
+export default function LessonGate({
+  children,
+  course = 'html',
+  lessonId = null,
+  docId = 'html/html-complete',
+}) {
+  const access = useLessonAccess({ course, lessonId, docId });
 
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    if (!blockedByPrereq || !requireLessonId) return;
-
-    const needPath = `/html/${requireLessonId}`;
-    const currentPath = `${window.location.pathname}${window.location.search}${window.location.hash}`;
-    const target = `/locked?need=${encodeURIComponent(needPath)}&next=${encodeURIComponent(currentPath)}`;
-
-    if (window.location.pathname !== '/locked') {
-      window.location.replace(target);
-    }
-  }, [blockedByPrereq, requireLessonId]);
-
-  // Always allow during SSR build safely (prevents weird build crashes)
-  if (typeof window === 'undefined') return <>{children}</>;
-
-  // Redirecting in browser when blocked by prerequisite.
-  if (blockedByPrereq) return null;
-
-  // While auth is loading, don't flicker
-  if (!auth || auth.loading) return null;
-
-  // Paid gate (HTML lessons 4-10)
-  if (paid && !HTML_FREE_MODE && (!auth.isLoggedIn || !auth.subscribed)) {
-    return (
-      <div style={wrap}>
-        <div style={card}>
-          <h1 style={title}>Subscriber Only</h1>
-          <p style={text}>
-            This lesson is part of the paid course. Subscribe to unlock Lessons 4-10.
-          </p>
-
-          <div style={row}>
-            {!auth.isLoggedIn ? (
-              <>
-                <Link to="/login" style={primaryLink}>
-                  Login
-                </Link>
-                <Link to="/signup" style={ghostLink}>
-                  Sign Up
-                </Link>
-              </>
-            ) : (
-              <>
-                <Link to="/account" style={primaryLink}>
-                  Upgrade on Account
-                </Link>
-                <Link to="/html/lesson1" style={ghostLink}>
-                  Back to free lessons
-                </Link>
-              </>
-            )}
+  if (!access.allowed) {
+    if (access.reason === 'paid') {
+      return (
+        <div style={wrap}>
+          <div style={card}>
+            <h1 style={title}>Subscriber Only</h1>
+            <p style={text}>This lesson is part of the paid course.</p>
+            <Link to="/account" style={primaryLink}>
+              Go to Account
+            </Link>
           </div>
         </div>
-      </div>
-    );
+      );
+    }
+
+    if (access.requiredLessonId) {
+      return (
+        <div style={wrap}>
+          <div style={card}>
+            <h1 style={title}>Lesson Locked</h1>
+            <p style={text}>
+              Complete <b>{access.requiredLessonId}</b> first.
+            </p>
+            <Link to={`/${course}/${access.requiredLessonId}`} style={primaryLink}>
+              Go to required lesson
+            </Link>
+          </div>
+        </div>
+      );
+    }
+
+    return null;
   }
 
-  // Allowed
   return <>{children}</>;
 }
 
@@ -100,13 +79,6 @@ const text = {
   lineHeight: 1.6,
 };
 
-const row = {
-  display: 'flex',
-  gap: '0.75rem',
-  flexWrap: 'wrap',
-  marginTop: '1.2rem',
-};
-
 const primaryLink = {
   padding: '0.75rem 1.1rem',
   borderRadius: 14,
@@ -115,20 +87,6 @@ const primaryLink = {
   cursor: 'pointer',
   background: '#7cf2b0',
   color: '#0b0f14',
-  textDecoration: 'none',
-  display: 'inline-flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-};
-
-const ghostLink = {
-  padding: '0.75rem 1.1rem',
-  borderRadius: 14,
-  border: '1px solid rgba(255,255,255,0.18)',
-  fontWeight: 950,
-  cursor: 'pointer',
-  background: 'rgba(255,255,255,0.06)',
-  color: 'rgba(255,255,255,0.92)',
   textDecoration: 'none',
   display: 'inline-flex',
   alignItems: 'center',

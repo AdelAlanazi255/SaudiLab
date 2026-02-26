@@ -3,6 +3,7 @@ import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
 import { useAuth } from '@site/src/utils/authState';
 import { getCourseProgress, COURSE_EVENT } from '@site/src/utils/progress';
+import { getCompletePage, getLesson } from '@site/src/course/courseMap';
 
 export default function Account() {
   const auth = useAuth();
@@ -53,18 +54,11 @@ export default function Account() {
 
   const toPath = (nextLessonId, course, fallback) => {
     if (!nextLessonId) return fallback;
-    const s = String(nextLessonId).replace(/^\/+/, '');
-    if (s.startsWith('html/') || s.startsWith('css/')) return `/${s}`;
-    if (s.startsWith('lesson')) {
-      return course === 'css' ? `/css/${s}` : `/html/${s}`;
-    }
-    if (s.startsWith('css-lesson')) return `/css/${s.replace('css-', '')}`;
-    if (s.startsWith('html-lesson')) return `/html/${s.replace('html-', '')}`;
-    return `/${s}`;
+    return getLesson(course, nextLessonId)?.permalink || fallback;
   };
 
-  const htmlContinueHref = toPath(html.nextLessonId, 'html', '/html/html-complete');
-  const cssContinueHref = toPath(css.nextLessonId, 'css', '/css/lesson1');
+  const htmlContinueHref = toPath(html.nextLessonId, 'html', getCompletePage('html')?.permalink || '/html/html-complete');
+  const cssContinueHref = toPath(css.nextLessonId, 'css', getCompletePage('css')?.permalink || '/css/lesson1');
 
   return (
     <Layout title="Account">

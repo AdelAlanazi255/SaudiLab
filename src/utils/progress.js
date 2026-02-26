@@ -1,7 +1,21 @@
-export const COURSE_EVENT = 'saudilab_course_progress_v1';
+import {
+  COURSE_EVENT,
+  PROGRESS_STORAGE_KEY,
+  PROGRESS_MIGRATED_FLAG,
+  canonicalKey,
+  isCompleted as isCompletedCanonical,
+  markCompleted as markCompletedCanonical,
+  migrateProgressOnce,
+  resetProgress as resetProgressCanonical,
+  getCourseProgress,
+} from '@site/src/utils/progressKeys';
+
+export { COURSE_EVENT, canonicalKey, migrateProgressOnce, getCourseProgress };
+
+// Legacy constants kept for compatibility with existing listeners.
 export const HTML_COURSE_KEY = 'saudilab_html_progress_v1';
 export const CSS_COURSE_KEY = 'saudilab_css_progress_v1';
-
+export const COURSE_KEY = PROGRESS_STORAGE_KEY;
 export const HTML_LESSONS = [
   'lesson1',
   'lesson2',
@@ -14,84 +28,50 @@ export const HTML_LESSONS = [
   'lesson9',
   'lesson10',
 ];
+export const CSS_LESSONS = [...HTML_LESSONS];
 
-export const CSS_LESSONS = [
-  'lesson1',
-  'lesson2',
-  'lesson3',
-  'lesson4',
-  'lesson5',
-  'lesson6',
-  'lesson7',
-  'lesson8',
-  'lesson9',
-  'lesson10',
-];
-
-
-
-function readKey(key) {
-  if (typeof window === 'undefined') return {};
+export function getProgress(course = 'html') {
+  migrateProgressOnce();
+  if (typeof window === 'undefined' || typeof localStorage === 'undefined') return {};
   try {
-    return JSON.parse(localStorage.getItem(key) || '{}');
+    const raw = localStorage.getItem(PROGRESS_STORAGE_KEY);
+    const canonical = raw ? JSON.parse(raw) : {};
+    const prefix = `${course}/`;
+    const out = {};
+    for (const [key, done] of Object.entries(canonical || {})) {
+      if (!done || !key.startsWith(prefix)) continue;
+      out[key.slice(prefix.length)] = true;
+    }
+    return out;
   } catch {
     return {};
   }
 }
 
-function writeKey(key, obj) {
-  if (typeof window === 'undefined') return;
-  localStorage.setItem(key, JSON.stringify(obj));
-}
-
-export function getProgress(course = 'html') {
-  const key = course === 'css' ? CSS_COURSE_KEY : HTML_COURSE_KEY;
-  return readKey(key);
-}
-
+// Legacy signature preserved: isCompleted(lessonId, course?)
 export function isCompleted(lessonId, course = 'html') {
-  const p = getProgress(course);
-  return Boolean(p[lessonId]);
+  return isCompletedCanonical(course, lessonId);
 }
 
+// Legacy signature preserved: markCompleted(lessonId, course?)
 export function markCompleted(lessonId, course = 'html') {
-  const key = course === 'css' ? CSS_COURSE_KEY : HTML_COURSE_KEY;
-  const p = readKey(key);
-  p[lessonId] = true;
-  writeKey(key, p);
+  markCompletedCanonical(course, lessonId);
 }
 
 export function resetProgress(course = 'all') {
-  if (typeof window === 'undefined') return;
-
-  if (course === 'html' || course === 'all') {
+  resetProgressCanonical(course);
+  if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+    // clean historical keys
     localStorage.removeItem(HTML_COURSE_KEY);
-  }
-  if (course === 'css' || course === 'all') {
     localStorage.removeItem(CSS_COURSE_KEY);
+    localStorage.removeItem('saudilab_progress_v1');
+    localStorage.removeItem('saudilab_completed_lessons');
+    if (course === 'all') {
+      localStorage.removeItem(PROGRESS_MIGRATED_FLAG);
+    }
   }
-
-  // clean old keys (in case you had older versions)
-  localStorage.removeItem('saudilab_progress_v1');
-  localStorage.removeItem('saudilab_completed_lessons');
 }
 
-export function getCourseProgress(course = 'html') {
-  const lessonIds = course === 'css' ? CSS_LESSONS : HTML_LESSONS;
-  const p = getProgress(course);
-
-  const total = lessonIds.length;
-  const completedCount = lessonIds.filter((id) => Boolean(p[id])).length;
-  const percent = total === 0 ? 0 : Math.round((completedCount / total) * 100);
-  const nextLessonId = lessonIds.find((id) => !p[id]) || null;
-
-  return { completedCount, total, percent, nextLessonId };
-}
-
-// Backwards compat for sidebar lock code
 export function isLessonComplete(lessonId) {
-  return isCompleted(lessonId, 'html');
+  return isCompletedCanonical('html', lessonId);
 }
-
-// Optional convenience if you ever need this:
-export const COURSE_KEY = HTML_COURSE_KEY;

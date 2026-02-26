@@ -1,59 +1,48 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React from 'react';
+import Link from '@docusaurus/Link';
 import LessonProgress from '@site/src/components/LessonProgress';
 import CompleteButton from '@site/src/components/CompleteButton';
 import TryItButton from '@site/src/components/TryItButton';
-import { COURSE_EVENT, isCompleted } from '@site/src/utils/progress';
+import useLessonAccess from '@site/src/hooks/useLessonAccess';
+import { getTryPath } from '@site/src/course/courseMap';
 
 export default function LessonShell({
   course,
   current,
   total,
   lessonId,
-  tryPath,
+  tryPath, // legacy prop; path is generated from courseMap
   children,
 }) {
-  const [locked, setLocked] = useState(false);
+  const access = useLessonAccess({ course, lessonId });
+  const generatedTryPath = getTryPath(course, lessonId) || tryPath || null;
 
-  const previousLessonId = useMemo(() => {
-    const n = Number(current);
-    if (!Number.isFinite(n) || n <= 1) return null;
-    return `lesson${n - 1}`;
-  }, [current]);
-
-  useEffect(() => {
-    const sync = () => {
-      setLocked(Boolean(previousLessonId) && !isCompleted(previousLessonId, course));
-    };
-
-    sync();
-
-    if (typeof window !== 'undefined') {
-      window.addEventListener(COURSE_EVENT, sync);
-      window.addEventListener('storage', sync);
+  if (!access.allowed) {
+    if (access.reason === 'paid') {
+      return (
+        <div style={lockWrap}>
+          <h2 style={lockTitle}>Lesson Locked</h2>
+          <p style={lockText}>This lesson requires an active subscription.</p>
+          <Link to="/account" style={primaryLink}>
+            Go to Account
+          </Link>
+        </div>
+      );
     }
 
-    return () => {
-      if (typeof window !== 'undefined') {
-        window.removeEventListener(COURSE_EVENT, sync);
-        window.removeEventListener('storage', sync);
-      }
-    };
-  }, [course, lessonId, previousLessonId]);
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    if (!locked || !previousLessonId) return;
-
-    const needPath = `/${course}/${previousLessonId}`;
-    const currentPath = `${window.location.pathname}${window.location.search}${window.location.hash}`;
-    const target = `/locked?need=${encodeURIComponent(needPath)}&next=${encodeURIComponent(currentPath)}`;
-
-    if (window.location.pathname !== '/locked') {
-      window.location.replace(target);
+    if (access.requiredLessonId) {
+      const requiredPath = `/${course}/${access.requiredLessonId}`;
+      return (
+        <div style={lockWrap}>
+          <h2 style={lockTitle}>Lesson Locked</h2>
+          <p style={lockText}>Complete the previous lesson first.</p>
+          <Link to={requiredPath} style={primaryLink}>
+            Go to required lesson
+          </Link>
+        </div>
+      );
     }
-  }, [locked, previousLessonId, course]);
 
-  if (locked) {
     return null;
   }
 
@@ -63,8 +52,12 @@ export default function LessonShell({
 
       {children}
 
-      <h2>Ready to Practice?</h2>
-      <TryItButton to={tryPath} />
+      {generatedTryPath ? (
+        <>
+          <h2>Ready to Practice?</h2>
+          <TryItButton to={generatedTryPath} />
+        </>
+      ) : null}
 
       <hr />
 
@@ -72,3 +65,34 @@ export default function LessonShell({
     </>
   );
 }
+
+const lockWrap = {
+  marginTop: '1.5rem',
+  padding: '1.2rem',
+  borderRadius: 16,
+  border: '1px solid rgba(255,255,255,0.15)',
+  background: 'rgba(0,0,0,0.3)',
+};
+
+const lockTitle = {
+  margin: 0,
+  fontWeight: 900,
+};
+
+const lockText = {
+  marginTop: '0.6rem',
+  marginBottom: '1rem',
+};
+
+const primaryLink = {
+  padding: '0.75rem 1.1rem',
+  borderRadius: 14,
+  border: 'none',
+  fontWeight: 950,
+  background: '#7cf2b0',
+  color: '#0b0f14',
+  textDecoration: 'none',
+  display: 'inline-flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+};
