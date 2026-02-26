@@ -1,43 +1,15 @@
-const HTML_LESSON_TITLES = [
-  'Introduction to HTML',
-  'Headings and Paragraphs',
-  'Text Formatting',
-  'Links',
-  'Images',
-  'Lists',
-  'Tables',
-  'Forms Basics',
-  'Form inputs',
-  'Semantic Layout',
-];
+import { htmlLessons, cssLessons } from '@site/src/data/lessons';
 
-const CSS_LESSON_TITLES = [
-  'Introduction to CSS',
-  'Selectors and Text',
-  'Box Model',
-  'Backgrounds and Borders',
-  'Flexbox Basics',
-  'Spacing and Sizing',
-  'Buttons and Hover',
-  'Form Styling',
-  'Grid Basics',
-  'Mini Page Layout',
-];
-
-function makeLessons(course, titles) {
-  return titles.map((title, index) => {
-    const number = index + 1;
-    const lessonId = `lesson${number}`;
-    return {
-      lessonId,
-      title,
-      docId: `${course}/${lessonId}`,
-      permalink: `/${course}/${lessonId}`,
-      tryPath: `/${course}/${lessonId}/try`,
-      requireLessonId: number === 1 ? null : `lesson${number - 1}`,
-      paid: course === 'html' ? number >= 4 : true,
-    };
-  });
+function mapToCourseLessons(items, course) {
+  return items.map((item) => ({
+    lessonId: item.lessonId,
+    title: item.title,
+    docId: `${course}/${item.lessonId}`,
+    permalink: `/${course}/${item.lessonId}`,
+    tryPath: `/${course}/${item.lessonId}/try`,
+    requireLessonId: item.n === 1 ? null : `lesson${item.n - 1}`,
+    paid: course === 'html' ? item.n >= 4 : true,
+  }));
 }
 
 export const COURSES = {
@@ -49,7 +21,7 @@ export const COURSES = {
       freeMode: true,
       paidFromLesson: 4,
     },
-    lessons: makeLessons('html', HTML_LESSON_TITLES),
+    lessons: mapToCourseLessons(htmlLessons, 'html'),
     completeDocId: 'html/html-complete',
     completePermalink: '/html/html-complete',
   },
@@ -61,7 +33,7 @@ export const COURSES = {
       freeMode: true,
       paidFromLesson: 1,
     },
-    lessons: makeLessons('css', CSS_LESSON_TITLES),
+    lessons: mapToCourseLessons(cssLessons, 'css'),
     completeDocId: 'css/css-complete',
     completePermalink: '/css/css-complete',
   },

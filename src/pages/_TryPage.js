@@ -7,7 +7,7 @@ import 'prismjs/components/prism-css';
 import 'prismjs/themes/prism-tomorrow.css';
 import { getTryStarter } from '@site/src/pages/_tryData';
 import { canAccessLesson, getLastUnlockedLessonPath } from '@site/src/utils/lessonAccess';
-import { getLessonTitle } from '@site/src/utils/lessonMeta';
+import { getLessonMeta } from '@site/src/data/lessons';
 
 const editorShellStyle = {
   display: 'flex',
@@ -180,7 +180,7 @@ function prismLanguageForCourse(course) {
 }
 
 export default function TryPage({ course = 'html', lessonId = 'lesson1' }) {
-  const lessonNumber = String(lessonId).replace('lesson', '');
+  const lessonNumber = Number(String(lessonId).replace('lesson', ''));
   const initialCode = useMemo(() => getTryStarter(course, lessonId), [course, lessonId]);
   const [code, setCode] = useState(initialCode);
   const [output, setOutput] = useState(initialCode);
@@ -188,7 +188,8 @@ export default function TryPage({ course = 'html', lessonId = 'lesson1' }) {
   const [backHover, setBackHover] = useState(false);
   const outputDoc = useMemo(() => withPreviewTheme(output), [output]);
   const label = courseLabel(course);
-  const lessonTitle = useMemo(() => getLessonTitle(course, lessonNumber), [course, lessonNumber]);
+  const lessonMeta = useMemo(() => getLessonMeta(course, lessonNumber), [course, lessonNumber]);
+  const lessonTitle = lessonMeta.title;
   const prismLanguage = prismLanguageForCourse(course);
   const codeClass = `language-${prismLanguage}`;
   const preRef = useRef(null);
@@ -214,9 +215,9 @@ export default function TryPage({ course = 'html', lessonId = 'lesson1' }) {
   };
 
   return (
-    <Layout title={`${label}: ${lessonTitle} — Try It`}>
+    <Layout title={`${label} Lesson ${lessonNumber}: ${lessonTitle} - Try It Yourself`}>
       <div style={{ padding: '2rem' }}>
-        <h1>{`${label}: ${lessonTitle} — Try It Yourself`}</h1>
+        <h1>{`${label} Lesson ${lessonNumber}: ${lessonTitle} - Try It Yourself`}</h1>
 
         <div style={{ display: 'flex', gap: '2rem', marginTop: '2rem' }}>
           <div style={{ flex: 1 }}>

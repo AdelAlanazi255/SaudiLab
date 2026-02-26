@@ -5,17 +5,20 @@ import CompleteButton from '@site/src/components/CompleteButton';
 import TryItButton from '@site/src/components/TryItButton';
 import useLessonAccess from '@site/src/hooks/useLessonAccess';
 import { getTryPath } from '@site/src/course/courseMap';
+import { getLessonMetaSafe } from '@site/src/data/lessons';
 
 export default function LessonShell({
   course,
   current,
   total,
   lessonId,
+  title,
   tryPath, // legacy prop; path is generated from courseMap
   children,
 }) {
   const access = useLessonAccess({ course, lessonId });
   const generatedTryPath = getTryPath(course, lessonId) || tryPath || null;
+  const resolvedTitle = title || getLessonMetaSafe(course, Number(current))?.title || null;
 
   if (!access.allowed) {
     if (access.reason === 'paid') {
@@ -61,7 +64,7 @@ export default function LessonShell({
 
       <hr />
 
-      <CompleteButton lessonId={lessonId} course={course} />
+      <CompleteButton lessonId={lessonId} course={course} lessonTitle={resolvedTitle} />
     </>
   );
 }
