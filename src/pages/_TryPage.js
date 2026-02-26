@@ -1,8 +1,13 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
+import Prism from 'prismjs';
+import 'prismjs/components/prism-markup';
+import 'prismjs/components/prism-css';
+import 'prismjs/themes/prism-tomorrow.css';
 import { getTryStarter } from '@site/src/pages/_tryData';
 import { canAccessLesson, getLastUnlockedLessonPath } from '@site/src/utils/lessonAccess';
+import { getLessonTitle } from '@site/src/utils/lessonMeta';
 
 const editorShellStyle = {
   display: 'flex',
@@ -45,6 +50,8 @@ const editorFooterStyle = {
 };
 
 const textareaStyle = {
+  position: 'absolute',
+  inset: 0,
   width: '100%',
   height: '100%',
   padding: '1rem',
@@ -52,12 +59,39 @@ const textareaStyle = {
   border: 'none',
   borderRadius: '8px',
   outline: 'none',
-  background: '#0b0d10',
-  color: '#e5e7eb',
+  background: 'transparent',
+  color: 'transparent',
   caretColor: '#e5e7eb',
   fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
   fontSize: '14px',
   lineHeight: 1.6,
+  whiteSpace: 'pre',
+  overflow: 'auto',
+};
+
+const highlightPreStyle = {
+  position: 'absolute',
+  inset: 0,
+  margin: 0,
+  padding: '1rem',
+  background: '#0b0d10',
+  color: '#e5e7eb',
+  pointerEvents: 'none',
+  fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+  fontSize: '14px',
+  lineHeight: 1.6,
+  overflow: 'auto',
+  borderRadius: '8px',
+  whiteSpace: 'pre',
+};
+
+const editorInputWrapStyle = {
+  position: 'relative',
+  width: '100%',
+  height: '100%',
+  borderRadius: '8px',
+  background: '#0b0d10',
+  overflow: 'hidden',
 };
 
 const outputPanelStyle = {
@@ -141,6 +175,10 @@ function courseLabel(course) {
   return course === 'css' ? 'CSS' : 'HTML';
 }
 
+function prismLanguageForCourse(course) {
+  return course === 'css' ? 'css' : 'html';
+}
+
 export default function TryPage({ course = 'html', lessonId = 'lesson1' }) {
   const lessonNumber = String(lessonId).replace('lesson', '');
   const initialCode = useMemo(() => getTryStarter(course, lessonId), [course, lessonId]);
@@ -150,6 +188,15 @@ export default function TryPage({ course = 'html', lessonId = 'lesson1' }) {
   const [backHover, setBackHover] = useState(false);
   const outputDoc = useMemo(() => withPreviewTheme(output), [output]);
   const label = courseLabel(course);
+  const lessonTitle = useMemo(() => getLessonTitle(course, lessonNumber), [course, lessonNumber]);
+  const prismLanguage = prismLanguageForCourse(course);
+  const codeClass = `language-${prismLanguage}`;
+  const preRef = useRef(null);
+
+  const highlighted = useMemo(() => {
+    const grammar = Prism.languages[prismLanguage] || Prism.languages.markup;
+    return Prism.highlight(code, grammar, prismLanguage);
+  }, [code, prismLanguage]);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -160,17 +207,34 @@ export default function TryPage({ course = 'html', lessonId = 'lesson1' }) {
     window.location.replace(redirectPath);
   }, [course, lessonNumber]);
 
+  const syncScroll = (e) => {
+    if (!preRef.current) return;
+    preRef.current.scrollTop = e.target.scrollTop;
+    preRef.current.scrollLeft = e.target.scrollLeft;
+  };
+
   return (
-    <Layout title={`${label} Lesson ${lessonNumber} - Try It`}>
+    <Layout title={`${label}: ${lessonTitle} — Try It`}>
       <div style={{ padding: '2rem' }}>
-        <h1>{`${label} Lesson ${lessonNumber} - Try It Yourself`}</h1>
+        <h1>{`${label}: ${lessonTitle} — Try It Yourself`}</h1>
 
         <div style={{ display: 'flex', gap: '2rem', marginTop: '2rem' }}>
           <div style={{ flex: 1 }}>
             <div style={editorShellStyle}>
               <div style={panelHeaderStyle}>Editor</div>
               <div style={editorBodyStyle}>
-                <textarea value={code} onChange={(e) => setCode(e.target.value)} style={textareaStyle} />
+                <div style={editorInputWrapStyle}>
+                  <pre ref={preRef} style={highlightPreStyle} className={codeClass} aria-hidden>
+                    <code className={codeClass} dangerouslySetInnerHTML={{ __html: highlighted }} />
+                  </pre>
+                  <textarea
+                    value={code}
+                    onChange={(e) => setCode(e.target.value)}
+                    onScroll={syncScroll}
+                    spellCheck={false}
+                    style={textareaStyle}
+                  />
+                </div>
               </div>
               <div style={editorFooterStyle}>
                 <button
