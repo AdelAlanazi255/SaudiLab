@@ -1,14 +1,27 @@
 import React, { useEffect, useState } from 'react';
+import Link from '@docusaurus/Link';
 import { isCompleted, markCompleted, COURSE_EVENT } from '@site/src/utils/progress';
 
-export default function CompleteButton({ lessonId }) {
+function sanitizeNextPath(value) {
+  if (!value || typeof value !== 'string') return null;
+  if (!value.startsWith('/')) return null;
+  if (value.startsWith('/locked')) return null;
+  return value;
+}
+
+export default function CompleteButton({ lessonId, course = 'html' }) {
   const [done, setDone] = useState(false);
+  const [nextPath, setNextPath] = useState(null);
 
   useEffect(() => {
-    setDone(isCompleted(lessonId));
+    setDone(isCompleted(lessonId, course));
 
-    // Optional: keep button in sync if progress changes elsewhere
-    const onProgress = () => setDone(isCompleted(lessonId));
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      setNextPath(sanitizeNextPath(params.get('next')));
+    }
+
+    const onProgress = () => setDone(isCompleted(lessonId, course));
 
     if (typeof window !== 'undefined') {
       window.addEventListener(COURSE_EVENT, onProgress);
@@ -21,13 +34,12 @@ export default function CompleteButton({ lessonId }) {
         window.removeEventListener('storage', onProgress);
       }
     };
-  }, [lessonId]);
+  }, [lessonId, course]);
 
   const onClick = () => {
-    markCompleted(lessonId);
+    markCompleted(lessonId, course);
     setDone(true);
 
-    // ✅ tell the rest of the app (Account dashboard) that progress changed
     if (typeof window !== 'undefined') {
       window.dispatchEvent(new Event(COURSE_EVENT));
     }
@@ -47,8 +59,30 @@ export default function CompleteButton({ lessonId }) {
           cursor: 'pointer',
         }}
       >
-        {done ? 'Completed ✓' : 'Mark as Completed'}
+        {done ? 'Completed' : 'Mark as Completed'}
       </button>
+
+      {done && nextPath ? (
+        <div style={{ marginTop: '0.85rem' }}>
+          <Link
+            to={nextPath}
+            style={{
+              padding: '0.75rem 1.1rem',
+              borderRadius: '14px',
+              border: 'none',
+              fontWeight: 950,
+              background: '#7cf2b0',
+              color: '#0b0f14',
+              textDecoration: 'none',
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            Continue
+          </Link>
+        </div>
+      ) : null}
     </div>
   );
 }

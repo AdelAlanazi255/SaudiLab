@@ -1,58 +1,52 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Link from '@docusaurus/Link';
 import { useAuth } from '@site/src/utils/authState';
 import { isCompleted } from '@site/src/utils/progress';
 
-// TODO BEFORE LAUNCH: disable HTML_FREE_MODE and re-enable paid gating for HTML lessons 4–10.
+// TODO BEFORE LAUNCH: disable HTML_FREE_MODE and re-enable paid gating for HTML lessons 4-10.
 export const HTML_FREE_MODE = true;
 
 export default function LessonGate({ requireLessonId, paid = false, children }) {
   const auth = useAuth();
+  const blockedByPrereq = Boolean(requireLessonId) && !isCompleted(requireLessonId, 'html');
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (!blockedByPrereq || !requireLessonId) return;
+
+    const needPath = `/html/${requireLessonId}`;
+    const currentPath = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+    const target = `/locked?need=${encodeURIComponent(needPath)}&next=${encodeURIComponent(currentPath)}`;
+
+    if (window.location.pathname !== '/locked') {
+      window.location.replace(target);
+    }
+  }, [blockedByPrereq, requireLessonId]);
 
   // Always allow during SSR build safely (prevents weird build crashes)
   if (typeof window === 'undefined') return <>{children}</>;
 
+  // Redirecting in browser when blocked by prerequisite.
+  if (blockedByPrereq) return null;
+
   // While auth is loading, don't flicker
   if (!auth || auth.loading) return null;
-
-  // Step prerequisite gate (ex: must finish lesson3)
-  if (requireLessonId && !isCompleted(requireLessonId)) {
-    return (
-      <div style={wrap}>
-        <div style={card}>
-          <h1 style={title}>Lesson Locked</h1>
-          <p style={text}>
-            You need to complete <b>{requireLessonId}</b> first.
-          </p>
-
-          <div style={row}>
-            <Link to={`/html/${requireLessonId}`} style={primaryLink}>
-              Go to required lesson →
-            </Link>
-            <Link to="/account" style={ghostLink}>
-              Go to Account
-            </Link>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   // Paid gate (HTML lessons 4-10)
   if (paid && !HTML_FREE_MODE && (!auth.isLoggedIn || !auth.subscribed)) {
     return (
       <div style={wrap}>
         <div style={card}>
-          <h1 style={title}>Subscriber Only 🔒</h1>
+          <h1 style={title}>Subscriber Only</h1>
           <p style={text}>
-            This lesson is part of the paid course. Subscribe to unlock Lessons 4–10.
+            This lesson is part of the paid course. Subscribe to unlock Lessons 4-10.
           </p>
 
           <div style={row}>
             {!auth.isLoggedIn ? (
               <>
                 <Link to="/login" style={primaryLink}>
-                  Login →
+                  Login
                 </Link>
                 <Link to="/signup" style={ghostLink}>
                   Sign Up
@@ -61,7 +55,7 @@ export default function LessonGate({ requireLessonId, paid = false, children }) 
             ) : (
               <>
                 <Link to="/account" style={primaryLink}>
-                  Upgrade on Account →
+                  Upgrade on Account
                 </Link>
                 <Link to="/html/lesson1" style={ghostLink}>
                   Back to free lessons
