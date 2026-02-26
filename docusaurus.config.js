@@ -1,7 +1,7 @@
 // docusaurus.config.js
 module.exports = {
   title: 'SaudiLab',
-  tagline: 'Learn HTML step by step',
+  tagline: 'Gateway to learning Coding and Cyber Security',
   url: 'http://localhost:3000',
   baseUrl: '/',
   onBrokenLinks: 'throw',
