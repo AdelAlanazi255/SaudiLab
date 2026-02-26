@@ -1,6 +1,6 @@
 // docusaurus.config.js
 module.exports = {
-  title: 'LearnHTML',
+  title: 'SaudiLab',
   tagline: 'Learn HTML step by step',
   url: 'http://localhost:3000',
   baseUrl: '/',
