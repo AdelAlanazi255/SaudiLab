@@ -1,18 +1,19 @@
-﻿---
+---
 id: lesson2
 title: "CSS Lesson 2: Selectors and Text"
 ---
 
-import CssGate from '@site/src/components/CssGate';
-import LessonProgress from '@site/src/components/LessonProgress';
-import CompleteButton from '@site/src/components/CompleteButton';
-import Link from '@docusaurus/Link';
-
-<CssGate>
+import LessonShell from '@site/src/components/LessonShell';
 
 # CSS Lesson 2: Selectors and Text
 
-<LessonProgress current={2} total={10} />
+<LessonShell
+  course="css"
+  current={2}
+  total={10}
+  lessonId="lesson2"
+  tryPath="/css/lesson2/try"
+>
 
 What You'll Learn
 - Core CSS concept for lesson 2
@@ -40,28 +41,6 @@ p {
 }
 ~~~
 
-<h2>Ready to Practice?</h2>
-
-<Link
-  to="/css/lesson2/try"
-  style={{
-    padding: '0.8rem 1.5rem',
-    backgroundColor: 'white',
-    color: 'black',
-    borderRadius: '6px',
-    textDecoration: 'none',
-    display: 'inline-block',
-    marginTop: '1rem',
-    fontWeight: 400
-  }}
->
-  <b>Try It Yourself -></b>
-</Link>
+</LessonShell>
 
 ---
-
-<CompleteButton lessonId="lesson2" />
-
----
-
-</CssGate>

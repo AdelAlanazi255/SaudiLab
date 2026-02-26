@@ -1,18 +1,19 @@
-﻿---
+---
 id: lesson9
 title: "CSS Lesson 9: Grid Basics"
 ---
 
-import CssGate from '@site/src/components/CssGate';
-import LessonProgress from '@site/src/components/LessonProgress';
-import CompleteButton from '@site/src/components/CompleteButton';
-import Link from '@docusaurus/Link';
-
-<CssGate>
+import LessonShell from '@site/src/components/LessonShell';
 
 # CSS Lesson 9: Grid Basics
 
-<LessonProgress current={9} total={10} />
+<LessonShell
+  course="css"
+  current={9}
+  total={10}
+  lessonId="lesson9"
+  tryPath="/css/lesson9/try"
+>
 
 What You'll Learn
 - Core CSS concept for lesson 9
@@ -37,28 +38,6 @@ Example
 }
 ~~~
 
-<h2>Ready to Practice?</h2>
-
-<Link
-  to="/css/lesson9/try"
-  style={{
-    padding: '0.8rem 1.5rem',
-    backgroundColor: 'white',
-    color: 'black',
-    borderRadius: '6px',
-    textDecoration: 'none',
-    display: 'inline-block',
-    marginTop: '1rem',
-    fontWeight: 400
-  }}
->
-  <b>Try It Yourself -></b>
-</Link>
+</LessonShell>
 
 ---
-
-<CompleteButton lessonId="lesson9" />
-
----
-
-</CssGate>
