@@ -66,6 +66,15 @@ module.exports = {
         sidebarPath: require.resolve('./sidebarsCss.js'),
       },
     ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'javascript',
+        path: 'docs/javascript',
+        routeBasePath: 'javascript',
+        sidebarPath: require.resolve('./sidebarsJavascript.js'),
+      },
+    ],
   ],
 
   themeConfig: {

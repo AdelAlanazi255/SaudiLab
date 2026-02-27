@@ -1,0 +1,49 @@
+﻿---
+id: lesson10
+title: "Lesson 10: Events and Interaction"
+---
+
+import LessonShell from '@site/src/components/LessonShell';
+
+# Lesson 10: Events and Interaction
+
+<LessonShell
+  course="javascript"
+  current={10}
+  total={10}
+  lessonId="lesson10"
+  tryPath="/javascript/lesson10/try"
+>
+
+What You'll Learn
+- Listen for user events
+- Run logic when events fire
+- Update UI based on interactions
+
+---
+
+Core Concept
+
+Events let your app respond to user actions like clicks and typing.
+
+---
+
+Example
+
+~~~javascript
+document.body.innerHTML = "<button id=\"btn\">Click me</button>";
+const button = document.getElementById("btn");
+button.addEventListener("click", () => {
+  console.log("Button clicked");
+});
+~~~
+
+---
+
+Practice
+
+Add another event listener that responds to keyboard input.
+
+</LessonShell>
+
+---

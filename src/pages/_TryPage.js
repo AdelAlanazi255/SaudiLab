@@ -4,6 +4,7 @@ import Link from '@docusaurus/Link';
 import Prism from 'prismjs';
 import 'prismjs/components/prism-markup';
 import 'prismjs/components/prism-css';
+import 'prismjs/components/prism-javascript';
 import 'prismjs/themes/prism-tomorrow.css';
 import { getTryStarter } from '@site/src/pages/_tryData';
 import { canAccessLesson, getLastUnlockedLessonPath } from '@site/src/utils/lessonAccess';
@@ -171,12 +172,91 @@ function withPreviewTheme(doc) {
   return `<!DOCTYPE html><html><head>${previewThemeStyle}</head><body>${source}</body></html>`;
 }
 
+function makeJavascriptRunnerDoc(source) {
+  const code = JSON.stringify(String(source || '')).replace(/<\//g, '<\\/');
+  return `<!DOCTYPE html>
+<html>
+  <head>
+    ${previewThemeStyle}
+    <style>
+      #console-root {
+        white-space: pre-wrap;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        font-size: 14px;
+        line-height: 1.55;
+      }
+      .log { color: #e5e7eb; }
+      .error { color: #fca5a5; }
+    </style>
+  </head>
+  <body>
+    <div id="console-root"></div>
+    <script>
+      (function () {
+        var output = document.getElementById('console-root');
+
+        function stringify(value) {
+          if (typeof value === 'string') return value;
+          try {
+            return JSON.stringify(value);
+          } catch (e) {
+            return String(value);
+          }
+        }
+
+        function writeLine(kind, text) {
+          var line = document.createElement('div');
+          line.className = kind;
+          line.textContent = text;
+          output.appendChild(line);
+        }
+
+        var originalConsoleLog = console.log.bind(console);
+        console.log = function () {
+          var message = Array.prototype.map.call(arguments, stringify).join(' ');
+          writeLine('log', message);
+          originalConsoleLog.apply(console, arguments);
+        };
+
+        window.onerror = function (message, source, lineno, colno) {
+          writeLine('error', 'Runtime Error: ' + message + ' (' + lineno + ':' + colno + ')');
+          return true;
+        };
+
+        window.onunhandledrejection = function (event) {
+          var reason = event && event.reason ? stringify(event.reason) : 'Unknown promise rejection';
+          writeLine('error', 'Unhandled Rejection: ' + reason);
+        };
+
+        try {
+          var fn = new Function(${code});
+          fn();
+        } catch (error) {
+          writeLine('error', 'Runtime Error: ' + (error && error.message ? error.message : String(error)));
+        }
+      })();
+    </script>
+  </body>
+</html>`;
+}
+
+function buildOutputDoc(course, source) {
+  if (course === 'javascript') {
+    return makeJavascriptRunnerDoc(source);
+  }
+  return withPreviewTheme(source);
+}
+
 function courseLabel(course) {
-  return course === 'css' ? 'CSS' : 'HTML';
+  if (course === 'css') return 'CSS';
+  if (course === 'javascript') return 'JavaScript';
+  return 'HTML';
 }
 
 function prismLanguageForCourse(course) {
-  return course === 'css' ? 'css' : 'html';
+  if (course === 'css') return 'css';
+  if (course === 'javascript') return 'javascript';
+  return 'html';
 }
 
 export default function TryPage({ course = 'html', lessonId = 'lesson1' }) {
@@ -186,7 +266,7 @@ export default function TryPage({ course = 'html', lessonId = 'lesson1' }) {
   const [output, setOutput] = useState(initialCode);
   const [runHover, setRunHover] = useState(false);
   const [backHover, setBackHover] = useState(false);
-  const outputDoc = useMemo(() => withPreviewTheme(output), [output]);
+  const outputDoc = useMemo(() => buildOutputDoc(course, output), [course, output]);
   const label = courseLabel(course);
   const lessonMeta = useMemo(() => getLessonMeta(course, lessonNumber), [course, lessonNumber]);
   const lessonTitle = lessonMeta.title;
@@ -268,9 +348,14 @@ export default function TryPage({ course = 'html', lessonId = 'lesson1' }) {
 
           <div style={{ flex: 1 }}>
             <div style={{ ...outputPanelStyle, display: 'flex', flexDirection: 'column' }}>
-              <div style={panelHeaderStyle}>Preview</div>
+              <div style={panelHeaderStyle}>{course === 'javascript' ? 'Output' : 'Preview'}</div>
               <div style={outputBodyStyle}>
-                <iframe title="output" style={frameStyle} srcDoc={outputDoc} />
+                <iframe
+                  title="output"
+                  style={frameStyle}
+                  srcDoc={outputDoc}
+                  sandbox={course === 'javascript' ? 'allow-scripts' : undefined}
+                />
               </div>
             </div>
           </div>

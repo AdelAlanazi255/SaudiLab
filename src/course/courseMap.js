@@ -1,4 +1,4 @@
-import { htmlLessons, cssLessons } from '@site/src/data/lessons';
+import { htmlLessons, cssLessons, javascriptLessons } from '@site/src/data/lessons';
 
 function mapToCourseLessons(items, course) {
   return items.map((item) => ({
@@ -36,6 +36,18 @@ export const COURSES = {
     lessons: mapToCourseLessons(cssLessons, 'css'),
     completeDocId: 'css/css-complete',
     completePermalink: '/css/css-complete',
+  },
+  javascript: {
+    id: 'javascript',
+    title: 'JavaScript',
+    totalLessons: 10,
+    access: {
+      freeMode: true,
+      paidFromLesson: 1,
+    },
+    lessons: mapToCourseLessons(javascriptLessons, 'javascript'),
+    completeDocId: 'javascript/javascript-complete',
+    completePermalink: '/javascript/javascript-complete',
   },
 };
 

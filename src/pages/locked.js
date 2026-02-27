@@ -12,16 +12,22 @@ function safePath(path) {
 function parseNeed(needRaw, nextPath) {
   const cleaned = String(needRaw || '').trim().split('?')[0].split('#')[0];
 
-  if (/^\/(html|css)\/lesson\d+$/i.test(cleaned)) {
+  if (/^\/(html|css|javascript)\/lesson\d+$/i.test(cleaned)) {
     return cleaned.toLowerCase();
   }
 
   if (/^lesson\d+$/i.test(cleaned)) {
-    const course = nextPath?.startsWith('/css/') ? 'css' : 'html';
+    const course = nextPath?.startsWith('/css/')
+      ? 'css'
+      : nextPath?.startsWith('/javascript/')
+        ? 'javascript'
+        : 'html';
     return `/${course}/${cleaned.toLowerCase()}`;
   }
 
-  return nextPath?.startsWith('/css/') ? '/css/lesson1' : '/html/lesson1';
+  if (nextPath?.startsWith('/css/')) return '/css/lesson1';
+  if (nextPath?.startsWith('/javascript/')) return '/javascript/lesson1';
+  return '/html/lesson1';
 }
 
 function lessonLabel(needPath) {
@@ -32,6 +38,9 @@ function lessonLabel(needPath) {
 function courseStart(needPath, nextPath) {
   if (String(needPath).startsWith('/css/') || String(nextPath || '').startsWith('/css/')) {
     return '/css/lesson1';
+  }
+  if (String(needPath).startsWith('/javascript/') || String(nextPath || '').startsWith('/javascript/')) {
+    return '/javascript/lesson1';
   }
   return '/html/lesson1';
 }

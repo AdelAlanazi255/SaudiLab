@@ -376,6 +376,54 @@ const TRY_STARTERS = {
     <footer>Footer</footer>
   </body>
 </html>`,
+  'javascript:lesson1': `console.log("Hello from JavaScript!");
+console.log(2 + 2);`,
+  'javascript:lesson2': `const studentName = "Ahmad";
+let score = 10;
+
+score = score + 5;
+console.log(studentName, score);`,
+  'javascript:lesson3': `const a = 8;
+const b = 3;
+
+console.log(a + b);
+console.log(a - b);
+console.log(a > b);`,
+  'javascript:lesson4': `const temperature = 32;
+
+if (temperature > 30) {
+  console.log("It is hot today.");
+} else {
+  console.log("Weather is mild.");
+}`,
+  'javascript:lesson5': `for (let i = 1; i <= 5; i += 1) {
+  console.log("Step", i);
+}`,
+  'javascript:lesson6': `function greet(name) {
+  return \`Welcome, \${name}!\`;
+}
+
+console.log(greet("Student"));`,
+  'javascript:lesson7': `const topics = ["HTML", "CSS", "JavaScript"];
+
+console.log(topics[0]);
+console.log(topics.length);`,
+  'javascript:lesson8': `const user = {
+  name: "Sara",
+  level: "Beginner",
+};
+
+console.log(user.name);`,
+  'javascript:lesson9': `document.body.innerHTML = "<h1 id=\\"title\\">Hello</h1>";
+const title = document.getElementById("title");
+
+title.textContent = "Hello from DOM";`,
+  'javascript:lesson10': `document.body.innerHTML = "<button id=\\"btn\\">Click me</button>";
+const button = document.getElementById("btn");
+
+button.addEventListener("click", () => {
+  console.log("Button clicked");
+});`,
 };
 
 export function getTryStarter(course, lessonId) {

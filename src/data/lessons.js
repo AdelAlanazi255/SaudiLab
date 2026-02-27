@@ -24,6 +24,19 @@ const cssTitles = [
   'Mini Page Layout',
 ];
 
+const javascriptTitles = [
+  'Introduction to JavaScript',
+  'Variables and Data Types',
+  'Operators and Expressions',
+  'Conditionals',
+  'Loops',
+  'Functions Basics',
+  'Arrays',
+  'Objects',
+  'DOM Basics',
+  'Events and Interaction',
+];
+
 function buildLessons(course, titles) {
   return titles.map((title, i) => {
     const n = i + 1;
@@ -38,10 +51,12 @@ function buildLessons(course, titles) {
 
 export const htmlLessons = buildLessons('html', htmlTitles);
 export const cssLessons = buildLessons('css', cssTitles);
+export const javascriptLessons = buildLessons('javascript', javascriptTitles);
 
 const byCourse = {
   html: htmlLessons,
   css: cssLessons,
+  javascript: javascriptLessons,
 };
 
 export function getLessonMeta(course, n) {

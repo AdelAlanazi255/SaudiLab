@@ -205,7 +205,7 @@ const FAQ_ITEMS = [
 const COURSES = [
   { title: 'HTML', description: 'Learn the structure of the web.', active: true, ctaHref: '/html/lesson1' },
   { title: 'CSS', description: 'Style and layout your websites.', active: true, ctaHref: '/css/lesson1' },
-  { title: 'JavaScript', description: 'Make your websites interactive.', active: false, notify: true },
+  { title: 'JavaScript', description: 'Make your websites interactive.', active: true, ctaHref: '/javascript' },
   {
     title: 'Cyber Security Essentials',
     description: 'Learn core security concepts, threats, and safe practices.',

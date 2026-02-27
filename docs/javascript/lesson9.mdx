@@ -1,0 +1,47 @@
+﻿---
+id: lesson9
+title: "Lesson 9: DOM Basics"
+---
+
+import LessonShell from '@site/src/components/LessonShell';
+
+# Lesson 9: DOM Basics
+
+<LessonShell
+  course="javascript"
+  current={9}
+  total={10}
+  lessonId="lesson9"
+  tryPath="/javascript/lesson9/try"
+>
+
+What You'll Learn
+- Select elements from the page
+- Update text content
+- Change styles with JavaScript
+
+---
+
+Core Concept
+
+The DOM represents your page as objects. JavaScript can read and modify those objects to update the UI.
+
+---
+
+Example
+
+~~~javascript
+document.body.innerHTML = "<h1 id=\"title\">Hello</h1>";
+const title = document.getElementById("title");
+title.textContent = "Hello from DOM";
+~~~
+
+---
+
+Practice
+
+Create an element, set its text, and append it to the page.
+
+</LessonShell>
+
+---
