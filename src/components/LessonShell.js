@@ -4,7 +4,7 @@ import LessonProgress from '@site/src/components/LessonProgress';
 import CompleteButton from '@site/src/components/CompleteButton';
 import TryItButton from '@site/src/components/TryItButton';
 import useLessonAccess from '@site/src/hooks/useLessonAccess';
-import { getTryPath } from '@site/src/course/courseMap';
+import { getLesson, getTryPath } from '@site/src/course/courseMap';
 import { getLessonMetaSafe } from '@site/src/data/lessons';
 
 export default function LessonShell({
@@ -34,7 +34,7 @@ export default function LessonShell({
     }
 
     if (access.requiredLessonId) {
-      const requiredPath = `/${course}/${access.requiredLessonId}`;
+      const requiredPath = getLesson(course, access.requiredLessonId)?.permalink || `/${course}/${access.requiredLessonId}`;
       return (
         <div style={lockWrap}>
           <h2 style={lockTitle}>Lesson Locked</h2>

@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from '@docusaurus/Link';
 import useLessonAccess from '@site/src/hooks/useLessonAccess';
-import { COURSES } from '@site/src/course/courseMap';
+import { COURSES, getLesson } from '@site/src/course/courseMap';
 
 // Kept for compatibility with older imports.
 export const HTML_FREE_MODE = COURSES.html.access.freeMode;
@@ -30,6 +30,7 @@ export default function LessonGate({
     }
 
     if (access.requiredLessonId) {
+      const requiredPath = getLesson(course, access.requiredLessonId)?.permalink || `/${course}/${access.requiredLessonId}`;
       return (
         <div style={wrap}>
           <div style={card}>
@@ -37,7 +38,7 @@ export default function LessonGate({
             <p style={text}>
               Complete <b>{access.requiredLessonId}</b> first.
             </p>
-            <Link to={`/${course}/${access.requiredLessonId}`} style={primaryLink}>
+            <Link to={requiredPath} style={primaryLink}>
               Go to required lesson
             </Link>
           </div>

@@ -21,6 +21,13 @@ function isPaidBlocked(courseMeta, lesson) {
   return Boolean(lesson.paid);
 }
 
+function getLessonNumber(lesson) {
+  if (!lesson) return NaN;
+  const source = String(lesson.routeId || lesson.lessonId || '');
+  const match = source.match(/lesson(\d+)/i);
+  return match ? Number(match[1]) : NaN;
+}
+
 function getAccessState({ course, lessonId, docId, auth }) {
   const parsed = docId ? parseDocId(docId) : null;
   const resolvedCourse = course || parsed?.course || null;
@@ -46,9 +53,10 @@ function getAccessState({ course, lessonId, docId, auth }) {
 
   if (kind === 'lesson' && lesson?.requireLessonId) {
     const requiredLessonId = lesson.requireLessonId;
-    const lessonNumber = Number(String(lesson.lessonId).replace('lesson', ''));
+    const lessonNumber = getLessonNumber(lesson);
     if (!canAccessLesson(resolvedCourse, lessonNumber) || !isCompleted(resolvedCourse, requiredLessonId)) {
-      const needPath = `/${resolvedCourse}/${requiredLessonId}`;
+      const requiredLesson = getLesson(resolvedCourse, requiredLessonId);
+      const needPath = requiredLesson?.permalink || `/${resolvedCourse}/${requiredLessonId}`;
       return {
         allowed: false,
         reason: 'prerequisite',
@@ -59,9 +67,10 @@ function getAccessState({ course, lessonId, docId, auth }) {
   }
 
   if (kind === 'complete') {
-    const lastLessonId = `lesson${courseMeta.totalLessons}`;
+    const lastLessonId = courseMeta.lessons[courseMeta.lessons.length - 1]?.lessonId || `lesson${courseMeta.totalLessons}`;
     if (!isCompleted(resolvedCourse, lastLessonId)) {
-      const needPath = `/${resolvedCourse}/${lastLessonId}`;
+      const lastLesson = getLesson(resolvedCourse, lastLessonId);
+      const needPath = lastLesson?.permalink || `/${resolvedCourse}/${lastLessonId}`;
       return {
         allowed: false,
         reason: 'prerequisite',

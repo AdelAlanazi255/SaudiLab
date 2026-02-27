@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
 import { useLocation } from '@docusaurus/router';
@@ -12,21 +12,67 @@ function safePath(path) {
 function parseNeed(needRaw, nextPath) {
   const cleaned = String(needRaw || '').trim().split('?')[0].split('#')[0];
 
-  if (/^\/(html|css|javascript)\/lesson\d+$/i.test(cleaned)) {
+  if (/^\/(html|css|javascript|cse|crypto|cryptography|web-security|network-basics|pcs|ethics|kali-tools|kali|forensics|blueteam|career)\/lesson\d+$/i.test(cleaned)) {
+    const m = cleaned.match(/lesson\d+$/i);
+    if (String(cleaned).toLowerCase().startsWith('/cse/') && m) {
+      return `/cse/${m[0].toLowerCase()}`;
+    }
     return cleaned.toLowerCase();
   }
 
   if (/^lesson\d+$/i.test(cleaned)) {
-    const course = nextPath?.startsWith('/css/')
+    const lowerNext = String(nextPath || '').toLowerCase();
+    const course = lowerNext.startsWith('/css/')
       ? 'css'
-      : nextPath?.startsWith('/javascript/')
+      : lowerNext.startsWith('/javascript/')
         ? 'javascript'
-        : 'html';
+      : lowerNext.startsWith('/cse/')
+          ? 'cse'
+        : lowerNext.startsWith('/crypto/') || lowerNext.startsWith('/cryptography/')
+          ? 'crypto'
+          : lowerNext.startsWith('/web-security/')
+            ? 'websecurity'
+            : lowerNext.startsWith('/network-basics/')
+              ? 'networkbasics'
+                : lowerNext.startsWith('/pcs/')
+                  ? 'pcs'
+                : lowerNext.startsWith('/ethics/')
+                  ? 'ethics'
+                  : lowerNext.startsWith('/kali-tools/') || lowerNext.startsWith('/kali/')
+                    ? 'kalitools'
+                    : lowerNext.startsWith('/forensics/')
+                      ? 'forensics'
+                      : lowerNext.startsWith('/blueteam/')
+                        ? 'blueteam'
+                        : lowerNext.startsWith('/career/')
+                          ? 'career'
+                          : 'html';
+    if (course === 'cse') return `/cse/${cleaned.toLowerCase()}`;
+    if (course === 'crypto') return `/cryptography/${cleaned.toLowerCase()}`;
+    if (course === 'websecurity') return `/web-security/${cleaned.toLowerCase()}`;
+    if (course === 'networkbasics') return `/network-basics/${cleaned.toLowerCase()}`;
+    if (course === 'pcs') return `/pcs/${cleaned.toLowerCase()}`;
+    if (course === 'ethics') return `/ethics/${cleaned.toLowerCase()}`;
+    if (course === 'kalitools') return `/kali/${cleaned.toLowerCase()}`;
+    if (course === 'forensics') return `/forensics/${cleaned.toLowerCase()}`;
+    if (course === 'blueteam') return `/blueteam/${cleaned.toLowerCase()}`;
+    if (course === 'career') return `/career/${cleaned.toLowerCase()}`;
     return `/${course}/${cleaned.toLowerCase()}`;
   }
 
-  if (nextPath?.startsWith('/css/')) return '/css/lesson1';
-  if (nextPath?.startsWith('/javascript/')) return '/javascript/lesson1';
+  const lowerNext = String(nextPath || '').toLowerCase();
+  if (lowerNext.startsWith('/css/')) return '/css/lesson1';
+  if (lowerNext.startsWith('/javascript/')) return '/javascript/lesson1';
+  if (lowerNext.startsWith('/cse/')) return '/cse/lesson1';
+  if (lowerNext.startsWith('/crypto/') || lowerNext.startsWith('/cryptography/')) return '/cryptography/lesson1';
+  if (lowerNext.startsWith('/web-security/')) return '/web-security/lesson1';
+  if (lowerNext.startsWith('/network-basics/')) return '/network-basics/lesson1';
+  if (lowerNext.startsWith('/pcs/')) return '/pcs/lesson1';
+  if (lowerNext.startsWith('/ethics/')) return '/ethics/lesson1';
+  if (lowerNext.startsWith('/kali-tools/') || lowerNext.startsWith('/kali/')) return '/kali/lesson1';
+  if (lowerNext.startsWith('/forensics/')) return '/forensics/lesson1';
+  if (lowerNext.startsWith('/blueteam/')) return '/blueteam/lesson1';
+  if (lowerNext.startsWith('/career/')) return '/career/lesson1';
   return '/html/lesson1';
 }
 
@@ -36,11 +82,48 @@ function lessonLabel(needPath) {
 }
 
 function courseStart(needPath, nextPath) {
-  if (String(needPath).startsWith('/css/') || String(nextPath || '').startsWith('/css/')) {
+  const lowerNeed = String(needPath || '').toLowerCase();
+  const lowerNext = String(nextPath || '').toLowerCase();
+  if (lowerNeed.startsWith('/css/') || lowerNext.startsWith('/css/')) {
     return '/css/lesson1';
   }
-  if (String(needPath).startsWith('/javascript/') || String(nextPath || '').startsWith('/javascript/')) {
+  if (lowerNeed.startsWith('/javascript/') || lowerNext.startsWith('/javascript/')) {
     return '/javascript/lesson1';
+  }
+  if (lowerNeed.startsWith('/cse/') || lowerNext.startsWith('/cse/')) {
+    return '/cse/lesson1';
+  }
+  if (
+    lowerNeed.startsWith('/crypto/')
+    || lowerNeed.startsWith('/cryptography/')
+    || lowerNext.startsWith('/crypto/')
+    || lowerNext.startsWith('/cryptography/')
+  ) {
+    return '/cryptography/lesson1';
+  }
+  if (lowerNeed.startsWith('/web-security/') || lowerNext.startsWith('/web-security/')) {
+    return '/web-security/lesson1';
+  }
+  if (lowerNeed.startsWith('/network-basics/') || lowerNext.startsWith('/network-basics/')) {
+    return '/network-basics/lesson1';
+  }
+  if (lowerNeed.startsWith('/pcs/') || lowerNext.startsWith('/pcs/')) {
+    return '/pcs/lesson1';
+  }
+  if (lowerNeed.startsWith('/ethics/') || lowerNext.startsWith('/ethics/')) {
+    return '/ethics/lesson1';
+  }
+  if (lowerNeed.startsWith('/kali-tools/') || lowerNeed.startsWith('/kali/') || lowerNext.startsWith('/kali-tools/') || lowerNext.startsWith('/kali/')) {
+    return '/kali/lesson1';
+  }
+  if (lowerNeed.startsWith('/forensics/') || lowerNext.startsWith('/forensics/')) {
+    return '/forensics/lesson1';
+  }
+  if (lowerNeed.startsWith('/blueteam/') || lowerNext.startsWith('/blueteam/')) {
+    return '/blueteam/lesson1';
+  }
+  if (lowerNeed.startsWith('/career/') || lowerNext.startsWith('/career/')) {
+    return '/career/lesson1';
   }
   return '/html/lesson1';
 }

@@ -37,6 +37,9 @@ function normalizeLegacyKey(rawKey, defaultCourse = null) {
 
   if (/^(html|css)\/lesson\d+$/.test(raw)) return raw;
   if (/^(html|css)[-_]lesson\d+$/.test(raw)) return raw.replace(/[-_]/, '/');
+  if (/^cse\/cse_lesson\d+$/.test(raw)) return raw;
+  if (/^cse\/cse-lesson\d+$/.test(raw)) return raw.replace('cse-lesson', 'cse_lesson');
+  if (/^cse[-_]lesson\d+$/.test(raw)) return `cse/${raw.replace('-', '_')}`;
 
   if (/^lesson\d+$/.test(raw) && defaultCourse) {
     return canonicalKey(defaultCourse, raw);

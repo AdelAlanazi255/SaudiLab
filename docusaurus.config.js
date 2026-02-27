@@ -1,4 +1,4 @@
-// docusaurus.config.js
+﻿// docusaurus.config.js
 module.exports = {
   title: 'SaudiLab',
   tagline: 'Gateway to learning Coding and Cyber Security',
@@ -14,10 +14,8 @@ module.exports = {
     API_BASE_URL: process.env.API_BASE_URL || 'http://localhost:5000',
   },
 
-  // ✅ correct shape (object) — OR you can delete this whole markdown block
   markdown: {
     mdx1Compat: {
-      // keep MDX2 behavior (no MDX1 "loose" parsing)
       comments: false,
       admonitions: false,
       headingIds: false,
@@ -73,6 +71,96 @@ module.exports = {
         path: 'docs/javascript',
         routeBasePath: 'javascript',
         sidebarPath: require.resolve('./sidebarsJavascript.js'),
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'cse',
+        path: 'docs/cse',
+        routeBasePath: 'cse',
+        sidebarPath: require.resolve('./sidebarsCse.js'),
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'crypto',
+        path: 'docs/crypto',
+        routeBasePath: 'cryptography',
+        sidebarPath: require.resolve('./sidebarsCrypto.js'),
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'websecurity',
+        path: 'docs/web-security',
+        routeBasePath: 'web-security',
+        sidebarPath: require.resolve('./sidebarsWebSecurity.js'),
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'networkbasics',
+        path: 'docs/network-basics',
+        routeBasePath: 'network-basics',
+        sidebarPath: require.resolve('./sidebarsNetworkBasics.js'),
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'pcs',
+        path: 'docs/pcs',
+        routeBasePath: 'pcs',
+        sidebarPath: require.resolve('./sidebarsPcs.js'),
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'ethics',
+        path: 'docs/ethics',
+        routeBasePath: 'ethics',
+        sidebarPath: require.resolve('./sidebarsEthics.js'),
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'kalitools',
+        path: 'docs/kali-tools',
+        routeBasePath: 'kali',
+        sidebarPath: require.resolve('./sidebarsKaliTools.js'),
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'forensics',
+        path: 'docs/forensics',
+        routeBasePath: 'forensics',
+        sidebarPath: require.resolve('./sidebarsForensics.js'),
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'blueteam',
+        path: 'docs/blueteam',
+        routeBasePath: 'blueteam',
+        sidebarPath: require.resolve('./sidebarsBlueteam.js'),
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'career',
+        path: 'docs/career',
+        routeBasePath: 'career',
+        sidebarPath: require.resolve('./sidebarsCareer.js'),
       },
     ],
   ],

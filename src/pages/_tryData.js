@@ -1,4 +1,4 @@
-const TRY_STARTERS = {
+﻿const TRY_STARTERS = {
   'html:lesson1': `<!DOCTYPE html>
 <html>
   <head>
@@ -424,6 +424,87 @@ const button = document.getElementById("btn");
 button.addEventListener("click", () => {
   console.log("Button clicked");
 });`,
+  'cse:cse_lesson1': `<!DOCTYPE html>
+<html>
+  <body>
+    <div style="max-width:520px;margin:0 auto;font-family:system-ui,sans-serif;">
+      <h1 style="margin-top:0;">Security Choices Simulator</h1>
+      <p>Select your habits to see how risk changes.</p>
+
+      <label for="password">Password strength</label><br />
+      <select id="password">
+        <option value="weak">Weak</option>
+        <option value="medium">Medium</option>
+        <option value="strong">Strong</option>
+      </select>
+      <br /><br />
+
+      <label for="mfa">MFA</label><br />
+      <select id="mfa">
+        <option value="off">Off</option>
+        <option value="on">On</option>
+      </select>
+      <br /><br />
+
+      <label for="links">Suspicious links behavior</label><br />
+      <select id="links">
+        <option value="often">Often</option>
+        <option value="sometimes">Sometimes</option>
+        <option value="never">Never</option>
+      </select>
+      <br /><br />
+
+      <div id="meter" style="padding:10px;border-radius:8px;background:#7f1d1d;">Risk: High</div>
+      <p id="explain" style="margin-top:10px;">Current choices increase your exposure to account compromise.</p>
+
+      <button id="resetBtn" style="padding:8px 12px;border-radius:6px;border:1px solid #334155;background:#111827;color:#e5e7eb;">Reset</button>
+    </div>
+
+    <script>
+      const password = document.getElementById('password');
+      const mfa = document.getElementById('mfa');
+      const links = document.getElementById('links');
+      const meter = document.getElementById('meter');
+      const explain = document.getElementById('explain');
+      const resetBtn = document.getElementById('resetBtn');
+
+      function calculateRisk() {
+        let score = 0;
+        score += password.value === 'weak' ? 3 : password.value === 'medium' ? 2 : 0;
+        score += mfa.value === 'off' ? 3 : 0;
+        score += links.value === 'often' ? 3 : links.value === 'sometimes' ? 2 : 0;
+
+        if (score >= 7) {
+          meter.textContent = 'Risk: High';
+          meter.style.background = '#7f1d1d';
+          explain.textContent = 'Current choices increase your exposure to account compromise.';
+        } else if (score >= 4) {
+          meter.textContent = 'Risk: Medium';
+          meter.style.background = '#78350f';
+          explain.textContent = 'You have some protection, but key habits should be improved.';
+        } else {
+          meter.textContent = 'Risk: Low';
+          meter.style.background = '#14532d';
+          explain.textContent = 'These choices reduce common account and phishing risks.';
+        }
+      }
+
+      function resetForm() {
+        password.value = 'weak';
+        mfa.value = 'off';
+        links.value = 'often';
+        calculateRisk();
+      }
+
+      password.addEventListener('change', calculateRisk);
+      mfa.addEventListener('change', calculateRisk);
+      links.addEventListener('change', calculateRisk);
+      resetBtn.addEventListener('click', resetForm);
+
+      calculateRisk();
+    </script>
+  </body>
+</html>`,
 };
 
 export function getTryStarter(course, lessonId) {
@@ -439,3 +520,4 @@ export function getTryStarter(course, lessonId) {
 </html>`
   );
 }
+

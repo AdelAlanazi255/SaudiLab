@@ -1,4 +1,4 @@
-import { COURSES, getLesson } from '@site/src/course/courseMap';
+import { COURSES, getLesson, getLessonByRoute } from '@site/src/course/courseMap';
 import { isCompleted, migrateProgressOnce } from '@site/src/utils/progressKeys';
 
 function toLessonId(lessonNumber) {
@@ -11,10 +11,10 @@ export function canAccessLesson(course, lessonNumber) {
   if (typeof window === 'undefined') return true;
   migrateProgressOnce();
 
-  const lessonId = toLessonId(lessonNumber);
-  if (!lessonId) return false;
+  const routeId = toLessonId(lessonNumber);
+  if (!routeId) return false;
 
-  const lesson = getLesson(course, lessonId);
+  const lesson = getLessonByRoute(course, routeId) || getLesson(course, routeId);
   if (!lesson) return false;
   if (!lesson.requireLessonId) return true;
 
@@ -28,7 +28,10 @@ export function getLastUnlockedLessonId(course) {
   let lastUnlocked = c.lessons[0].lessonId;
   for (let i = 0; i < c.lessons.length; i += 1) {
     const lesson = c.lessons[i];
-    const n = Number(String(lesson.lessonId).replace('lesson', ''));
+    const source = String(lesson.routeId || lesson.lessonId || '');
+    const match = source.match(/lesson(\d+)/i);
+    const n = match ? Number(match[1]) : NaN;
+    if (!Number.isFinite(n)) break;
     if (!canAccessLesson(course, n)) break;
     lastUnlocked = lesson.lessonId;
   }
@@ -38,5 +41,6 @@ export function getLastUnlockedLessonId(course) {
 
 export function getLastUnlockedLessonPath(course) {
   const lessonId = getLastUnlockedLessonId(course);
-  return `/${course}/${lessonId}`;
+  const lesson = getLesson(course, lessonId);
+  return lesson?.permalink || `/${course}/${lessonId}`;
 }

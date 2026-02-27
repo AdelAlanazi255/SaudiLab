@@ -3,8 +3,8 @@ import { useHistory } from '@docusaurus/router';
 import { COURSES } from '@site/src/course/courseMap';
 
 function getFirstLessonPath(course) {
-  const firstLessonId = COURSES[course]?.lessons?.[0]?.lessonId || 'lesson1';
-  return `/${course}/${firstLessonId}`;
+  const firstLesson = COURSES[course]?.lessons?.[0];
+  return firstLesson?.permalink || `/${course}/lesson1`;
 }
 
 export default function RedirectToFirstLesson({ course }) {
