@@ -3,9 +3,30 @@ import Link from '@docusaurus/Link';
 import { useAuth } from '@site/src/utils/authState';
 import ConfirmModal from '@site/src/components/ConfirmModal';
 
+function SubscriptionBadge({ subscribed }) {
+  const isPro = !!subscribed;
+  return (
+    <span
+      style={{
+        fontSize: '0.68rem',
+        fontWeight: 800,
+        lineHeight: 1,
+        padding: '0.16rem 0.42rem',
+        borderRadius: 999,
+        color: isPro ? '#d7f7e4' : 'rgba(229,231,235,0.9)',
+        background: isPro ? 'rgba(0, 108, 53, 0.32)' : 'rgba(148,163,184,0.16)',
+        border: isPro ? '1px solid rgba(124, 242, 176, 0.28)' : '1px solid rgba(148,163,184,0.28)',
+      }}
+    >
+      {isPro ? 'Pro' : 'Free'}
+    </span>
+  );
+}
+
 export default function Navbar() {
   const auth = useAuth();
   const [open, setOpen] = useState(false);
+  const showSubscriptionBadge = !!auth?.isLoggedIn && !auth?.loading;
 
   return (
     <>
@@ -96,7 +117,10 @@ export default function Navbar() {
                     background: 'rgba(255,255,255,0.06)',
                   }}
                 >
-                  {auth.user?.username || 'Account'}
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.45rem' }}>
+                    <span>{auth.user?.username || 'Account'}</span>
+                    {showSubscriptionBadge ? <SubscriptionBadge subscribed={auth?.subscribed} /> : null}
+                  </span>
                 </Link>
 
                 <button
