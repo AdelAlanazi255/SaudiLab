@@ -134,7 +134,7 @@ export default function Home() {
                   )}
                   {course.notify ? (
                     <a href="/account" className="notify-link">
-                      Notify me -
+                      Notify me 
                     </a>
                   ) : null}
                 </div>
