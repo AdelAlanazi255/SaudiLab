@@ -210,7 +210,7 @@ const COURSES = [
     title: 'Cyber Security Essentials',
     description: 'Learn core security concepts and safe online habits.',
     active: true,
-    ctaHref: '/CSE',
+    ctaHref: '/cse',
   },
   {
     title: 'Personal Cyber Safety',
