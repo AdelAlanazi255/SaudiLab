@@ -3,12 +3,29 @@ import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
 import { useAuth } from '@site/src/utils/authState';
 import { getCourseProgress, COURSE_EVENT } from '@site/src/utils/progress';
-import { getCompletePage, getLesson } from '@site/src/course/courseMap';
+import { getLesson } from '@site/src/course/courseMap';
+import { HOMEPAGE_COURSES } from '@site/src/course/courseCatalog';
+import styles from './account.module.css';
+
+const COURSE_TABS = [
+  { id: 'in_progress', label: 'In progress' },
+  { id: 'not_started', label: 'Not started' },
+  { id: 'completed', label: 'Completed' },
+];
+
+function resolveCourseStatus(completedLessons, totalLessons) {
+  if (completedLessons <= 0) return 'not_started';
+  if (completedLessons >= totalLessons) return 'completed';
+  return 'in_progress';
+}
 
 export default function Account() {
   const auth = useAuth();
   const [msg, setMsg] = useState('');
   const [progressTick, setProgressTick] = useState(0);
+  const [activeTab, setActiveTab] = useState('in_progress');
+  const billingPortalUrl = '';
+  const hasBillingPortal = billingPortalUrl.length > 0;
 
   useEffect(() => {
     if (!auth) return;
@@ -47,61 +64,80 @@ export default function Account() {
     }
   };
 
-  const html = useMemo(() => getCourseProgress('html'), [progressTick, auth?.subscribed]);
-  const css = useMemo(() => getCourseProgress('css'), [progressTick, auth?.subscribed]);
+  const availableCourses = useMemo(
+    () => HOMEPAGE_COURSES.filter((course) => course.active && course.ctaHref),
+    [],
+  );
+
+  const courseCards = useMemo(
+    () =>
+      availableCourses.map((course) => {
+        const progress = getCourseProgress(course.courseId);
+        const totalLessons = Number(progress.total) || 0;
+        const completedLessons = Number(progress.completedCount) || 0;
+        const firstLessonPath = getLesson(course.courseId, 'lesson1')?.permalink || `${course.ctaHref}/lesson1`;
+        const continuePath = progress.nextLessonId
+          ? getLesson(course.courseId, progress.nextLessonId)?.permalink || firstLessonPath
+          : firstLessonPath;
+        const status = resolveCourseStatus(completedLessons, totalLessons);
+        const percent = totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 0;
+
+        const ctaText = status === 'not_started' ? 'Start' : status === 'completed' ? 'Review' : 'Continue';
+        const ctaHref = status === 'not_started' ? firstLessonPath : status === 'completed' ? firstLessonPath : continuePath || firstLessonPath;
+
+        return {
+          id: course.courseId,
+          title: course.title,
+          totalLessons,
+          completedLessons,
+          status,
+          percent,
+          ctaHref,
+          ctaText,
+        };
+      }),
+    [availableCourses, progressTick, auth?.subscribed],
+  );
+
+  const filteredCards = useMemo(
+    () => courseCards.filter((course) => course.status === activeTab),
+    [courseCards, activeTab],
+  );
 
   if (!auth || auth.loading) return null;
-
-  const toPath = (nextLessonId, course, fallback) => {
-    if (!nextLessonId) return fallback;
-    return getLesson(course, nextLessonId)?.permalink || fallback;
-  };
-
-  const htmlContinueHref = toPath(html.nextLessonId, 'html', getCompletePage('html')?.permalink || '/html/html-complete');
-  const cssContinueHref = toPath(css.nextLessonId, 'css', getCompletePage('css')?.permalink || '/css/lesson1');
 
   return (
     <Layout title="Account">
       <div style={pageWrap}>
         <header style={headerBlock}>
           <h1 style={pageTitle}>Account Dashboard</h1>
-          <p style={pageSub}>Profile, subscription status, and course progress in one place.</p>
+          <p style={pageSub}>Account details, plan status, and course progress in one place.</p>
         </header>
 
-        <section style={card}>
-          <h2 style={sectionTitle}>Profile</h2>
+        <section style={summaryCard}>
+          <h2 style={sectionTitle}>Account Summary</h2>
 
-          <div style={profileGrid}>
-            <Row label="Username" value={auth.user?.username || '-'} />
-            <Row label="Email" value={auth.user?.email || '-'} />
-            <div style={rowBox}>
-              <div style={label}>Subscription</div>
-              <div style={value}>
-                {auth.subscribed ? (
-                  <span style={statusActive}>Active</span>
-                ) : (
-                  <span style={statusFree}>Free</span>
-                )}
-              </div>
-            </div>
+          <div style={summaryGrid}>
+            <SummaryItem label="Username" value={auth.user?.username || '-'} />
+            <SummaryItem label="Email" value={auth.user?.email || '-'} />
+            <SummaryItem label="Plan" value={<PlanBadge subscribed={auth.subscribed} />} />
           </div>
 
-          {!auth.subscribed ? <p style={freeNote}>Free includes HTML lessons 1-3.</p> : null}
-
-          <div style={actionRow}>
-            <Link to="/html/lesson1" style={ghostLink}>
-              Go to Lessons
-            </Link>
-
-            {auth.subscribed ? (
-              <Link to="/manage-subscription" style={ghostLink}>
-                Manage subscription
-              </Link>
+          <div style={summaryActions}>
+            {hasBillingPortal ? (
+              <a href={billingPortalUrl} target="_blank" rel="noopener noreferrer" style={ghostLink}>
+                Billing
+              </a>
             ) : (
+              <button type="button" disabled style={disabledGhostBtn}>
+                Billing (coming soon)
+              </button>
+            )}
+            {!auth.subscribed ? (
               <button onClick={startCheckout} style={primaryBtn}>
                 Upgrade to Pro
               </button>
-            )}
+            ) : null}
           </div>
 
           {msg ? <div style={message}>{msg}</div> : null}
@@ -109,26 +145,39 @@ export default function Account() {
 
         <section style={coursesSection}>
           <h2 style={sectionTitle}>Courses and Progress</h2>
-          <div style={coursesGrid}>
-            <CourseCard
-              title="HTML Course"
-              subtitle={`${html.completedCount} / ${html.total} lessons completed`}
-              percent={html.percent}
-              primaryHref={htmlContinueHref}
-              primaryText={html.nextLessonId ? 'Continue Learning' : 'View Completion'}
-              secondaryHref="/html/lesson1"
-              secondaryText="Start from Lesson 1"
-            />
+          <div className={styles.filtersWrap}>
+            <div className={styles.courseFilters} role="tablist" aria-label="Course progress filters">
+              {COURSE_TABS.map((tab) => {
+                const active = tab.id === activeTab;
+                return (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    role="tab"
+                    aria-selected={active}
+                    className={`${styles.filterTab} ${active ? styles.filterTabActive : ''}`}
+                    onClick={() => setActiveTab(tab.id)}
+                  >
+                    {tab.label}
+                  </button>
+                );
+              })}
+            </div>
+            <p className={styles.filterSummary}>Showing {filteredCards.length} of {courseCards.length} courses</p>
+          </div>
 
-            <CourseCard
-              title="CSS Course"
-              subtitle={`${css.completedCount} / ${css.total} lessons completed`}
-              percent={css.percent}
-              primaryHref={cssContinueHref}
-              primaryText={css.nextLessonId ? 'Continue Learning' : 'Start CSS Course'}
-              secondaryHref="/css/lesson1"
-              secondaryText="Start from Lesson 1"
-            />
+          <div className={styles.coursesGrid}>
+            {filteredCards.map((courseCard) => (
+              <CourseCard
+                key={courseCard.id}
+                title={courseCard.title}
+                completedLessons={courseCard.completedLessons}
+                totalLessons={courseCard.totalLessons}
+                percent={courseCard.percent}
+                ctaHref={courseCard.ctaHref}
+                ctaText={courseCard.ctaText}
+              />
+            ))}
           </div>
         </section>
       </div>
@@ -136,65 +185,55 @@ export default function Account() {
   );
 }
 
-function CourseCard({ title, subtitle, percent, primaryHref, primaryText, secondaryHref, secondaryText }) {
+function CourseCard({ title, completedLessons, totalLessons, percent, ctaHref, ctaText }) {
   return (
-    <div style={card}>
-      <div style={cardHeaderRow}>
-        <div>
-          <div style={courseTitle}>{title}</div>
-          <div style={courseSubtitle}>{subtitle}</div>
-        </div>
-        <Circle percent={percent} />
+    <div style={courseCard} className={styles.courseCard}>
+      <div>
+        <div style={courseTitle} className={styles.courseTitleClamp}>{title}</div>
+        <div style={courseSubtitle}>{completedLessons} / {totalLessons} lessons</div>
       </div>
 
-      <div style={cardActions}>
-        <Link to={primaryHref} style={primaryLink}>
-          {primaryText}
-        </Link>
-        <Link to={secondaryHref} style={ghostLink}>
-          {secondaryText}
+      <div className={styles.progressTrack} aria-hidden="true">
+        <div className={styles.progressFill} style={{ width: `${Math.max(0, Math.min(100, percent))}%` }} />
+      </div>
+
+      <div style={cardActions} className={styles.cardActions}>
+        <Link to={ctaHref} style={coursePrimaryLink} className={styles.cardBtn}>
+          {ctaText}
         </Link>
       </div>
     </div>
   );
 }
 
-function Row({ label: l, value: v }) {
+function SummaryItem({ label: l, value: v }) {
   return (
-    <div style={rowBox}>
+    <div style={summaryItem}>
       <div style={label}>{l}</div>
       <div style={value}>{v}</div>
     </div>
   );
 }
 
-function Circle({ percent }) {
-  const p = Math.max(0, Math.min(100, Number(percent) || 0));
-  const size = 82;
-  const stroke = 9;
-  const r = (size - stroke) / 2;
-  const c = 2 * Math.PI * r;
-  const offset = c - (p / 100) * c;
-
+function PlanBadge({ subscribed }) {
+  const isPro = !!subscribed;
   return (
-    <div style={{ width: size, height: size, position: 'relative' }}>
-      <svg width={size} height={size}>
-        <circle cx={size / 2} cy={size / 2} r={r} stroke="rgba(255,255,255,0.12)" strokeWidth={stroke} fill="transparent" />
-        <circle
-          cx={size / 2}
-          cy={size / 2}
-          r={r}
-          stroke="#7cf2b0"
-          strokeWidth={stroke}
-          fill="transparent"
-          strokeLinecap="round"
-          strokeDasharray={c}
-          strokeDashoffset={offset}
-          style={{ transition: 'stroke-dashoffset 450ms ease' }}
-        />
-      </svg>
-      <div style={circleValue}>{p}%</div>
-    </div>
+    <span
+      style={{
+        fontSize: '0.68rem',
+        fontWeight: 800,
+        lineHeight: 1,
+        padding: '0.16rem 0.42rem',
+        borderRadius: 999,
+        color: isPro ? '#d7f7e4' : 'rgba(229,231,235,0.9)',
+        background: isPro ? 'rgba(0, 108, 53, 0.32)' : 'rgba(148,163,184,0.16)',
+        border: isPro ? '1px solid rgba(124, 242, 176, 0.28)' : '1px solid rgba(148,163,184,0.28)',
+        display: 'inline-flex',
+        alignItems: 'center',
+      }}
+    >
+      {isPro ? 'Pro' : 'Free'}
+    </span>
   );
 }
 
@@ -237,16 +276,24 @@ const card = {
   boxShadow: '0 20px 60px rgba(0,0,0,0.45), 0 0 60px rgba(124, 242, 176, 0.08)',
 };
 
-const profileGrid = {
-  marginTop: '1rem',
-  display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))',
-  gap: '0.8rem',
+const summaryCard = {
+  ...card,
+  marginTop: '0.85rem',
+  padding: '1rem 1.1rem',
+  borderRadius: 14,
+  boxShadow: '0 10px 24px rgba(0,0,0,0.24)',
 };
 
-const rowBox = {
-  padding: '0.8rem 0.9rem',
-  borderRadius: 12,
+const summaryGrid = {
+  marginTop: '0.72rem',
+  display: 'grid',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))',
+  gap: '0.58rem',
+};
+
+const summaryItem = {
+  padding: '0.6rem 0.75rem',
+  borderRadius: 10,
   border: '1px solid rgba(255,255,255,0.1)',
   background: 'rgba(255,255,255,0.04)',
 };
@@ -259,29 +306,14 @@ const label = {
 };
 
 const value = {
-  fontSize: '1rem',
+  fontSize: '0.95rem',
   fontWeight: 900,
 };
 
-const statusActive = {
-  color: '#7cf2b0',
-};
-
-const statusFree = {
-  color: 'rgba(255,255,255,0.82)',
-};
-
-const freeNote = {
-  marginTop: '0.8rem',
-  marginBottom: 0,
-  opacity: 0.78,
-  fontSize: '0.93rem',
-};
-
-const actionRow = {
-  marginTop: '1rem',
+const summaryActions = {
+  marginTop: '0.7rem',
   display: 'flex',
-  gap: '0.75rem',
+  gap: '0.55rem',
   flexWrap: 'wrap',
 };
 
@@ -291,45 +323,29 @@ const message = {
   opacity: 0.92,
 };
 
-const coursesGrid = {
-  marginTop: '1rem',
-  display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-  gap: '1rem',
-};
-
-const cardHeaderRow = {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-  gap: '1rem',
-  flexWrap: 'wrap',
+const courseCard = {
+  ...card,
+  padding: '0.95rem',
+  borderRadius: 14,
+  boxShadow: '0 8px 24px rgba(0,0,0,0.22)',
 };
 
 const courseTitle = {
   fontWeight: 950,
-  fontSize: '1.15rem',
+  fontSize: '1rem',
+  lineHeight: 1.25,
 };
 
 const courseSubtitle = {
   opacity: 0.76,
-  marginTop: '0.25rem',
+  marginTop: '0.18rem',
+  fontSize: '0.88rem',
 };
 
 const cardActions = {
-  marginTop: '1rem',
+  marginTop: '0.6rem',
   display: 'flex',
-  gap: '0.65rem',
-  flexWrap: 'wrap',
-};
-
-const circleValue = {
-  position: 'absolute',
-  inset: 0,
-  display: 'grid',
-  placeItems: 'center',
-  fontWeight: 950,
-  fontSize: '1rem',
+  gap: '0.4rem',
 };
 
 const primaryBtn = {
@@ -353,6 +369,12 @@ const ghostBtn = {
   color: 'rgba(255,255,255,0.92)',
 };
 
+const disabledGhostBtn = {
+  ...ghostBtn,
+  opacity: 0.52,
+  cursor: 'not-allowed',
+};
+
 const primaryLink = {
   ...primaryBtn,
   textDecoration: 'none',
@@ -367,4 +389,12 @@ const ghostLink = {
   display: 'inline-flex',
   alignItems: 'center',
   justifyContent: 'center',
+};
+
+const coursePrimaryLink = {
+  ...primaryLink,
+  padding: '0.56rem 0.84rem',
+  borderRadius: 12,
+  fontSize: '0.88rem',
+  fontWeight: 900,
 };

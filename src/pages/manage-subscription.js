@@ -1,13 +1,11 @@
-import React from 'react';
-import Layout from '@theme/Layout';
+import React, { useEffect } from 'react';
 
 export default function ManageSubscription() {
-  return (
-    <Layout title="Manage Subscription">
-      <div style={{ padding: '3rem', textAlign: 'center' }}>
-        <h1>Manage Subscription</h1>
-        <p>This page will be available soon.</p>
-      </div>
-    </Layout>
-  );
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      window.location.replace('/account');
+    }
+  }, []);
+
+  return null;
 }

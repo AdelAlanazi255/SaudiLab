@@ -1,6 +1,8 @@
 ﻿import React, { useEffect, useState } from 'react';
 import { useAuth } from '@site/src/utils/authState';
 import Layout from '@theme/Layout';
+import { HOMEPAGE_COURSES } from '@site/src/course/courseCatalog';
+import PricingPlansSection from '@site/src/components/PricingPlansSection';
 import './homepage.css';
 
 export default function Home() {
@@ -41,7 +43,7 @@ export default function Home() {
                 Start Learning
               </a>
               {showPricing ? (
-                <a href="#pricing" className="btn btn-ghost">
+                <a href="/pricing" className="btn btn-ghost">
                   View Plans
                 </a>
               ) : null}
@@ -50,63 +52,11 @@ export default function Home() {
         </section>
 
         {showPricing ? (
-          <section id="pricing" className="pricing-section reveal">
-            <div className="section-head">
-              <h2 className="section-title">Free vs Pro</h2>
-            </div>
-            <div className="pricing-grid">
-              <article className="plan-card">
-                <h3 className="plan-name">Free</h3>
-                <ul className="feature-list">
-                  <li>
-                    <span className="mark mark-ok" aria-hidden="true">+</span>
-                    <span>First 3 HTML lessons</span>
-                  </li>
-                  <li>
-                    <span className="mark mark-no" aria-hidden="true">-</span>
-                    <span>Full HTML course</span>
-                  </li>
-                  <li>
-                    <span className="mark mark-no" aria-hidden="true">-</span>
-                    <span>CSS course</span>
-                  </li>
-                  <li>
-                    <span className="mark mark-no" aria-hidden="true">-</span>
-                    <span>JavaScript course</span>
-                  </li>
-                </ul>
-              </article>
-
-              <article className="plan-card plan-card-pro">
-                <h3 className="plan-name">Pro</h3>
-                <p className="price-row">
-                  <span className="price-main">19 SAR</span>
-                  <span className="price-sub">/month</span>
-                </p>
-                <ul className="feature-list">
-                  <li>
-                    <span className="mark mark-ok" aria-hidden="true">+</span>
-                    <span>Full HTML course</span>
-                  </li>
-                  <li>
-                    <span className="mark mark-ok" aria-hidden="true">+</span>
-                    <span>Full CSS course</span>
-                  </li>
-                  <li>
-                    <span className="mark mark-ok" aria-hidden="true">+</span>
-                    <span>Full JavaScript course</span>
-                  </li>
-                  <li>
-                    <span className="mark mark-ok" aria-hidden="true">+</span>
-                    <span>Future course content</span>
-                  </li>
-                </ul>
-                <a href={pricingCtaHref} className="btn btn-primary plan-cta">
-                  {pricingCtaLabel}
-                </a>
-              </article>
-            </div>
-          </section>
+          <PricingPlansSection
+            pricingCtaHref={pricingCtaHref}
+            pricingCtaLabel={pricingCtaLabel}
+            className="reveal"
+          />
         ) : null}
 
         <section className="courses-section reveal" id="courses">
@@ -114,7 +64,7 @@ export default function Home() {
             <h2 className="section-title">Courses</h2>
           </div>
           <div className="courses-grid">
-            {COURSES.map((course) => (
+            {HOMEPAGE_COURSES.map((course) => (
               <article
                 key={course.title}
                 className={`course-card ${course.active ? 'course-card-active' : 'course-card-soon'}`}
@@ -201,65 +151,3 @@ const FAQ_ITEMS = [
   },
   { q: 'How do subscriptions work?', a: 'One subscription unlocks all current and upcoming premium courses.' },
 ];
-
-const COURSES = [
-  { title: 'HTML', description: 'Learn the structure of the web.', active: true, ctaHref: '/html' },
-  { title: 'CSS', description: 'Style and layout your websites.', active: true, ctaHref: '/css' },
-  { title: 'JavaScript', description: 'Make your websites interactive.', active: true, ctaHref: '/javascript' },
-  {
-    title: 'Cyber Security Essentials',
-    description: 'Learn core security concepts and safe online habits.',
-    active: true,
-    ctaHref: '/cse',
-  },
-  {
-    title: 'Personal Cyber Safety',
-    description: 'Protect accounts, devices, and personal data safely.',
-    active: true,
-    ctaHref: '/pcs',
-  },
-  {
-    title: 'Security Ethics',
-    description: 'Learn ethical hacking boundaries, responsibility, and mindset.',
-    active: true,
-    ctaHref: '/ethics',
-  },
-  {
-    title: 'Intro to Security Tools (Kali Linux)',
-    description: 'Learn common security tools and concepts used by professionals — safely and responsibly.',
-    active: true,
-    ctaHref: '/kali',
-  },
-  {
-    title: 'Cryptography',
-    description: 'Understand encryption, hashing, and modern crypto basics.',
-    active: true,
-    ctaHref: '/cryptography',
-  },
-  {
-    title: 'Web Security',
-    description: 'Learn how websites are protected against common attacks.',
-    active: true,
-    ctaHref: '/web-security',
-  },
-  {
-    title: 'Digital Forensics',
-    description: 'Learn how investigators analyze digital evidence.',
-    active: true,
-    ctaHref: '/forensics',
-  },
-  {
-    title: 'Blue Team Fundamentals',
-    description: 'Learn defensive security, monitoring, and incident response basics.',
-    active: true,
-    ctaHref: '/blueteam',
-  },
-  {
-    title: 'Cyber Security Career Paths',
-    description: 'Beginner guide to understanding cyber security roles, skills, and career paths.',
-    active: true,
-    ctaHref: '/career',
-  },
-];
-
-

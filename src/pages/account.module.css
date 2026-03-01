@@ -1,0 +1,99 @@
+.coursesGrid {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 18px;
+  align-items: stretch;
+}
+
+@media (min-width: 768px) {
+  .coursesGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1200px) {
+  .coursesGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1500px) {
+  .coursesGrid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.courseCard {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.courseTitleClamp {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cardActions {
+  margin-top: auto;
+}
+
+.cardBtn {
+  width: 100%;
+}
+
+.filtersWrap {
+  margin-top: 0.8rem;
+}
+
+.courseFilters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.filterTab {
+  padding: 0.46rem 0.8rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.84rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.filterTab:focus-visible {
+  outline: 2px solid #7cf2b0;
+  outline-offset: 2px;
+}
+
+.filterTabActive {
+  border-color: rgba(124, 242, 176, 0.55);
+  background: rgba(124, 242, 176, 0.16);
+  color: #7cf2b0;
+}
+
+.filterSummary {
+  margin: 0.45rem 0 0;
+  font-size: 0.84rem;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.progressTrack {
+  width: 100%;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  border-radius: 999px;
+  background: #7cf2b0;
+  transition: width 220ms ease;
+}

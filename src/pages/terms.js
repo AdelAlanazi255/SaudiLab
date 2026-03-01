@@ -4,48 +4,35 @@ import Layout from '@theme/Layout';
 export default function Terms() {
   return (
     <Layout title="Terms of Service">
-      <div style={{ padding: '3rem 1.5rem', maxWidth: 900, margin: '0 auto' }}>
+      <div style={pageWrap}>
         <h1>Terms of Service</h1>
-
-        <p>
-          Welcome to SaudiLab. By using this website, you agree to the following terms.
-        </p>
-
-        <h2>1. Service</h2>
-        <p>
-          SaudiLab provides online educational content for web development.
-          Some content is free, while other lessons require a paid subscription.
-        </p>
-
-        <h2>2. Accounts</h2>
-        <p>
-          You are responsible for maintaining the security of your account.
-          You must provide accurate information during registration.
-        </p>
-
-        <h2>3. Payments</h2>
-        <p>
-          Paid lessons require an active subscription.
-          Payments are processed securely through a third-party payment provider.
-        </p>
-
-        <h2>4. Usage</h2>
-        <p>
-          You may not copy, redistribute, or resell any content from SaudiLab
-          without permission.
-        </p>
-
-        <h2>5. Changes</h2>
-        <p>
-          SaudiLab may update these terms at any time. Continued use of the
-          website means you accept the updated terms.
-        </p>
-
-        <h2>Contact</h2>
-        <p>
-          For any questions, contact: support@saudilab.io
-        </p>
+        <div style={legalCard}>
+          <p>By using SaudiLab, you agree to these terms.</p>
+          <p>SaudiLab provides online educational content. Some lessons are free and some require a paid subscription.</p>
+          <p>You are responsible for your account security and for keeping your account information accurate.</p>
+          <p>Paid content requires an active subscription. Payments are processed by a secure third-party provider.</p>
+          <p>You may not copy, redistribute, or resell SaudiLab content without permission.</p>
+          <p>SaudiLab may update these terms over time. Continued use means you accept the latest version.</p>
+          <p>
+            For questions, contact <a href="mailto:support@saudilab.io">support@saudilab.io</a>.
+          </p>
+        </div>
       </div>
     </Layout>
   );
 }
+
+const pageWrap = {
+  padding: '3rem 1.5rem',
+  maxWidth: 900,
+  margin: '0 auto',
+};
+
+const legalCard = {
+  border: '1px solid rgba(255,255,255,0.12)',
+  borderRadius: 14,
+  background: 'rgba(255,255,255,0.03)',
+  padding: '1.2rem 1.25rem',
+  display: 'grid',
+  gap: '0.75rem',
+};
