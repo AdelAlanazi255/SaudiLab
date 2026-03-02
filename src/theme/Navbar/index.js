@@ -27,7 +27,7 @@ export default function Navbar() {
   return (
     <>
       <nav className="navbar navbar--fixed-top sl-nav-outer" role="navigation" aria-label="Main navigation">
-        <div className="navbar__inner sl-nav-grid">
+        <div className="navbar__inner sl-nav-row">
           <div className="navbar__items sl-nav-leftSlot">
             <Link className="navbar__brand sl-nav-brand" to="/">
               <span className="sl-nav-brandText">
@@ -43,13 +43,14 @@ export default function Navbar() {
                 onClick={() => setFeedbackOpen(true)}
                 className="sl-btn-ghost sl-nav-feedbackBtn"
               >
-                Give Feedback
+                <span className="sl-show-mobile">Feedback</span>
+                <span className="sl-hide-mobile">Give Feedback</span>
               </button>
             ) : null}
           </div>
 
           {auth?.isLoggedIn ? (
-            <div className="sl-nav-centerSlot navbarWelcome">
+            <div className="sl-nav-centerAbs navbarWelcome">
               <span className="sl-nav-centerText">Welcome, {formattedName}</span>
             </div>
           ) : null}
@@ -78,9 +79,6 @@ export default function Navbar() {
             )}
           </div>
         </div>
-        {auth?.isLoggedIn ? (
-          <div className="welcomeMobile">Welcome, {formattedName}</div>
-        ) : null}
       </nav>
 
       <ConfirmModal

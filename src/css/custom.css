@@ -214,13 +214,15 @@ h3 {
 }
 
 .navbar .navbar__inner {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
+  display: flex;
+  justify-content: space-between;
   min-height: var(--ifm-navbar-height) !important;
   height: var(--ifm-navbar-height);
   align-items: center !important;
   padding: 0 1rem;
-  gap: 16px;
+  gap: 12px;
+  position: relative;
+  flex-wrap: nowrap;
 }
 
 @media (min-width: 996px) {
@@ -272,6 +274,7 @@ h3 {
   padding: 0 0.8rem;
   font-size: 0.82rem;
   font-weight: 800;
+  flex-shrink: 0;
 }
 
 .sl-nav-brandText {
@@ -355,13 +358,6 @@ h3 {
   gap: 0.45rem;
 }
 
-.sl-nav-centerSlot {
-  justify-self: center;
-  min-width: 0;
-  overflow: hidden;
-  text-align: center;
-}
-
 .sl-nav-centerText {
   display: block;
   font-size: 0.88rem;
@@ -373,8 +369,24 @@ h3 {
   text-overflow: ellipsis;
 }
 
-.welcomeMobile {
+.sl-nav-centerAbs {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  min-width: 0;
+  max-width: 40vw;
+  text-align: center;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.sl-show-mobile {
   display: none;
+}
+
+.sl-hide-mobile {
+  display: inline;
 }
 
 .sl-nav-logoutBtn {
@@ -652,33 +664,48 @@ h3 {
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 767px) {
   .navbarWelcome {
     display: none;
   }
 
-  .sl-nav-outer {
-    padding-bottom: 6px;
-  }
-
-  .welcomeMobile {
-    display: block;
-    text-align: center;
-    font-size: 12px;
-    opacity: 0.75;
-    margin-top: 6px;
-    color: rgba(232, 238, 245, 0.75);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    padding: 0 1rem;
-  }
-
   .sl-nav-rightSlot {
-    gap: 10px;
+    gap: 8px;
   }
 
   .sl-nav-leftSlot {
-    gap: 10px;
+    gap: 8px;
+  }
+
+  .sl-nav-authBtn {
+    height: 34px;
+    padding: 0 0.74rem;
+    font-size: 0.82rem;
+  }
+
+  .sl-nav-accountLink {
+    padding: 0.28rem 0.55rem;
+    font-size: 0.82rem;
+  }
+
+  .sl-nav-logoutBtn {
+    height: 34px;
+    padding: 0 0.74rem;
+    font-size: 0.82rem;
+  }
+
+  .sl-nav-feedbackBtn {
+    height: 34px;
+    margin-left: 0.25rem;
+    padding: 0 0.62rem;
+    font-size: 0.78rem;
+  }
+
+  .sl-show-mobile {
+    display: inline;
+  }
+
+  .sl-hide-mobile {
+    display: none;
   }
 }
