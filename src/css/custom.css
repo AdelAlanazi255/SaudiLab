@@ -1,123 +1,467 @@
 :root {
+  --ifm-navbar-height: 64px;
   --ifm-color-primary: #7cf2b0;
-  --ifm-background-color: #0b0f14;
-  --ifm-font-color-base: rgba(255,255,255,0.92);
+  --ifm-color-primary-dark: #62e39f;
+  --ifm-color-primary-darker: #52d18f;
+  --ifm-color-primary-darkest: #3bb576;
+  --ifm-color-primary-light: #93f6c1;
+  --ifm-color-primary-lighter: #a2f8cb;
+  --ifm-color-primary-lightest: #b8fbd8;
 
-  --sl-bg: #0b0f14;
-  --sl-card: #11161c;
-  --sl-border: #1b232c;
+  --ifm-background-color: #090d12;
+  --ifm-font-color-base: #e8eef5;
+  --ifm-heading-color: #f4f8fc;
+
+  --sl-bg: #090d12;
+  --sl-surface: #111721;
+  --sl-surface-2: #161f2b;
+  --sl-border: rgba(226, 238, 251, 0.14);
   --sl-accent: #7cf2b0;
-  --sl-text-main: rgba(255,255,255,0.92);
-  --sl-text-muted: rgba(255,255,255,0.65);
+  --sl-text: #e8eef5;
+  --sl-muted: #9ca8b6;
+  --sl-shadow: 0 14px 34px rgba(0, 0, 0, 0.36);
+  --sl-glow: 0 0 42px rgba(124, 242, 176, 0.18);
+  --sl-radius-card: 16px;
+  --sl-radius-btn: 14px;
+  --sl-space-1: 0.5rem;
+  --sl-space-2: 0.75rem;
+  --sl-space-3: 1rem;
+  --sl-space-4: 1.5rem;
+  --sl-space-5: 2rem;
+  --sl-h1: clamp(2.2rem, 4.5vw, 3.3rem);
+  --sl-h2: clamp(1.7rem, 3.2vw, 2.3rem);
+  --sl-h3: clamp(1.1rem, 2vw, 1.35rem);
 }
 
 html[data-theme='dark'] {
-  --ifm-background-color: #0b0f14;
+  --ifm-background-color: var(--sl-bg);
 }
 
 body {
-  background: var(--sl-bg);
-  color: var(--sl-text-main);
+  background-color: var(--sl-bg);
+  background-image:
+    radial-gradient(900px 450px at 50% -8%, rgba(124, 242, 176, 0.07), transparent 72%),
+    linear-gradient(180deg, rgba(8, 12, 18, 0.84), rgba(8, 12, 18, 0.96));
+  color: var(--sl-text);
 }
 
-.info-card,
-.plan-card {
-  background: var(--sl-card);
-  border: 1px solid var(--sl-border);
-  color: var(--sl-text-main);
+h1,
+h2,
+h3,
+h4 {
+  color: var(--ifm-heading-color);
 }
 
-.section-title {
-  color: var(--sl-text-main);
+h1 {
+  font-size: var(--sl-h1);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 1.08;
 }
 
-.start-button,
-.plan-button,
-.mini-button {
-  background: var(--sl-accent);
-  color: #0b0f14;
-  border: none;
+h2 {
+  font-size: var(--sl-h2);
+  font-weight: 850;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+h3 {
+  font-size: var(--sl-h3);
   font-weight: 800;
+  line-height: 1.2;
 }
 
-.start-button:hover,
-.plan-button:hover,
-.mini-button:hover {
-  filter: brightness(1.05);
+.sl-muted {
+  color: var(--sl-muted);
 }
 
-/* Subtle neon backlight for cards (slightly stronger) */
-.info-card,
-.plan-card {
-  box-shadow:
-    0 10px 30px rgba(0, 0, 0, 0.35),
-    0 0 35px rgba(124, 242, 176, 0.10);
+.sl-card {
+  background: linear-gradient(180deg, var(--sl-surface), var(--sl-surface-2));
+  border: 1px solid var(--sl-border);
+  border-radius: var(--sl-radius-card);
+  box-shadow: var(--sl-shadow);
+}
+
+.sl-card-hover:hover {
+  border-color: rgba(226, 238, 251, 0.24);
+  background: linear-gradient(180deg, var(--sl-surface-2), #1a2432);
+}
+
+.sl-card-glow {
+  border-color: rgba(124, 242, 176, 0.42);
+  box-shadow: var(--sl-shadow), var(--sl-glow);
+}
+
+.sl-card-disabled {
+  background: linear-gradient(180deg, #0d1219, #0a0f14);
+  border-color: rgba(226, 238, 251, 0.1);
+  filter: saturate(0.66);
+}
+
+.sl-btn-primary,
+.sl-btn-ghost {
+  height: 44px;
+  border-radius: var(--sl-radius-btn);
+  padding: 0 1.1rem;
+  font-size: 0.93rem;
+  font-weight: 900;
+  text-decoration: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   transition:
-    box-shadow 0.45s ease,
-    transform 0.35s ease;
+    background-color 180ms ease,
+    color 180ms ease,
+    border-color 180ms ease,
+    transform 180ms ease,
+    box-shadow 180ms ease;
 }
 
-/* Slightly stronger glow on hover */
-.info-card:hover,
-.plan-card:hover {
-  box-shadow:
-    0 18px 50px rgba(0, 0, 0, 0.45),
-    0 0 80px rgba(124, 242, 176, 0.22);
-  transform: translateY(-4px);
+.sl-btn-primary {
+  border: 1px solid rgba(124, 242, 176, 0.52);
+  background: var(--sl-accent);
+  color: #08110b;
+  box-shadow: var(--sl-shadow), 0 0 32px rgba(124, 242, 176, 0.2);
 }
 
-/* =========================
-   SaudiLab Navbar hard-fix
-   ========================= */
+.sl-btn-primary:hover {
+  color: #08110b;
+  transform: translateY(-1px);
+  box-shadow: var(--sl-shadow), 0 0 36px rgba(124, 242, 176, 0.28);
+}
 
-/* Force navbar background + height */
+.sl-btn-ghost {
+  border: 1px solid var(--sl-border);
+  background: rgba(226, 238, 251, 0.03);
+  color: var(--sl-text);
+}
+
+.sl-btn-ghost:hover {
+  color: var(--sl-text);
+  transform: translateY(-1px);
+  background: rgba(226, 238, 251, 0.08);
+  border-color: rgba(226, 238, 251, 0.26);
+}
+
+.sl-btn-primary:focus-visible,
+.sl-btn-ghost:focus-visible,
+.sl-focus:focus-visible {
+  outline: 2px solid rgba(124, 242, 176, 0.92);
+  outline-offset: 2px;
+}
+
 .navbar.navbar--fixed-top {
-  background: rgba(0, 0, 0, 0.72) !important;
+  background: rgba(8, 12, 18, 0.84) !important;
+  border-bottom: 1px solid var(--sl-border) !important;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(255,255,255,0.10) !important;
 }
 
-/* Keep height sane (prevents giant empty bar) */
-:root {
-  --ifm-navbar-height: 64px;
-}
-
-/* Make sure contents are vertically centered */
 .navbar .navbar__inner {
   min-height: var(--ifm-navbar-height) !important;
   align-items: center !important;
 }
 
-/* Make default Docusaurus navbar links visible */
 .navbar .navbar__link,
 .navbar .navbar__brand {
-  color: #ffffff !important;
+  color: var(--sl-text) !important;
 }
 
-/* Ensure Login looks like a real button (not invisible) */
-.navbar .navbar__items--right .navbar__link {
-  padding: 8px 10px !important;
-  border-radius: 10px !important;
-  background: rgba(255,255,255,0.06) !important;
-  border: 1px solid rgba(255,255,255,0.10) !important;
-  font-weight: 900 !important;
+.sl-nav-brand {
+  text-decoration: none !important;
 }
 
-/* Smooth hover */
-.navbar .navbar__items--right .navbar__link:hover {
-  background: rgba(255,255,255,0.10) !important;
+.sl-nav-brandText {
+  display: inline-flex;
+  align-items: center;
+  font-weight: 900;
+  font-size: 1.2rem;
+  color: var(--sl-text);
+  letter-spacing: 0.2px;
+  white-space: nowrap;
 }
 
-/* Force Sign Up (your inline styles should already work, this just guarantees it) */
-.navbar a[href="/signup"] {
-  background: #ffffff !important;
-  color: #111827 !important;
-  border: 1px solid rgba(255,255,255,0.18) !important;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.25) !important;
+.sl-nav-wordmarkWrap {
+  position: relative;
+  display: inline-block;
+  padding-right: 1.85rem;
 }
 
-/* Brand text always visible even if theme overrides */
-.navbar .navbar__brand span {
-  color: #ffffff !important;
+.sl-nav-wordmark {
+  display: inline-block;
+  line-height: 1;
+}
+
+.sl-nav-beta {
+  position: absolute;
+  top: -0.38rem;
+  right: 0;
+  padding: 0.05rem 0.4rem;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  line-height: 1.3;
+  border: 1px solid rgba(124, 242, 176, 0.2);
+  background: rgba(124, 242, 176, 0.08);
+  color: rgba(198, 255, 222, 0.78);
+  pointer-events: none;
+}
+
+.sl-nav-linkBtn {
+  height: 38px;
+  margin-right: 0.4rem;
+}
+
+.sl-nav-signupBtn {
+  height: 38px;
+}
+
+.sl-nav-authActions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.sl-nav-accountLink {
+  color: var(--sl-text);
+  text-decoration: none;
+  font-weight: 800;
+  padding: 0.25rem 0.6rem;
+  border-radius: 10px;
+  border: 1px solid var(--sl-border);
+  background: rgba(226, 238, 251, 0.04);
+}
+
+.sl-nav-accountLink:hover {
+  color: var(--sl-text);
+  background: rgba(226, 238, 251, 0.08);
+}
+
+.sl-nav-accountInner {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.sl-nav-logoutBtn {
+  border: 0;
+  height: 38px;
+}
+
+.sl-footer {
+  padding: 2.5rem 1.5rem;
+  background: linear-gradient(180deg, #0b1017, #090d12);
+  color: rgba(232, 238, 245, 0.85);
+  margin-top: 4rem;
+  border-top: 1px solid var(--sl-border);
+}
+
+.sl-footerInner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 2.5rem;
+}
+
+.sl-footerBrand {
+  max-width: 320px;
+}
+
+.sl-footerBrandTitle {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: var(--sl-text);
+}
+
+.sl-footerBrandText {
+  margin-top: 0.6rem;
+  line-height: 1.6;
+  color: var(--sl-muted);
+}
+
+.sl-footerHeading {
+  font-weight: 850;
+  color: var(--sl-text);
+  margin-bottom: 0.8rem;
+}
+
+.sl-footerLinks {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.sl-footerPill {
+  color: var(--sl-text);
+  text-decoration: none;
+  border: 1px solid var(--sl-border);
+  background: rgba(226, 238, 251, 0.04);
+  padding: 0.4rem 0.85rem;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.sl-footerPill:hover {
+  color: var(--sl-text);
+  border-color: rgba(226, 238, 251, 0.25);
+  background: rgba(226, 238, 251, 0.08);
+}
+
+.sl-footerBottom {
+  max-width: 1100px;
+  margin: 2rem auto 0;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--sl-border);
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--sl-muted);
+}
+
+.sl-lessonLock {
+  margin-top: 1.5rem;
+  padding: 1.2rem;
+}
+
+.sl-lessonLockTitle {
+  margin: 0;
+  font-size: var(--sl-h3);
+  font-weight: 850;
+}
+
+.sl-lessonLockText {
+  margin-top: 0.6rem;
+  margin-bottom: 1rem;
+  color: var(--sl-muted);
+}
+
+.sl-lessonTryBtn {
+  margin-top: 1rem;
+}
+
+.sl-completeWrap {
+  margin-top: 2rem;
+}
+
+.sl-completeBtn {
+  border: 1px solid rgba(124, 242, 176, 0.52);
+}
+
+.sl-completeBtnDone {
+  border-color: rgba(124, 242, 176, 0.35);
+  background: rgba(124, 242, 176, 0.12);
+  color: var(--sl-accent);
+  box-shadow: none;
+}
+
+.sl-completeBtnDone:hover {
+  color: var(--sl-accent);
+  background: rgba(124, 242, 176, 0.15);
+  box-shadow: none;
+}
+
+.sl-completeContinueWrap {
+  margin-top: 0.85rem;
+}
+
+.sl-lessonProgress {
+  margin: 1.5rem 0 2rem;
+}
+
+.sl-lessonProgressHead {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 750;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.sl-lessonProgressTrack {
+  width: 100%;
+  height: 12px;
+  border-radius: 999px;
+  overflow: hidden;
+  border: 1px solid var(--sl-border);
+  background: rgba(226, 238, 251, 0.08);
+}
+
+.sl-lessonProgressFill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.4s ease;
+  background: linear-gradient(90deg, #46cd8f, #7cf2b0);
+}
+
+.sl-modalBackdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.62);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  z-index: 9999;
+}
+
+.sl-modal {
+  width: 100%;
+  max-width: 460px;
+  border-radius: var(--sl-radius-card);
+  padding: 1.25rem;
+  border: 1px solid var(--sl-border);
+  background: linear-gradient(180deg, var(--sl-surface), var(--sl-surface-2));
+  box-shadow: var(--sl-shadow), var(--sl-glow);
+  color: var(--sl-text);
+}
+
+.sl-modalHead {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.sl-modalTitle {
+  font-weight: 900;
+  font-size: 1.15rem;
+  margin-bottom: 0.35rem;
+}
+
+.sl-modalMsg {
+  color: var(--sl-muted);
+  line-height: 1.6;
+}
+
+.sl-modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 1.15rem;
+}
+
+.sl-modalX {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  border: 1px solid var(--sl-border);
+  background: rgba(226, 238, 251, 0.06);
+  color: var(--sl-text);
+  cursor: pointer;
+}
+
+.sl-modalX:hover {
+  background: rgba(226, 238, 251, 0.1);
+}
+
+@media (max-width: 996px) {
+  .sl-nav-linkBtn,
+  .sl-nav-signupBtn,
+  .sl-nav-logoutBtn {
+    height: 36px;
+  }
 }
