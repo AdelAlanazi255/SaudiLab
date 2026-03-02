@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
+import LandscapeTip from '@site/src/components/LandscapeTip';
 import { canAccessLesson, getLastUnlockedLessonPath } from '@site/src/utils/lessonAccess';
 import { getLessonMeta } from '@site/src/data/lessons';
 import { getLesson } from '@site/src/course/courseMap';
@@ -173,6 +174,7 @@ export default function EthicsLessonTry({ lessonId = 'lesson1' }) {
     <Layout title={`Security Ethics Lesson ${lessonNumber}: ${lessonMeta.title} - Try It Yourself`}>
       <div className="sl-try-page">
         <h1 className="sl-try-title">{`Security Ethics Lesson ${lessonNumber}: ${lessonMeta.title} - Try It Yourself`}</h1>
+        <LandscapeTip />
         <div className="sl-try-layout">
           <div className="sl-try-col">
             <div style={editorShellStyle} className="sl-try-panel sl-try-editor-panel">
@@ -228,6 +230,10 @@ export default function EthicsLessonTry({ lessonId = 'lesson1' }) {
               </div>
             </div>
           </div>
+        </div>
+
+        <div className="sl-try-back-wrap">
+          <Link to={backPath} className="sl-btn-ghost sl-try-back-btn">Go back to lesson</Link>
         </div>
       </div>
     </Layout>

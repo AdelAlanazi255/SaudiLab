@@ -1,6 +1,7 @@
-﻿import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
+import LandscapeTip from '@site/src/components/LandscapeTip';
 import Prism from 'prismjs';
 import 'prismjs/components/prism-markup';
 import 'prismjs/components/prism-css';
@@ -849,6 +850,7 @@ export default function TryPage({ course = 'html', lessonId = 'lesson1' }) {
     <Layout title={`${label} Lesson ${lessonNumber}: ${lessonTitle} - Try It Yourself`}>
       <div className="sl-try-page">
         <h1 className="sl-try-title">{`${label} Lesson ${lessonNumber}: ${lessonTitle} - Try It Yourself`}</h1>
+        <LandscapeTip />
 
         <div className="sl-try-layout">
           <div className="sl-try-col">
@@ -1070,6 +1072,10 @@ export default function TryPage({ course = 'html', lessonId = 'lesson1' }) {
               </div>
             </div>
           </div>
+        </div>
+
+        <div className="sl-try-back-wrap">
+          <Link to={backPath} className="sl-btn-ghost sl-try-back-btn">Go back to lesson</Link>
         </div>
       </div>
     </Layout>

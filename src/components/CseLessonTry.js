@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
+import LandscapeTip from '@site/src/components/LandscapeTip';
 import { canAccessLesson, getLastUnlockedLessonPath } from '@site/src/utils/lessonAccess';
 import { getLessonMeta } from '@site/src/data/lessons';
 import { getLesson } from '@site/src/course/courseMap';
@@ -441,6 +442,7 @@ ${network.vpn ? 'Traffic tunnel: Encrypted (VPN)' : network.openWifi ? 'Traffic 
     <Layout title={`CSE Lesson ${lessonNumber}: ${lessonMeta.title} - Try It Yourself`}>
       <div className="sl-try-page">
         <h1 className="sl-try-title">{`CSE Lesson ${lessonNumber}: ${lessonMeta.title} - Try It Yourself`}</h1>
+        <LandscapeTip />
         <div className="sl-try-layout">
           <div className="sl-try-col">
             <div style={editorShellStyle} className="sl-try-panel sl-try-editor-panel">
@@ -469,6 +471,10 @@ ${network.vpn ? 'Traffic tunnel: Encrypted (VPN)' : network.openWifi ? 'Traffic 
               </div>
             </div>
           </div>
+        </div>
+
+        <div className="sl-try-back-wrap">
+          <Link to={backPath} className="sl-btn-ghost sl-try-back-btn">Go back to lesson</Link>
         </div>
       </div>
     </Layout>
