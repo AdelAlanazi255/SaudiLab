@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Link from '@docusaurus/Link';
 import { useAuth } from '@site/src/utils/authState';
 import ConfirmModal from '@site/src/components/ConfirmModal';
+import FeedbackModal from '@site/src/components/FeedbackModal';
 
 function capitalizeFirstLetter(str) {
   if (!str || typeof str !== 'string') return 'there';
@@ -11,6 +12,7 @@ function capitalizeFirstLetter(str) {
 export default function Navbar() {
   const auth = useAuth();
   const [open, setOpen] = useState(false);
+  const [feedbackOpen, setFeedbackOpen] = useState(false);
   const displayName =
     auth?.profile?.username?.split(' ')?.[0]
     ?? auth?.user?.user_metadata?.username
@@ -35,6 +37,13 @@ export default function Navbar() {
                 </span>
               </span>
             </Link>
+            <button
+              type="button"
+              onClick={() => setFeedbackOpen(true)}
+              className="sl-btn-ghost sl-nav-feedbackBtn"
+            >
+              Give Feedback
+            </button>
           </div>
 
           {auth?.isLoggedIn ? (
@@ -81,6 +90,13 @@ export default function Navbar() {
           if (auth.signOut) await auth.signOut();
           else await auth.logout();
         }}
+      />
+
+      <FeedbackModal
+        open={feedbackOpen}
+        onClose={() => setFeedbackOpen(false)}
+        userEmail={auth?.user?.email || auth?.profile?.email || ''}
+        userId={auth?.user?.id || null}
       />
     </>
   );
