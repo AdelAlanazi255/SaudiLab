@@ -3,114 +3,55 @@ import Link from '@docusaurus/Link';
 
 export default function Footer() {
   return (
-    <footer
-      style={{
-        padding: '2.5rem 1.5rem',
-        backgroundColor: '#0f172a',
-        color: 'rgba(255,255,255,0.85)',
-        marginTop: '4rem',
-      }}
-    >
-      <div
-        style={{
-          maxWidth: '1100px',
-          margin: '0 auto',
-          display: 'flex',
-          justifyContent: 'space-between',
-          flexWrap: 'wrap',
-          gap: '2.5rem',
-        }}
-      >
-        {/* Brand */}
-        <div style={{ maxWidth: 320 }}>
-          <div style={{ fontSize: '1.15rem', fontWeight: 900, color: 'white' }}>
-            SaudiLab
-          </div>
-          <div style={{ marginTop: '0.6rem', lineHeight: 1.6, opacity: 0.85 }}>
-            Learn web development with interactive lessons designed for
-            Arabic-speaking beginners.
+    <footer className="sl-footer">
+      <div className="sl-footerInner">
+        <div className="sl-footerBrand">
+          <div className="sl-footerBrandTitle">SaudiLab</div>
+          <div className="sl-footerBrandText">
+            A beginner-friendly platform for learning web basics, cyber security, and ethical security concepts.
           </div>
         </div>
 
-        {/* Social */}
         <div>
-          <div style={sectionTitle}>Social</div>
-          <div style={linkRow}>
-            <a
-              href="https://www.instagram.com/saudi.lab"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={pill}
-            >
+          <div className="sl-footerHeading">Social</div>
+          <div className="sl-footerLinks">
+            <a href="https://www.instagram.com/saudi.lab" target="_blank" rel="noopener noreferrer" className="sl-footerPill">
               Instagram
             </a>
-            <a
-              href="https://www.tiktok.com/@saudi.lab"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={pill}
-            >
+            <a href="https://www.tiktok.com/@saudi.lab" target="_blank" rel="noopener noreferrer" className="sl-footerPill">
               TikTok
             </a>
           </div>
         </div>
 
-        {/* Legal */}
         <div>
-          <div style={sectionTitle}>Legal</div>
-          <div style={linkRow}>
-            <Link to="/contact" style={pill}>
+          <div className="sl-footerHeading">Legal</div>
+          <div className="sl-footerLinks">
+            <Link to="/contact" className="sl-footerPill">
               Contact
             </Link>
-            <Link to="/privacy" style={pill}>
+            <Link to="/privacy" className="sl-footerPill">
               Privacy
             </Link>
-            <Link to="/terms" style={pill}>
+            <Link to="/terms" className="sl-footerPill">
               Terms
             </Link>
-            <Link to="/refund" style={pill}>
-              Refund
-            </Link>
+          </div>
+        </div>
+
+        <div>
+          <div className="sl-footerHeading">Support</div>
+          <div className="sl-footerLinks">
+            <a href="https://example.com/support" target="_blank" rel="noopener noreferrer" className="sl-footerPill">
+              Support SaudiLab
+            </a>
           </div>
         </div>
       </div>
 
-      {/* Bottom bar */}
-      <div
-        style={{
-          maxWidth: '1100px',
-          margin: '2rem auto 0',
-          paddingTop: '1.2rem',
-          borderTop: '1px solid rgba(255,255,255,0.15)',
-          textAlign: 'center',
-          fontSize: '0.9rem',
-          opacity: 0.8,
-        }}
-      >
+      <div className="sl-footerBottom">
         © {new Date().getFullYear()} SaudiLab. All rights reserved.
       </div>
     </footer>
   );
 }
-
-const sectionTitle = {
-  fontWeight: 900,
-  color: 'white',
-  marginBottom: '0.8rem',
-};
-
-const linkRow = {
-  display: 'flex',
-  gap: '0.6rem',
-  flexWrap: 'wrap',
-};
-
-const pill = {
-  color: 'white',
-  textDecoration: 'none',
-  border: '1px solid rgba(255,255,255,0.25)',
-  padding: '0.4rem 0.85rem',
-  borderRadius: '999px',
-  fontWeight: 700,
-  fontSize: '0.9rem',
-};
