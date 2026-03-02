@@ -17,7 +17,7 @@ export default function AuthCallback() {
         for (let attempt = 0; attempt < 10; attempt += 1) {
           const { data } = await supabase.auth.getSession();
           if (data?.session) {
-            window.location.href = '/account';
+            window.location.href = '/';
             return;
           }
           await new Promise((resolve) => setTimeout(resolve, 300));

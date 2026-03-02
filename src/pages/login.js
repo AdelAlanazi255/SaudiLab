@@ -30,7 +30,7 @@ export default function Login() {
       });
 
       if (error) throw error;
-      window.location.href = '/account';
+      window.location.href = '/';
     } catch (err) {
       setMsg(err.message);
     }

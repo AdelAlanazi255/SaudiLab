@@ -37,7 +37,7 @@ export default function SignUp() {
         return;
       }
 
-      window.location.href = '/account';
+      window.location.href = '/';
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error(err?.message || String(err));
