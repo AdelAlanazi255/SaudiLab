@@ -28,7 +28,7 @@ export default function Navbar() {
     <>
       <nav className="navbar navbar--fixed-top" role="navigation" aria-label="Main navigation">
         <div className="navbar__inner">
-          <div className="navbar__items">
+          <div className="navbar__items sl-nav-left">
             <Link className="navbar__brand sl-nav-brand" to="/">
               <span className="sl-nav-brandText">
                 <span className="sl-nav-wordmarkWrap">
@@ -47,12 +47,12 @@ export default function Navbar() {
           </div>
 
           {auth?.isLoggedIn ? (
-            <div className="sl-nav-centerWelcome">
+            <div className="sl-nav-centerWelcome navbarWelcome">
               Welcome, {formattedName}
             </div>
           ) : null}
 
-          <div className="navbar__items navbar__items--right">
+          <div className="navbar__items navbar__items--right sl-nav-right">
             {!auth?.isLoggedIn ? (
               <div className="sl-nav-guestActions">
                 <Link className="sl-btn-ghost sl-nav-authBtn sl-nav-linkBtn" to="/login">
