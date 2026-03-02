@@ -3,6 +3,9 @@ import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
 import { useAuth } from '@site/src/utils/authState';
 import RequireAuth from '@site/src/components/RequireAuth';
+import PageContainer from '@site/src/components/layout/PageContainer';
+import Section from '@site/src/components/layout/Section';
+import CardGrid from '@site/src/components/layout/CardGrid';
 import { getCourseProgress, COURSE_EVENT } from '@site/src/utils/progress';
 import { getLesson } from '@site/src/course/courseMap';
 import { HOMEPAGE_COURSES } from '@site/src/course/courseCatalog';
@@ -89,7 +92,7 @@ export default function Account() {
   return (
     <Layout title="Account">
       <RequireAuth>
-        <div className={styles.pageWrap}>
+        <PageContainer className={styles.pageWrap}>
           <header className={styles.headerBlock}>
             <div className={styles.headerTopRow}>
               <h1 className={styles.pageTitle}>Account Dashboard</h1>
@@ -102,7 +105,7 @@ export default function Account() {
             <p className={styles.pageSub}>Account details and course progress in one place.</p>
           </header>
 
-          <section className={styles.summaryCard}>
+          <Section className={styles.summaryCard}>
             <h2 className={styles.sectionTitle}>Account Summary</h2>
 
             <div className={styles.summaryGrid}>
@@ -110,9 +113,9 @@ export default function Account() {
               <SummaryItem label="Email" value={auth.profile?.email || auth.user?.email || '-'} />
               <SummaryItem label="Access" value="All courses available" />
             </div>
-          </section>
+          </Section>
 
-          <section className={styles.coursesSection}>
+          <Section className={styles.coursesSection}>
             <h2 className={styles.sectionTitle}>Courses and Progress</h2>
             <div className={styles.filtersWrap}>
               <div className={styles.courseFilters} role="tablist" aria-label="Course progress filters">
@@ -135,7 +138,7 @@ export default function Account() {
               <p className={styles.filterSummary}>Showing {filteredCards.length} of {courseCards.length} courses</p>
             </div>
 
-            <div className={styles.coursesGrid}>
+            <CardGrid className={styles.coursesGrid} columns="four">
               {filteredCards.map((courseCard) => (
                 <CourseCard
                   key={courseCard.id}
@@ -147,9 +150,9 @@ export default function Account() {
                   ctaText={courseCard.ctaText}
                 />
               ))}
-            </div>
-          </section>
-        </div>
+            </CardGrid>
+          </Section>
+        </PageContainer>
       </RequireAuth>
     </Layout>
   );

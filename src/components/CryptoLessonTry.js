@@ -438,11 +438,11 @@ export default function CryptoLessonTry({ lessonId = 'lesson1' }) {
 
   return (
     <Layout title={`Cryptography Lesson ${lessonNumber}: ${lessonMeta.title} - Try It Yourself`}>
-      <div style={{ padding: '2rem' }}>
-        <h1>{`Cryptography Lesson ${lessonNumber}: ${lessonMeta.title} - Try It Yourself`}</h1>
-        <div style={{ display: 'flex', gap: '2rem', marginTop: '2rem' }}>
-          <div style={{ flex: 1 }}>
-            <div style={editorShellStyle}>
+      <div className="sl-try-page">
+        <h1 className="sl-try-title">{`Cryptography Lesson ${lessonNumber}: ${lessonMeta.title} - Try It Yourself`}</h1>
+        <div className="sl-try-layout">
+          <div className="sl-try-col">
+            <div style={editorShellStyle} className="sl-try-panel sl-try-editor-panel">
               <div style={panelHeaderStyle}>Input</div>
               <div style={editorBodyStyle}>
                 <div style={panelBodyStyle}>
@@ -562,7 +562,7 @@ export default function CryptoLessonTry({ lessonId = 'lesson1' }) {
                   ) : null}
                 </div>
               </div>
-              <div style={editorFooterStyle}>
+              <div style={editorFooterStyle} className="sl-try-actions">
                 <button onClick={resetLesson} style={buttonBase}>Reset</button>
                 <Link
                   to={backPath}
@@ -575,8 +575,8 @@ export default function CryptoLessonTry({ lessonId = 'lesson1' }) {
               </div>
             </div>
           </div>
-          <div style={{ flex: 1 }}>
-            <div style={outputPanelStyle}>
+          <div className="sl-try-col">
+            <div style={outputPanelStyle} className="sl-try-panel sl-try-preview-panel">
               <div style={panelHeaderStyle}>Output</div>
               <div style={outputBodyStyle}>
                 <div style={panelBodyStyle}>
@@ -757,3 +757,4 @@ export default function CryptoLessonTry({ lessonId = 'lesson1' }) {
     </Layout>
   );
 }
+

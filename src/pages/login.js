@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import Layout from '@theme/Layout';
 import { getSupabaseConfigStatus, supabase } from '@site/src/utils/supabaseClient';
+import PageContainer from '@site/src/components/layout/PageContainer';
+import Section from '@site/src/components/layout/Section';
 
 export default function Login() {
   const [usernameOrEmail, setUsernameOrEmail] = useState('');
@@ -51,45 +53,47 @@ export default function Login() {
 
   return (
     <Layout title="Login">
-      <div style={{ padding: '4rem 1.5rem', maxWidth: 520, margin: '0 auto' }}>
-        <h1 style={{ fontWeight: 900 }}>Login</h1>
+      <PageContainer size="narrow">
+        <Section className="sl-auth-section">
+          <h1 style={{ fontWeight: 900, margin: 0 }}>Login</h1>
 
-        <form onSubmit={onSubmit} style={{ marginTop: '1.5rem' }}>
-          <input
-            value={usernameOrEmail}
-            onChange={(e) => setUsernameOrEmail(e.target.value)}
-            placeholder="Username or Email"
-            style={inputStyle}
-          />
-          <input
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Password"
-            type="password"
-            style={inputStyle}
-          />
+          <form onSubmit={onSubmit} style={{ marginTop: '1.5rem' }}>
+            <input
+              value={usernameOrEmail}
+              onChange={(e) => setUsernameOrEmail(e.target.value)}
+              placeholder="Username or Email"
+              style={inputStyle}
+            />
+            <input
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Password"
+              type="password"
+              style={inputStyle}
+            />
 
-          <button type="submit" style={btnStyle}>
-            Login
-          </button>
+            <button type="submit" style={btnStyle}>
+              Login
+            </button>
 
-          <button type="button" onClick={onGoogle} style={oauthBtnStyle} disabled={!supabaseConfig.ok}>
-            Continue with Google
-          </button>
+            <button type="button" onClick={onGoogle} style={oauthBtnStyle} disabled={!supabaseConfig.ok}>
+              Continue with Google
+            </button>
 
-          {!supabaseConfig.ok ? (
-            <div style={{ marginTop: '0.85rem', color: '#ffb0b0', fontWeight: 700 }}>
-              {supabaseMissingMsg}
-            </div>
-          ) : null}
+            {!supabaseConfig.ok ? (
+              <div style={{ marginTop: '0.85rem', color: '#ffb0b0', fontWeight: 700 }}>
+                {supabaseMissingMsg}
+              </div>
+            ) : null}
 
-          {msg ? (
-            <div style={{ marginTop: '1rem', color: '#ff8a8a', fontWeight: 700 }}>
-              {msg}
-            </div>
-          ) : null}
-        </form>
-      </div>
+            {msg ? (
+              <div style={{ marginTop: '1rem', color: '#ff8a8a', fontWeight: 700 }}>
+                {msg}
+              </div>
+            ) : null}
+          </form>
+        </Section>
+      </PageContainer>
     </Layout>
   );
 }

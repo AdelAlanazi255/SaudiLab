@@ -847,12 +847,12 @@ export default function TryPage({ course = 'html', lessonId = 'lesson1' }) {
 
   return (
     <Layout title={`${label} Lesson ${lessonNumber}: ${lessonTitle} - Try It Yourself`}>
-      <div style={{ padding: '2rem' }}>
-        <h1>{`${label} Lesson ${lessonNumber}: ${lessonTitle} - Try It Yourself`}</h1>
+      <div className="sl-try-page">
+        <h1 className="sl-try-title">{`${label} Lesson ${lessonNumber}: ${lessonTitle} - Try It Yourself`}</h1>
 
-        <div style={{ display: 'flex', gap: '2rem', marginTop: '2rem' }}>
-          <div style={{ flex: 1 }}>
-            <div style={editorShellStyle}>
+        <div className="sl-try-layout">
+          <div className="sl-try-col">
+            <div style={editorShellStyle} className="sl-try-panel sl-try-editor-panel">
               <div style={panelHeaderStyle}>{isCse ? 'Scenario' : 'Editor'}</div>
               <div style={editorBodyStyle}>
                 {isCse ? (
@@ -955,10 +955,11 @@ export default function TryPage({ course = 'html', lessonId = 'lesson1' }) {
                   </div>
                 )}
               </div>
-              <div style={editorFooterStyle}>
+              <div style={editorFooterStyle} className="sl-try-actions">
                 {isCse ? (
                   <button
                     onClick={onResetCse}
+                    className="sl-try-action-btn"
                     style={{
                       ...buttonBase,
                       ...primaryButtonStyle,
@@ -971,6 +972,7 @@ export default function TryPage({ course = 'html', lessonId = 'lesson1' }) {
                     onClick={() => setOutput(code)}
                     onMouseEnter={() => setRunHover(true)}
                     onMouseLeave={() => setRunHover(false)}
+                    className="sl-try-action-btn sl-try-action-primary"
                     style={{
                       ...buttonBase,
                       ...primaryButtonStyle,
@@ -984,6 +986,7 @@ export default function TryPage({ course = 'html', lessonId = 'lesson1' }) {
                   to={backPath}
                   onMouseEnter={() => setBackHover(true)}
                   onMouseLeave={() => setBackHover(false)}
+                  className="sl-try-action-btn"
                     style={{
                       ...buttonBase,
                       ...ghostButtonStyle,
@@ -996,8 +999,8 @@ export default function TryPage({ course = 'html', lessonId = 'lesson1' }) {
             </div>
           </div>
 
-          <div style={{ flex: 1 }}>
-            <div style={{ ...outputPanelStyle, display: 'flex', flexDirection: 'column' }}>
+          <div className="sl-try-col">
+            <div style={{ ...outputPanelStyle, display: 'flex', flexDirection: 'column' }} className="sl-try-panel sl-try-preview-panel">
               <div style={panelHeaderStyle}>{isCse ? 'Outcome' : course === 'javascript' ? 'Results' : 'Preview'}</div>
               <div style={outputBodyStyle}>
                 {isCse ? (

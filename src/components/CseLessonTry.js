@@ -439,16 +439,16 @@ ${network.vpn ? 'Traffic tunnel: Encrypted (VPN)' : network.openWifi ? 'Traffic 
 
   return (
     <Layout title={`CSE Lesson ${lessonNumber}: ${lessonMeta.title} - Try It Yourself`}>
-      <div style={{ padding: '2rem' }}>
-        <h1>{`CSE Lesson ${lessonNumber}: ${lessonMeta.title} - Try It Yourself`}</h1>
-        <div style={{ display: 'flex', gap: '2rem', marginTop: '2rem' }}>
-          <div style={{ flex: 1 }}>
-            <div style={editorShellStyle}>
+      <div className="sl-try-page">
+        <h1 className="sl-try-title">{`CSE Lesson ${lessonNumber}: ${lessonMeta.title} - Try It Yourself`}</h1>
+        <div className="sl-try-layout">
+          <div className="sl-try-col">
+            <div style={editorShellStyle} className="sl-try-panel sl-try-editor-panel">
               <div style={panelHeaderStyle}>Scenario</div>
               <div style={editorBodyStyle}>
                 <div style={panelBodyStyle}>{leftByLesson[lessonNumber] || <p style={{ marginTop: 0 }}>Interactive content coming soon.</p>}</div>
               </div>
-              <div style={editorFooterStyle}>
+              <div style={editorFooterStyle} className="sl-try-actions">
                 <button onClick={reset} style={{ ...buttonBase, backgroundColor: '#15181d', color: '#e5e7eb' }}>Reset</button>
                 <Link
                   to={backPath}
@@ -461,8 +461,8 @@ ${network.vpn ? 'Traffic tunnel: Encrypted (VPN)' : network.openWifi ? 'Traffic 
               </div>
             </div>
           </div>
-          <div style={{ flex: 1 }}>
-            <div style={outputPanelStyle}>
+          <div className="sl-try-col">
+            <div style={outputPanelStyle} className="sl-try-panel sl-try-preview-panel">
               <div style={panelHeaderStyle}>Outcome</div>
               <div style={outputBodyStyle}>
                 <div style={panelBodyStyle}>{rightByLesson[lessonNumber] || <p style={{ marginTop: 0 }}>No outcome available.</p>}</div>
@@ -474,3 +474,4 @@ ${network.vpn ? 'Traffic tunnel: Encrypted (VPN)' : network.openWifi ? 'Traffic 
     </Layout>
   );
 }
+

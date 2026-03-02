@@ -171,11 +171,11 @@ export default function EthicsLessonTry({ lessonId = 'lesson1' }) {
 
   return (
     <Layout title={`Security Ethics Lesson ${lessonNumber}: ${lessonMeta.title} - Try It Yourself`}>
-      <div style={{ padding: '2rem' }}>
-        <h1>{`Security Ethics Lesson ${lessonNumber}: ${lessonMeta.title} - Try It Yourself`}</h1>
-        <div style={{ display: 'flex', gap: '2rem', marginTop: '2rem' }}>
-          <div style={{ flex: 1 }}>
-            <div style={editorShellStyle}>
+      <div className="sl-try-page">
+        <h1 className="sl-try-title">{`Security Ethics Lesson ${lessonNumber}: ${lessonMeta.title} - Try It Yourself`}</h1>
+        <div className="sl-try-layout">
+          <div className="sl-try-col">
+            <div style={editorShellStyle} className="sl-try-panel sl-try-editor-panel">
               <div style={panelHeaderStyle}>Scenario</div>
               <div style={{ flex: 1, padding: '0.5rem' }}>
                 <div style={panelBodyStyle}>
@@ -202,7 +202,7 @@ export default function EthicsLessonTry({ lessonId = 'lesson1' }) {
                   )}
                 </div>
               </div>
-              <div style={editorFooterStyle}>
+              <div style={editorFooterStyle} className="sl-try-actions">
                 <button onClick={() => setChoice(scenario ? scenario.options[0] : 'pending')} style={buttonBase}>Reset</button>
                 <Link
                   to={backPath}
@@ -215,8 +215,8 @@ export default function EthicsLessonTry({ lessonId = 'lesson1' }) {
               </div>
             </div>
           </div>
-          <div style={{ flex: 1 }}>
-            <div style={outputPanelStyle}>
+          <div className="sl-try-col">
+            <div style={outputPanelStyle} className="sl-try-panel sl-try-preview-panel">
               <div style={panelHeaderStyle}>Outcome</div>
               <div style={{ flex: 1, padding: '0.5rem' }}>
                 <div style={panelBodyStyle}>
@@ -233,3 +233,4 @@ export default function EthicsLessonTry({ lessonId = 'lesson1' }) {
     </Layout>
   );
 }
+

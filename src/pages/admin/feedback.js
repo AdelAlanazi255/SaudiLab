@@ -2,6 +2,8 @@ import React, { useEffect, useMemo, useState } from 'react';
 import Layout from '@theme/Layout';
 import { useAuth } from '@site/src/utils/authState';
 import { hasSupabaseConfig, supabase } from '@site/src/utils/supabaseClient';
+import PageContainer from '@site/src/components/layout/PageContainer';
+import Section from '@site/src/components/layout/Section';
 
 function fmtDate(value) {
   if (!value) return '-';
@@ -85,7 +87,9 @@ export default function AdminFeedbackPage() {
   if (auth?.loading || loading) {
     return (
       <Layout title="Admin Feedback">
-        <main style={{ padding: '2rem 1.5rem' }}>Loading...</main>
+        <PageContainer>
+          <Section>Loading...</Section>
+        </PageContainer>
       </Layout>
     );
   }
@@ -93,14 +97,17 @@ export default function AdminFeedbackPage() {
   if (!isAdmin) {
     return (
       <Layout title="Admin Feedback">
-        <main style={{ padding: '2rem 1.5rem' }}>Not authorized.</main>
+        <PageContainer>
+          <Section>Not authorized.</Section>
+        </PageContainer>
       </Layout>
     );
   }
 
   return (
     <Layout title="Admin Feedback">
-      <main style={{ padding: '2rem 1.5rem' }}>
+      <PageContainer>
+        <Section>
         <h1 style={{ marginBottom: '1rem' }}>Feedback</h1>
 
         {err ? <div style={{ marginBottom: '1rem', color: '#ffb0b0' }}>{err}</div> : null}
@@ -129,7 +136,8 @@ export default function AdminFeedbackPage() {
             </tbody>
           </table>
         </div>
-      </main>
+        </Section>
+      </PageContainer>
     </Layout>
   );
 }

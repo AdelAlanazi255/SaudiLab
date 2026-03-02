@@ -354,17 +354,17 @@ export default function KaliToolsLessonTry({ lessonId = 'lesson1' }) {
 
   return (
     <Layout title={`Kali Tools Lesson ${lessonNumber}: ${lessonMeta.title} - Try It Yourself`}>
-      <div style={{ padding: '2rem' }}>
-        <h1>{`Kali Tools Lesson ${lessonNumber}: ${lessonMeta.title} - Try It Yourself`}</h1>
-        <div style={{ display: 'flex', gap: '2rem', marginTop: '2rem' }}>
-          <div style={{ flex: 1 }}>
-            <div style={editorShellStyle}>
+      <div className="sl-try-page">
+        <h1 className="sl-try-title">{`Kali Tools Lesson ${lessonNumber}: ${lessonMeta.title} - Try It Yourself`}</h1>
+        <div className="sl-try-layout">
+          <div className="sl-try-col">
+            <div style={editorShellStyle} className="sl-try-panel sl-try-editor-panel">
               <div style={panelHeaderStyle}>Simulator</div>
               <div style={{ flex: 1, padding: '0.5rem' }}>
                 <div style={panelBodyStyle}>{renderSimulator()}</div>
               </div>
-              <div style={editorFooterStyle}>
-                <button onClick={reset} style={buttonBase}>Reset</button>
+              <div style={editorFooterStyle} className="sl-try-actions">
+                <button onClick={reset} className="sl-try-action-btn" style={buttonBase}>Reset</button>
                 <Link
                   to={backPath}
                   onMouseEnter={() => setBackHover(true)}
@@ -376,8 +376,8 @@ export default function KaliToolsLessonTry({ lessonId = 'lesson1' }) {
               </div>
             </div>
           </div>
-          <div style={{ flex: 1 }}>
-            <div style={outputPanelStyle}>
+          <div className="sl-try-col">
+            <div style={outputPanelStyle} className="sl-try-panel sl-try-preview-panel">
               <div style={panelHeaderStyle}>Output/Explanation</div>
               <div style={{ flex: 1, padding: '0.5rem' }}>
                 <div style={panelBodyStyle}>
@@ -394,3 +394,4 @@ export default function KaliToolsLessonTry({ lessonId = 'lesson1' }) {
     </Layout>
   );
 }
+

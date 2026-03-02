@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import Layout from '@theme/Layout';
 import { hasSupabaseConfig, supabase } from '@site/src/utils/supabaseClient';
+import PageContainer from '@site/src/components/layout/PageContainer';
+import Section from '@site/src/components/layout/Section';
 
 export default function SignUp() {
   const [username, setUsername] = useState('');
@@ -63,29 +65,31 @@ export default function SignUp() {
 
   return (
     <Layout title="Sign Up">
-      <div style={{ padding: '4rem 1.5rem', maxWidth: 520, margin: '0 auto' }}>
-        <h1 style={{ fontWeight: 900 }}>Sign Up</h1>
+      <PageContainer size="narrow">
+        <Section className="sl-auth-section">
+          <h1 style={{ fontWeight: 900, margin: 0 }}>Sign Up</h1>
 
-        <form onSubmit={onSubmit} style={{ marginTop: '1.5rem' }}>
-          <input value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Username" style={inputStyle} disabled={loading} />
-          <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" style={inputStyle} disabled={loading} />
-          <input value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password (min 8 chars)" type="password" style={inputStyle} disabled={loading} />
+          <form onSubmit={onSubmit} style={{ marginTop: '1.5rem' }}>
+            <input value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Username" style={inputStyle} disabled={loading} />
+            <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" style={inputStyle} disabled={loading} />
+            <input value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password (min 8 chars)" type="password" style={inputStyle} disabled={loading} />
 
-          <button type="submit" style={btnStyle} disabled={loading}>
-            {loading ? 'Creating…' : 'Create account'}
-          </button>
+            <button type="submit" style={btnStyle} disabled={loading}>
+              {loading ? 'Creating...' : 'Create account'}
+            </button>
 
-          <button type="button" onClick={onGoogle} style={oauthBtnStyle}>
-            Continue with Google
-          </button>
+            <button type="button" onClick={onGoogle} style={oauthBtnStyle}>
+              Continue with Google
+            </button>
 
-          {msg ? (
-            <div style={{ marginTop: '1rem', color: '#ff8a8a', fontWeight: 700 }}>
-              {msg}
-            </div>
-          ) : null}
-        </form>
-      </div>
+            {msg ? (
+              <div style={{ marginTop: '1rem', color: '#ff8a8a', fontWeight: 700 }}>
+                {msg}
+              </div>
+            ) : null}
+          </form>
+        </Section>
+      </PageContainer>
     </Layout>
   );
 }
