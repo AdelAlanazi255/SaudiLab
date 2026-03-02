@@ -2,25 +2,49 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { hasSupabaseConfig, supabase } from '@site/src/utils/supabaseClient';
 
 export default function FeedbackModal({ open, onClose, userEmail = '', userId = null }) {
-  const [category, setCategory] = useState('Bug');
   const [email, setEmail] = useState(userEmail || '');
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [msg, setMsg] = useState('');
+  const [emailError, setEmailError] = useState('');
 
   useEffect(() => {
-    if (!open) return;
-    setCategory('Bug');
+    if (!open) {
+      setEmail('');
+      setMessage('');
+      setMsg('');
+      setLoading(false);
+      setEmailError('');
+      return;
+    }
+
     setEmail(userEmail || '');
     setMessage('');
     setMsg('');
     setLoading(false);
+    setEmailError('');
   }, [open, userEmail]);
 
+  const trimmedEmail = email.trim();
+  const trimmedMessage = message.trim();
+
+  const isEmailValid = useMemo(() => {
+    const at = trimmedEmail.indexOf('@');
+    const dot = trimmedEmail.lastIndexOf('.');
+    return at > 0 && dot > at + 1 && dot < trimmedEmail.length - 1;
+  }, [trimmedEmail]);
+
   const canSubmit = useMemo(
-    () => !loading && message.trim().length > 0,
-    [loading, message],
+    () =>
+      !loading &&
+      trimmedEmail.length > 0 &&
+      trimmedMessage.length > 0 &&
+      isEmailValid,
+    [loading, trimmedEmail, trimmedMessage, isEmailValid],
   );
+  const liveEmailFormatError =
+    trimmedEmail.length > 0 && !isEmailValid ? 'Enter a valid email address.' : '';
+  const visibleEmailError = emailError || liveEmailFormatError;
 
   if (!open) return null;
 
@@ -33,7 +57,19 @@ export default function FeedbackModal({ open, onClose, userEmail = '', userId = 
     if (loading) return;
 
     setMsg('');
-    if (!message.trim()) {
+    if (!trimmedEmail) {
+      setEmailError('Email is required.');
+      return;
+    }
+
+    if (!isEmailValid) {
+      setEmailError('Enter a valid email address.');
+      return;
+    }
+
+    setEmailError('');
+
+    if (!trimmedMessage) {
       setMsg('Message is required.');
       return;
     }
@@ -52,9 +88,8 @@ export default function FeedbackModal({ open, onClose, userEmail = '', userId = 
     try {
       const payload = {
         user_id: userId,
-        email: email.trim() || null,
-        category,
-        message: message.trim(),
+        email: trimmedEmail,
+        message: trimmedMessage,
         page_url: typeof window !== 'undefined' ? window.location.pathname : null,
       };
 
@@ -86,36 +121,34 @@ export default function FeedbackModal({ open, onClose, userEmail = '', userId = 
         </div>
 
         <form onSubmit={onSubmit} style={{ marginTop: '0.9rem' }}>
-          <label htmlFor="feedback-category" className="sl-feedbackLabel">
-            Category
-          </label>
-          <select
-            id="feedback-category"
-            className="sl-feedbackInput"
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            disabled={loading}
-          >
-            <option value="Bug">Bug</option>
-            <option value="Idea">Idea</option>
-            <option value="Content">Content</option>
-            <option value="Other">Other</option>
-          </select>
-
           <label htmlFor="feedback-email" className="sl-feedbackLabel">
-            Email (optional)
+            Email
+            <span className="sl-feedbackRequired">*</span>
           </label>
           <input
             id="feedback-email"
             className="sl-feedbackInput"
             type="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              if (emailError) {
+                const nextTrimmedEmail = e.target.value.trim();
+                const at = nextTrimmedEmail.indexOf('@');
+                const dot = nextTrimmedEmail.lastIndexOf('.');
+                if (nextTrimmedEmail && at > 0 && dot > at + 1 && dot < nextTrimmedEmail.length - 1) {
+                  setEmailError('');
+                }
+              }
+            }}
             disabled={loading}
+            required
           />
+          {visibleEmailError ? <div className="sl-feedbackFieldError">{visibleEmailError}</div> : null}
 
           <label htmlFor="feedback-message" className="sl-feedbackLabel">
             Message
+            <span className="sl-feedbackRequired">*</span>
           </label>
           <textarea
             id="feedback-message"
@@ -132,7 +165,12 @@ export default function FeedbackModal({ open, onClose, userEmail = '', userId = 
             <button type="button" onClick={onClose} className="sl-btn-ghost" disabled={loading}>
               Cancel
             </button>
-            <button type="submit" className="sl-btn-primary" disabled={!canSubmit}>
+            <button
+              type="submit"
+              className="sl-btn-primary"
+              disabled={!canSubmit}
+              style={!canSubmit ? { opacity: 0.62, cursor: 'not-allowed' } : undefined}
+            >
               {loading ? 'Sending...' : 'Submit Feedback'}
             </button>
           </div>

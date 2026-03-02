@@ -557,6 +557,12 @@ h3 {
   color: var(--sl-muted);
 }
 
+.sl-feedbackRequired {
+  color: #ff6f6f;
+  margin-left: 0.2rem;
+  font-weight: 800;
+}
+
 .sl-feedbackInput {
   width: 100%;
   border-radius: 10px;
@@ -580,6 +586,12 @@ h3 {
   margin-top: 0.85rem;
   color: var(--sl-text);
   font-size: 0.9rem;
+}
+
+.sl-feedbackFieldError {
+  margin-top: 0.35rem;
+  color: #ff9b9b;
+  font-size: 0.8rem;
 }
 
 .sl-modalX {
