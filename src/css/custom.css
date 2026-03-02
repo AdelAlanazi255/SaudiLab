@@ -12,25 +12,34 @@
   --ifm-font-color-base: #e8eef5;
   --ifm-heading-color: #f4f8fc;
 
-  --sl-bg: #090d12;
-  --sl-surface: #111721;
-  --sl-surface-2: #161f2b;
-  --sl-border: rgba(226, 238, 251, 0.14);
-  --sl-accent: #7cf2b0;
-  --sl-text: #e8eef5;
-  --sl-muted: #9ca8b6;
-  --sl-shadow: 0 14px 34px rgba(0, 0, 0, 0.36);
-  --sl-glow: 0 0 42px rgba(124, 242, 176, 0.18);
-  --sl-radius-card: 16px;
+  --bg: #090d12;
+  --panel: #111721;
+  --border: rgba(145, 162, 182, 0.24);
+  --text: #e8eef5;
+  --muted: #94a1b2;
+  --accent-green: #7cf2b0;
+  --accent-neutral: #6f849d;
+
+  --sl-bg: var(--bg);
+  --sl-surface: var(--panel);
+  --sl-surface-2: #161e2a;
+  --sl-border: var(--border);
+  --sl-accent: var(--accent-green);
+  --sl-accent-neutral: var(--accent-neutral);
+  --sl-text: var(--text);
+  --sl-muted: var(--muted);
+  --sl-shadow: 0 10px 24px rgba(0, 0, 0, 0.3);
+  --sl-glow: 0 0 20px rgba(124, 242, 176, 0.09);
+  --sl-radius-card: 18px;
   --sl-radius-btn: 14px;
   --sl-space-1: 0.5rem;
   --sl-space-2: 0.75rem;
   --sl-space-3: 1rem;
   --sl-space-4: 1.5rem;
   --sl-space-5: 2rem;
-  --sl-h1: clamp(2.2rem, 4.5vw, 3.3rem);
-  --sl-h2: clamp(1.7rem, 3.2vw, 2.3rem);
-  --sl-h3: clamp(1.1rem, 2vw, 1.35rem);
+  --sl-h1: clamp(2rem, 3.8vw, 2.8rem);
+  --sl-h2: clamp(1.55rem, 2.6vw, 2rem);
+  --sl-h3: clamp(1.02rem, 1.55vw, 1.2rem);
 }
 
 html[data-theme='dark'] {
@@ -45,6 +54,10 @@ body {
   color: var(--sl-text);
 }
 
+main {
+  --ifm-leading: 1.72;
+}
+
 h1,
 h2,
 h3,
@@ -54,22 +67,40 @@ h4 {
 
 h1 {
   font-size: var(--sl-h1);
-  font-weight: 900;
-  letter-spacing: -0.03em;
-  line-height: 1.08;
+  font-weight: 850;
+  letter-spacing: -0.022em;
+  line-height: 1.12;
 }
 
 h2 {
   font-size: var(--sl-h2);
-  font-weight: 850;
-  letter-spacing: -0.02em;
-  line-height: 1.15;
+  font-weight: 800;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
 }
 
 h3 {
   font-size: var(--sl-h3);
   font-weight: 800;
   line-height: 1.2;
+}
+
+.theme-doc-markdown > h1 {
+  margin-bottom: 1rem;
+}
+
+.theme-doc-markdown > h2 {
+  margin-top: 2.35rem;
+  margin-bottom: 0.95rem;
+}
+
+.theme-doc-markdown > p {
+  max-width: 72ch;
+  color: var(--sl-muted);
+}
+
+.theme-doc-markdown > hr {
+  border-color: rgba(111, 132, 157, 0.34);
 }
 
 .sl-muted {
@@ -84,12 +115,17 @@ h3 {
 }
 
 .sl-card-hover:hover {
-  border-color: rgba(226, 238, 251, 0.24);
+  border-color: rgba(145, 162, 182, 0.36);
   background: linear-gradient(180deg, var(--sl-surface-2), #1a2432);
 }
 
 .sl-card-glow {
-  border-color: rgba(124, 242, 176, 0.42);
+  border-color: rgba(145, 162, 182, 0.32);
+  box-shadow: var(--sl-shadow);
+}
+
+.sl-card-glow:hover {
+  border-color: rgba(124, 242, 176, 0.26);
   box-shadow: var(--sl-shadow), var(--sl-glow);
 }
 
@@ -120,29 +156,29 @@ h3 {
 }
 
 .sl-btn-primary {
-  border: 1px solid rgba(124, 242, 176, 0.52);
+  border: 1px solid rgba(124, 242, 176, 0.34);
   background: var(--sl-accent);
   color: #08110b;
-  box-shadow: var(--sl-shadow), 0 0 32px rgba(124, 242, 176, 0.2);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.26);
 }
 
 .sl-btn-primary:hover {
   color: #08110b;
   transform: translateY(-1px);
-  box-shadow: var(--sl-shadow), 0 0 36px rgba(124, 242, 176, 0.28);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.3), 0 0 18px rgba(124, 242, 176, 0.14);
 }
 
 .sl-btn-ghost {
-  border: 1px solid var(--sl-border);
-  background: rgba(226, 238, 251, 0.03);
+  border: 1px solid rgba(111, 132, 157, 0.42);
+  background: rgba(111, 132, 157, 0.08);
   color: var(--sl-text);
 }
 
 .sl-btn-ghost:hover {
   color: var(--sl-text);
   transform: translateY(-1px);
-  background: rgba(226, 238, 251, 0.08);
-  border-color: rgba(226, 238, 251, 0.26);
+  background: rgba(111, 132, 157, 0.14);
+  border-color: rgba(111, 132, 157, 0.56);
 }
 
 .sl-btn-primary:focus-visible,
@@ -177,7 +213,7 @@ h3 {
   display: inline-flex;
   align-items: center;
   font-weight: 900;
-  font-size: 1.2rem;
+  font-size: 1.14rem;
   color: var(--sl-text);
   letter-spacing: 0.2px;
   white-space: nowrap;
@@ -211,12 +247,12 @@ h3 {
 }
 
 .sl-nav-linkBtn {
-  height: 38px;
+  height: 36px;
   margin-right: 0.4rem;
 }
 
 .sl-nav-signupBtn {
-  height: 38px;
+  height: 36px;
 }
 
 .sl-nav-authActions {
@@ -229,7 +265,7 @@ h3 {
   color: var(--sl-text);
   text-decoration: none;
   font-weight: 800;
-  padding: 0.25rem 0.6rem;
+  padding: 0.34rem 0.66rem;
   border-radius: 10px;
   border: 1px solid var(--sl-border);
   background: rgba(226, 238, 251, 0.04);
@@ -248,11 +284,11 @@ h3 {
 
 .sl-nav-logoutBtn {
   border: 0;
-  height: 38px;
+  height: 36px;
 }
 
 .sl-footer {
-  padding: 2.5rem 1.5rem;
+  padding: 3.2rem 1.5rem 2.4rem;
   background: linear-gradient(180deg, #0b1017, #090d12);
   color: rgba(232, 238, 245, 0.85);
   margin-top: 4rem;
@@ -265,7 +301,7 @@ h3 {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: 2.5rem;
+  gap: 3rem;
 }
 
 .sl-footerBrand {
@@ -279,8 +315,9 @@ h3 {
 }
 
 .sl-footerBrandText {
-  margin-top: 0.6rem;
-  line-height: 1.6;
+  margin-top: 0.8rem;
+  line-height: 1.7;
+  max-width: 34ch;
   color: var(--sl-muted);
 }
 
@@ -315,8 +352,8 @@ h3 {
 
 .sl-footerBottom {
   max-width: 1100px;
-  margin: 2rem auto 0;
-  padding-top: 1.2rem;
+  margin: 2.4rem auto 0;
+  padding-top: 1.3rem;
   border-top: 1px solid var(--sl-border);
   text-align: center;
   font-size: 0.9rem;
@@ -324,8 +361,8 @@ h3 {
 }
 
 .sl-lessonLock {
-  margin-top: 1.5rem;
-  padding: 1.2rem;
+  margin-top: 2rem;
+  padding: 1.45rem;
 }
 
 .sl-lessonLockTitle {
@@ -341,27 +378,27 @@ h3 {
 }
 
 .sl-lessonTryBtn {
-  margin-top: 1rem;
+  margin-top: 1.35rem;
 }
 
 .sl-completeWrap {
-  margin-top: 2rem;
+  margin-top: 2.25rem;
 }
 
 .sl-completeBtn {
-  border: 1px solid rgba(124, 242, 176, 0.52);
+  border: 1px solid rgba(124, 242, 176, 0.34);
 }
 
 .sl-completeBtnDone {
-  border-color: rgba(124, 242, 176, 0.35);
-  background: rgba(124, 242, 176, 0.12);
+  border-color: rgba(111, 132, 157, 0.36);
+  background: rgba(111, 132, 157, 0.12);
   color: var(--sl-accent);
   box-shadow: none;
 }
 
 .sl-completeBtnDone:hover {
   color: var(--sl-accent);
-  background: rgba(124, 242, 176, 0.15);
+  background: rgba(111, 132, 157, 0.16);
   box-shadow: none;
 }
 
@@ -370,7 +407,7 @@ h3 {
 }
 
 .sl-lessonProgress {
-  margin: 1.5rem 0 2rem;
+  margin: 1.75rem 0 2.35rem;
 }
 
 .sl-lessonProgressHead {
@@ -416,7 +453,7 @@ h3 {
   padding: 1.25rem;
   border: 1px solid var(--sl-border);
   background: linear-gradient(180deg, var(--sl-surface), var(--sl-surface-2));
-  box-shadow: var(--sl-shadow), var(--sl-glow);
+  box-shadow: var(--sl-shadow);
   color: var(--sl-text);
 }
 
@@ -463,5 +500,13 @@ h3 {
   .sl-nav-signupBtn,
   .sl-nav-logoutBtn {
     height: 36px;
+  }
+
+  .sl-footer {
+    padding-top: 2.6rem;
+  }
+
+  .sl-footerInner {
+    gap: 2rem;
   }
 }

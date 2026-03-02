@@ -46,39 +46,17 @@ export default function CompleteButton({ lessonId, course = 'html' }) {
   };
 
   return (
-    <div style={{ marginTop: '2rem' }}>
+    <div className="sl-completeWrap">
       <button
         onClick={onClick}
-        style={{
-          padding: '0.7rem 1.2rem',
-          borderRadius: '10px',
-          border: done ? '1px solid rgba(22,163,74,0.35)' : '1px solid rgba(0,0,0,0.2)',
-          background: done ? 'rgba(22,163,74,0.12)' : 'white',
-          color: done ? '#16a34a' : '#111',
-          fontWeight: 800,
-          cursor: 'pointer',
-        }}
+        className={`sl-btn-primary sl-completeBtn ${done ? 'sl-completeBtnDone' : ''}`}
       >
         {done ? 'Completed' : 'Mark as Completed'}
       </button>
 
       {done && nextPath ? (
-        <div style={{ marginTop: '0.85rem' }}>
-          <Link
-            to={nextPath}
-            style={{
-              padding: '0.75rem 1.1rem',
-              borderRadius: '14px',
-              border: 'none',
-              fontWeight: 950,
-              background: '#7cf2b0',
-              color: '#0b0f14',
-              textDecoration: 'none',
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
+        <div className="sl-completeContinueWrap">
+          <Link to={nextPath} className="sl-btn-primary">
             Continue
           </Link>
         </div>

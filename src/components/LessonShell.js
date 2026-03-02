@@ -21,25 +21,13 @@ export default function LessonShell({
   const resolvedTitle = title || getLessonMetaSafe(course, Number(current))?.title || null;
 
   if (!access.allowed) {
-    if (access.reason === 'paid') {
-      return (
-        <div style={lockWrap}>
-          <h2 style={lockTitle}>Lesson Locked</h2>
-          <p style={lockText}>This lesson requires an active subscription.</p>
-          <Link to="/account" style={primaryLink}>
-            Go to Account
-          </Link>
-        </div>
-      );
-    }
-
     if (access.requiredLessonId) {
       const requiredPath = getLesson(course, access.requiredLessonId)?.permalink || `/${course}/${access.requiredLessonId}`;
       return (
-        <div style={lockWrap}>
-          <h2 style={lockTitle}>Lesson Locked</h2>
-          <p style={lockText}>Complete the previous lesson first.</p>
-          <Link to={requiredPath} style={primaryLink}>
+        <div className="sl-lessonLock sl-card">
+          <h2 className="sl-lessonLockTitle">Lesson Locked</h2>
+          <p className="sl-lessonLockText">Complete the previous lesson first.</p>
+          <Link to={requiredPath} className="sl-btn-primary">
             Go to required lesson
           </Link>
         </div>
@@ -68,34 +56,3 @@ export default function LessonShell({
     </>
   );
 }
-
-const lockWrap = {
-  marginTop: '1.5rem',
-  padding: '1.2rem',
-  borderRadius: 16,
-  border: '1px solid rgba(255,255,255,0.15)',
-  background: 'rgba(0,0,0,0.3)',
-};
-
-const lockTitle = {
-  margin: 0,
-  fontWeight: 900,
-};
-
-const lockText = {
-  marginTop: '0.6rem',
-  marginBottom: '1rem',
-};
-
-const primaryLink = {
-  padding: '0.75rem 1.1rem',
-  borderRadius: 14,
-  border: 'none',
-  fontWeight: 950,
-  background: '#7cf2b0',
-  color: '#0b0f14',
-  textDecoration: 'none',
-  display: 'inline-flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-};

@@ -1,5 +1,4 @@
 import React from 'react';
-import Link from '@docusaurus/Link';
 import useLessonAccess from '@site/src/hooks/useLessonAccess';
 import { COURSES, getLesson } from '@site/src/course/courseMap';
 
@@ -15,20 +14,6 @@ export default function LessonGate({
   const access = useLessonAccess({ course, lessonId, docId });
 
   if (!access.allowed) {
-    if (access.reason === 'paid') {
-      return (
-        <div style={wrap}>
-          <div style={card}>
-            <h1 style={title}>Subscriber Only</h1>
-            <p style={text}>This lesson is part of the paid course.</p>
-            <Link to="/account" style={primaryLink}>
-              Go to Account
-            </Link>
-          </div>
-        </div>
-      );
-    }
-
     if (access.requiredLessonId) {
       const requiredPath = getLesson(course, access.requiredLessonId)?.permalink || `/${course}/${access.requiredLessonId}`;
       return (
@@ -38,9 +23,9 @@ export default function LessonGate({
             <p style={text}>
               Complete <b>{access.requiredLessonId}</b> first.
             </p>
-            <Link to={requiredPath} style={primaryLink}>
+            <a href={requiredPath} style={primaryLink}>
               Go to required lesson
-            </Link>
+            </a>
           </div>
         </div>
       );

@@ -8,13 +8,12 @@ export default function Terms() {
         <h1>Terms of Service</h1>
         <div style={legalCard}>
           <p>By using SaudiLab, you agree to these terms.</p>
-          <p>SaudiLab provides online educational content. Some lessons are free and some require a paid subscription.</p>
+          <p>SaudiLab provides online educational content for learners.</p>
           <p>You are responsible for your account security and for keeping your account information accurate.</p>
-          <p>Paid content requires an active subscription. Payments are processed by a secure third-party provider.</p>
           <p>You may not copy, redistribute, or resell SaudiLab content without permission.</p>
           <p>SaudiLab may update these terms over time. Continued use means you accept the latest version.</p>
           <p>
-            For questions, contact <a href="mailto:support@saudilab.io">support@saudilab.io</a>.
+            For questions and general feedback, contact <a href="mailto:saudilab255@gmail.com">saudilab255@gmail.com</a>.
           </p>
         </div>
       </div>

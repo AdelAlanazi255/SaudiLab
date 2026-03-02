@@ -16,9 +16,9 @@ const editorShellStyle = {
   flexDirection: 'column',
   width: '100%',
   height: '550px',
-  border: '1px solid #2a2f36',
-  borderRadius: '10px',
-  background: '#0f1115',
+  border: '1px solid var(--sl-border)',
+  borderRadius: '16px',
+  background: 'linear-gradient(180deg, var(--sl-surface), var(--sl-surface-2))',
   overflow: 'hidden',
   boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.02)',
 };
@@ -30,9 +30,9 @@ const panelHeaderStyle = {
   alignItems: 'center',
   fontSize: '12px',
   fontWeight: 700,
-  color: '#9ca3af',
-  borderBottom: '1px solid #2a2f36',
-  background: '#0f1115',
+  color: 'var(--sl-muted)',
+  borderBottom: '1px solid var(--sl-border)',
+  background: 'rgba(226, 238, 251, 0.02)',
 };
 
 const editorBodyStyle = {
@@ -43,12 +43,12 @@ const editorBodyStyle = {
 const editorFooterStyle = {
   height: '56px',
   padding: '0 0.75rem',
-  borderTop: '1px solid #2a2f36',
+  borderTop: '1px solid var(--sl-border)',
   display: 'flex',
   alignItems: 'center',
   gap: '0.6rem',
   justifyContent: 'flex-start',
-  background: '#0f1115',
+  background: 'rgba(226, 238, 251, 0.02)',
 };
 
 const textareaStyle = {
@@ -59,11 +59,11 @@ const textareaStyle = {
   padding: '1rem',
   resize: 'none',
   border: 'none',
-  borderRadius: '8px',
+  borderRadius: '12px',
   outline: 'none',
   background: 'transparent',
   color: 'transparent',
-  caretColor: '#e5e7eb',
+  caretColor: 'var(--sl-text)',
   fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
   fontSize: '14px',
   lineHeight: 1.6,
@@ -76,8 +76,8 @@ const highlightPreStyle = {
   inset: 0,
   margin: 0,
   padding: '1rem',
-  background: '#0b0d10',
-  color: '#e5e7eb',
+  background: '#0a0f14',
+  color: 'var(--sl-text)',
   pointerEvents: 'none',
   fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
   fontSize: '14px',
@@ -91,17 +91,17 @@ const editorInputWrapStyle = {
   position: 'relative',
   width: '100%',
   height: '100%',
-  borderRadius: '8px',
-  background: '#0b0d10',
+  borderRadius: '12px',
+  background: '#0a0f14',
   overflow: 'hidden',
 };
 
 const outputPanelStyle = {
   width: '100%',
   height: '550px',
-  border: '1px solid #2a2f36',
-  borderRadius: '10px',
-  backgroundColor: '#0f1115',
+  border: '1px solid var(--sl-border)',
+  borderRadius: '16px',
+  background: 'linear-gradient(180deg, var(--sl-surface), var(--sl-surface-2))',
   overflow: 'hidden',
   boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.02)',
 };
@@ -116,14 +116,14 @@ const frameStyle = {
   height: '100%',
   border: 'none',
   borderRadius: '8px',
-  backgroundColor: '#0b0d10',
+  backgroundColor: '#0a0f14',
 };
 
 const buttonBase = {
   height: '40px',
   padding: '0 1rem',
-  borderRadius: '8px',
-  border: '1px solid #2a2f36',
+  borderRadius: '14px',
+  border: '1px solid var(--sl-border)',
   cursor: 'pointer',
   fontWeight: 600,
   textDecoration: 'none',
@@ -133,13 +133,13 @@ const buttonBase = {
 };
 
 const primaryButtonStyle = {
-  backgroundColor: '#15181d',
-  color: '#e5e7eb',
+  backgroundColor: 'var(--sl-accent)',
+  color: '#08110b',
 };
 
 const ghostButtonStyle = {
   backgroundColor: 'transparent',
-  color: '#9ca3af',
+  color: 'var(--sl-text)',
 };
 
 const previewThemeStyle = `
@@ -762,7 +762,7 @@ function getRiskMessage(riskLevel) {
 
 function getRiskColor(riskLevel) {
   if (riskLevel === 'Low') return 'var(--ifm-color-success)';
-  if (riskLevel === 'Medium') return '#fbbf24';
+  if (riskLevel === 'Medium') return '#f9c64f';
   return 'var(--ifm-color-danger)';
 }
 
@@ -860,8 +860,8 @@ export default function TryPage({ course = 'html', lessonId = 'lesson1' }) {
                     style={{
                       ...editorInputWrapStyle,
                       padding: '1rem',
-                      color: '#e5e7eb',
-                      background: '#0b0d10',
+                      color: 'var(--sl-text)',
+                      background: '#0a0f14',
                       overflow: 'auto',
                     }}
                   >
@@ -880,10 +880,10 @@ export default function TryPage({ course = 'html', lessonId = 'lesson1' }) {
                             style={{
                               textAlign: 'left',
                               padding: '0.65rem 0.75rem',
-                              borderRadius: '8px',
-                              border: selected ? '1px solid #7cf2b0' : '1px solid #2a2f36',
+                              borderRadius: '14px',
+                              border: selected ? '1px solid var(--sl-accent)' : '1px solid var(--sl-border)',
                               background: selected ? 'rgba(124,242,176,0.12)' : '#111827',
-                              color: '#e5e7eb',
+                              color: 'var(--sl-text)',
                               cursor: 'pointer',
                               fontWeight: 600,
                             }}
@@ -904,7 +904,7 @@ export default function TryPage({ course = 'html', lessonId = 'lesson1' }) {
                           opacity: cseStep === 1 ? 0.5 : 1,
                           cursor: cseStep === 1 ? 'default' : 'pointer',
                           background: '#111827',
-                          color: '#e5e7eb',
+                          color: 'var(--sl-text)',
                         }}
                       >
                         Back
@@ -918,7 +918,7 @@ export default function TryPage({ course = 'html', lessonId = 'lesson1' }) {
                           opacity: cseStep === totalCseSteps || !currentChoice ? 0.5 : 1,
                           cursor: cseStep === totalCseSteps || !currentChoice ? 'default' : 'pointer',
                           background: '#111827',
-                          color: '#e5e7eb',
+                          color: 'var(--sl-text)',
                         }}
                       >
                         Next
@@ -962,7 +962,6 @@ export default function TryPage({ course = 'html', lessonId = 'lesson1' }) {
                     style={{
                       ...buttonBase,
                       ...primaryButtonStyle,
-                      backgroundColor: '#15181d',
                     }}
                   >
                     Reset
@@ -975,7 +974,7 @@ export default function TryPage({ course = 'html', lessonId = 'lesson1' }) {
                     style={{
                       ...buttonBase,
                       ...primaryButtonStyle,
-                      backgroundColor: runHover ? '#1c1f25' : '#15181d',
+                      backgroundColor: runHover ? '#93f6c1' : 'var(--sl-accent)',
                     }}
                   >
                     RUN
@@ -985,12 +984,12 @@ export default function TryPage({ course = 'html', lessonId = 'lesson1' }) {
                   to={backPath}
                   onMouseEnter={() => setBackHover(true)}
                   onMouseLeave={() => setBackHover(false)}
-                  style={{
-                    ...buttonBase,
-                    ...ghostButtonStyle,
-                    backgroundColor: backHover ? '#14171b' : 'transparent',
-                  }}
-                >
+                    style={{
+                      ...buttonBase,
+                      ...ghostButtonStyle,
+                      backgroundColor: backHover ? 'rgba(226, 238, 251, 0.08)' : 'transparent',
+                    }}
+                  >
                   {`Back to Lesson ${lessonNumber}`}
                 </Link>
               </div>
@@ -1006,8 +1005,8 @@ export default function TryPage({ course = 'html', lessonId = 'lesson1' }) {
                     style={{
                       ...editorInputWrapStyle,
                       padding: '1rem',
-                      color: '#e5e7eb',
-                      background: '#0b0d10',
+                      color: 'var(--sl-text)',
+                      background: '#0a0f14',
                       overflow: 'auto',
                     }}
                   >

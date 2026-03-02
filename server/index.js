@@ -181,42 +181,6 @@ app.get('/auth/me', authMiddleware, (req, res) => {
   }
 });
 
-app.get('/billing/status', authMiddleware, (req, res) => {
-  const row = db.prepare('SELECT subscribed FROM users WHERE id = ?').get(req.user.id);
-  return res.json({ subscribed: !!row?.subscribed });
-});
-
-app.post('/billing/checkout/start', authMiddleware, (req, res) => {
-  // TODO: Replace with Lemon Squeezy integration
-  return res.json({ ok: true, checkoutUrl: '/payment-success' });
-});
-
-app.get('/billing/checkout/status/:id', authMiddleware, (req, res) => {
-  // TODO: Replace with Lemon Squeezy integration
-  db.prepare('UPDATE users SET subscribed = 1 WHERE id = ?').run(req.user.id);
-  return res.json({ paid: true });
-});
-
-app.post('/api/paypal/create-order', authMiddleware, (req, res) => {
-  const hasConfig = Boolean(process.env.PAYPAL_CLIENT_ID && process.env.PAYPAL_CLIENT_SECRET);
-  if (!hasConfig) return res.status(501).json({ error: 'PayPal not configured' });
-
-  // TODO: Replace with real PayPal order creation flow.
-  return res.json({ orderId: `stub-order-${Date.now()}` });
-});
-
-app.post('/api/paypal/capture-order', authMiddleware, (req, res) => {
-  const hasConfig = Boolean(process.env.PAYPAL_CLIENT_ID && process.env.PAYPAL_CLIENT_SECRET);
-  if (!hasConfig) return res.status(501).json({ error: 'PayPal not configured' });
-
-  const { orderId } = req.body || {};
-  if (!orderId) return res.status(400).json({ error: 'orderId is required' });
-
-  // TODO: Replace with real PayPal capture flow.
-  db.prepare('UPDATE users SET subscribed = 1 WHERE id = ?').run(req.user.id);
-  return res.json({ ok: true, orderId, status: 'captured_placeholder' });
-});
-
 // 404
 app.use((req, res) => res.status(404).json({ error: 'Not found' }));
 

@@ -1,18 +1,10 @@
-﻿import React, { useEffect, useState } from 'react';
-import { useAuth } from '@site/src/utils/authState';
+import React, { useEffect, useState } from 'react';
 import Layout from '@theme/Layout';
 import { HOMEPAGE_COURSES } from '@site/src/course/courseCatalog';
-import PricingPlansSection from '@site/src/components/PricingPlansSection';
 import './homepage.css';
 
 export default function Home() {
   const [openFaqIndex, setOpenFaqIndex] = useState(0);
-  const auth = useAuth();
-  const isLoggedIn = auth?.isLoggedIn === true;
-  const isSubscribed = auth?.subscribed === true;
-  const showPricing = !isSubscribed;
-  const pricingCtaHref = isLoggedIn ? '/checkout' : '/login';
-  const pricingCtaLabel = isLoggedIn ? 'Subscribe Now' : 'Log in';
 
   useEffect(() => {
     const els = document.querySelectorAll('.reveal');
@@ -36,28 +28,15 @@ export default function Home() {
           <div className="hero-inner">
             <h1 className="hero-title">Start Your Cyber Security Journey</h1>
             <p className="hero-subtitle">
-              Build a strong foundation in security, web technologies, and practical skills - designed for complete beginners.
+              Build a strong foundation in security, web technologies, and practical skills  Designed for complete beginners.
             </p>
             <div className="hero-cta-row">
               <a href="/html/lesson1" className="btn btn-primary">
                 Start Learning
               </a>
-              {showPricing ? (
-                <a href="/pricing" className="btn btn-ghost">
-                  View Plans
-                </a>
-              ) : null}
             </div>
           </div>
         </section>
-
-        {showPricing ? (
-          <PricingPlansSection
-            pricingCtaHref={pricingCtaHref}
-            pricingCtaLabel={pricingCtaLabel}
-            className="reveal"
-          />
-        ) : null}
 
         <section className="courses-section reveal" id="courses">
           <div className="section-head">
@@ -84,7 +63,7 @@ export default function Home() {
                   )}
                   {course.notify ? (
                     <a href="/account" className="notify-link">
-                      Notify me 
+                      Notify me
                     </a>
                   ) : null}
                 </div>
@@ -136,18 +115,11 @@ export default function Home() {
 
 const FAQ_ITEMS = [
   { q: 'Do I need coding experience?', a: 'No. SaudiLab is designed for complete beginners and starts from zero.' },
-  {
-    q: 'What can I try for free?',
-    a: 'You can access the first 3 HTML lessons for free. Full courses unlock with subscription.',
-  },
-  {
-    q: 'Will my price change after more courses are added?',
-    a: 'No. Your 19 SAR rate stays locked while your subscription is active. Re-subscribing later may use the current price.',
-  },
+  { q: 'What can I access?', a: 'All currently published lessons and Try-It exercises are available to every learner.' },
   { q: 'Do I need to install anything?', a: 'No. All lessons and Try-It exercises run directly in your browser.' },
   {
     q: 'Are cyber security topics included?',
     a: 'Yes. Security fundamentals and applied cryptography content are planned in the learning path.',
   },
-  { q: 'How do subscriptions work?', a: 'One subscription unlocks all current and upcoming premium courses.' },
+  { q: 'Do I need to pay to use SaudiLab?', a: 'No. SaudiLab is fully free to use.' },
 ];

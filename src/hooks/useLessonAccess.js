@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useAuth } from '@site/src/utils/authState';
 import { COURSE_EVENT } from '@site/src/utils/progress';
 import { isCompleted, migrateProgressOnce } from '@site/src/utils/progressKeys';
 import { COURSES, getLesson, parseDocId } from '@site/src/course/courseMap';
@@ -15,12 +14,6 @@ function buildLockedRedirect(needPath) {
   return `/locked?need=${encodeURIComponent(needPath)}&next=${encodeURIComponent(currentPath)}`;
 }
 
-function isPaidBlocked(courseMeta, lesson) {
-  if (!courseMeta || !lesson) return false;
-  if (courseMeta.access?.freeMode) return false;
-  return Boolean(lesson.paid);
-}
-
 function getLessonNumber(lesson) {
   if (!lesson) return NaN;
   const source = String(lesson.routeId || lesson.lessonId || '');
@@ -28,7 +21,7 @@ function getLessonNumber(lesson) {
   return match ? Number(match[1]) : NaN;
 }
 
-function getAccessState({ course, lessonId, docId, auth }) {
+function getAccessState({ course, lessonId, docId }) {
   const parsed = docId ? parseDocId(docId) : null;
   const resolvedCourse = course || parsed?.course || null;
   const resolvedLessonId = lessonId || parsed?.lessonId || null;
@@ -80,19 +73,10 @@ function getAccessState({ course, lessonId, docId, auth }) {
     }
   }
 
-  if (!auth || auth.loading) {
-    return { allowed: true, reason: 'loading', redirectTo: null, requiredLessonId: null };
-  }
-
-  if (kind === 'lesson' && isPaidBlocked(courseMeta, lesson) && (!auth.isLoggedIn || !auth.subscribed)) {
-    return { allowed: false, reason: 'paid', redirectTo: '/account', requiredLessonId: null };
-  }
-
   return { allowed: true, reason: 'allowed', redirectTo: null, requiredLessonId: null };
 }
 
 export default function useLessonAccess({ course, lessonId, docId }) {
-  const auth = useAuth();
   const [tick, setTick] = useState(0);
 
   useEffect(() => {
@@ -109,8 +93,8 @@ export default function useLessonAccess({ course, lessonId, docId }) {
   }, []);
 
   return useMemo(
-    () => getAccessState({ course, lessonId, docId, auth, tick }),
-    [course, lessonId, docId, auth, tick],
+    () => getAccessState({ course, lessonId, docId, tick }),
+    [course, lessonId, docId, tick],
   );
 }
 

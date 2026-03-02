@@ -1,8 +1,92 @@
-.coursesGrid {
+.pageWrap {
+  padding: 3.7rem 1.3rem 4.6rem;
+  max-width: 1120px;
+  margin: 0 auto;
+}
+
+.headerBlock {
+  margin-bottom: 1.4rem;
+}
+
+.pageTitle {
+  margin: 0;
+  font-size: var(--sl-h1);
+  font-weight: 900;
+}
+
+.pageSub {
+  margin-top: 0.62rem;
+  max-width: 56ch;
+  color: var(--sl-muted);
+  line-height: 1.7;
+}
+
+.sectionTitle {
+  margin: 0;
+  font-size: var(--sl-h3);
+  font-weight: 850;
+}
+
+.summaryCard,
+.courseCard {
+  border: 1px solid var(--sl-border);
+  border-radius: var(--sl-radius-card);
+  background: linear-gradient(180deg, var(--sl-surface), var(--sl-surface-2));
+  box-shadow: var(--sl-shadow);
+}
+
+.summaryCard {
+  margin-top: 1rem;
+  padding: 1.25rem 1.35rem;
+}
+
+.summaryGrid {
   margin-top: 1rem;
   display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 0.9rem;
+}
+
+.summaryItem {
+  padding: 0.82rem 0.9rem;
+  border-radius: 12px;
+  border: 1px solid var(--sl-border);
+  background: rgba(111, 132, 157, 0.08);
+}
+
+.label {
+  font-size: 0.84rem;
+  font-weight: 800;
+  color: var(--sl-muted);
+  margin-bottom: 0.2rem;
+}
+
+.value {
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+.summaryActions {
+  margin-top: 0.7rem;
+  display: flex;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+}
+
+.message {
+  margin-top: 0.9rem;
+  font-weight: 800;
+}
+
+.coursesSection {
+  margin-top: 1.8rem;
+}
+
+.coursesGrid {
+  margin-top: 1.2rem;
+  display: grid;
   grid-template-columns: repeat(1, minmax(0, 1fr));
-  gap: 18px;
+  gap: 22px;
   align-items: stretch;
 }
 
@@ -28,13 +112,23 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
+  padding: 1.2rem 1.05rem 1.05rem;
 }
 
 .courseTitleClamp {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-weight: 900;
+  font-size: 1rem;
+  line-height: 1.25;
+}
+
+.courseSubtitle {
+  color: var(--sl-muted);
+  margin-top: 0.28rem;
+  font-size: 0.88rem;
 }
 
 .cardActions {
@@ -43,24 +137,35 @@
 
 .cardBtn {
   width: 100%;
+  height: 38px;
+  font-size: 0.88rem;
+}
+
+.btnReset {
+  border: 0;
+}
+
+.btnDisabled {
+  opacity: 0.52;
+  cursor: not-allowed;
 }
 
 .filtersWrap {
-  margin-top: 0.8rem;
+  margin-top: 1rem;
 }
 
 .courseFilters {
   display: flex;
-  gap: 8px;
+  gap: 10px;
   flex-wrap: wrap;
 }
 
 .filterTab {
-  padding: 0.46rem 0.8rem;
+  padding: 0.52rem 0.92rem;
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  background: rgba(255, 255, 255, 0.04);
-  color: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--sl-border);
+  background: rgba(111, 132, 157, 0.08);
+  color: var(--sl-text);
   font-size: 0.84rem;
   font-weight: 800;
   cursor: pointer;
@@ -72,28 +177,28 @@
 }
 
 .filterTabActive {
-  border-color: rgba(124, 242, 176, 0.55);
-  background: rgba(124, 242, 176, 0.16);
-  color: #7cf2b0;
+  border-color: rgba(124, 242, 176, 0.36);
+  background: rgba(124, 242, 176, 0.12);
+  color: var(--sl-accent);
 }
 
 .filterSummary {
-  margin: 0.45rem 0 0;
+  margin: 0.62rem 0 0;
   font-size: 0.84rem;
-  color: rgba(255, 255, 255, 0.72);
+  color: var(--sl-muted);
 }
 
 .progressTrack {
   width: 100%;
-  height: 6px;
+  height: 7px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(111, 132, 157, 0.22);
   overflow: hidden;
 }
 
 .progressFill {
   height: 100%;
   border-radius: 999px;
-  background: #7cf2b0;
+  background: var(--sl-accent);
   transition: width 220ms ease;
 }

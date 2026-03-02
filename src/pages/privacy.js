@@ -8,12 +8,9 @@ export default function Privacy() {
         <h1>Privacy Policy</h1>
         <div style={legalCard}>
           <p>SaudiLab collects basic account information such as username, email, and learning activity.</p>
-          <p>We use this information to provide lessons, manage subscriptions, and improve the platform.</p>
-          <p>Payments are handled by a secure third-party provider. SaudiLab does not store card details.</p>
+          <p>We use this information to provide lessons and improve the platform.</p>
           <p>We apply reasonable security measures to protect personal data.</p>
-          <p>
-            For privacy questions, contact <a href="mailto:support@saudilab.io">support@saudilab.io</a>.
-          </p>
+          
         </div>
       </div>
     </Layout>
