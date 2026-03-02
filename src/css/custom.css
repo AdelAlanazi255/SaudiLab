@@ -46,6 +46,13 @@ html[data-theme='dark'] {
   --ifm-background-color: var(--sl-bg);
 }
 
+html,
+body {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
 body {
   background-color: var(--sl-bg);
   background-image:
@@ -189,20 +196,52 @@ h3 {
 }
 
 .navbar.navbar--fixed-top {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0;
+  right: 0;
+  width: 100%;
+  margin-top: 0 !important;
   background: rgba(8, 12, 18, 0.84) !important;
   border-bottom: 1px solid var(--sl-border) !important;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 }
 
+.navbar {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
 .navbar .navbar__inner {
+  display: flex;
+  justify-content: space-between;
   min-height: var(--ifm-navbar-height) !important;
+  height: var(--ifm-navbar-height);
   align-items: center !important;
+  padding: 0 1rem;
+  position: relative;
+}
+
+@media (min-width: 996px) {
+  .navbar .navbar__inner {
+    padding: 0 1.5rem;
+  }
+}
+
+.main-wrapper {
+  padding-top: var(--ifm-navbar-height);
 }
 
 .navbar .navbar__link,
 .navbar .navbar__brand {
   color: var(--sl-text) !important;
+}
+
+.navbar .navbar__items,
+.navbar .navbar__items--right {
+  display: flex;
+  align-items: center;
 }
 
 .sl-nav-brand {
@@ -247,15 +286,23 @@ h3 {
 }
 
 .sl-nav-linkBtn {
-  height: 36px;
-  margin-right: 0.4rem;
+  margin-right: 0;
 }
 
-.sl-nav-signupBtn {
+.sl-nav-authBtn {
   height: 36px;
+  padding: 0 0.95rem;
+  font-size: 0.9rem;
+  line-height: 1;
 }
 
 .sl-nav-authActions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.sl-nav-guestActions {
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -280,6 +327,18 @@ h3 {
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
+}
+
+.sl-nav-centerWelcome {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.88rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: rgba(232, 238, 245, 0.64);
+  pointer-events: none;
+  white-space: nowrap;
 }
 
 .sl-nav-logoutBtn {

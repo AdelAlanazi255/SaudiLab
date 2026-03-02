@@ -3,9 +3,20 @@ import Link from '@docusaurus/Link';
 import { useAuth } from '@site/src/utils/authState';
 import ConfirmModal from '@site/src/components/ConfirmModal';
 
+function capitalizeFirstLetter(str) {
+  if (!str || typeof str !== 'string') return 'there';
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
 export default function Navbar() {
   const auth = useAuth();
   const [open, setOpen] = useState(false);
+  const displayName =
+    auth?.user?.name?.split(' ')?.[0]
+    ?? auth?.user?.username
+    ?? auth?.user?.email?.split('@')?.[0]
+    ?? 'there';
+  const formattedName = capitalizeFirstLetter(displayName);
 
   return (
     <>
@@ -22,21 +33,27 @@ export default function Navbar() {
             </Link>
           </div>
 
+          {auth?.isLoggedIn ? (
+            <div className="sl-nav-centerWelcome">
+              Welcome, {formattedName}
+            </div>
+          ) : null}
+
           <div className="navbar__items navbar__items--right">
             {!auth?.isLoggedIn ? (
-              <>
-                <Link className="navbar__item navbar__link sl-btn-ghost sl-nav-linkBtn" to="/login">
+              <div className="sl-nav-guestActions">
+                <Link className="sl-btn-ghost sl-nav-authBtn sl-nav-linkBtn" to="/login">
                   Login
                 </Link>
 
-                <Link to="/signup" className="sl-btn-primary sl-nav-signupBtn">
+                <Link to="/signup" className="sl-btn-primary sl-nav-authBtn sl-nav-signupBtn">
                   Sign Up
                 </Link>
-              </>
+              </div>
             ) : (
               <div className="sl-nav-authActions">
                 <Link to="/account" className="sl-nav-accountLink">
-                  <span className="sl-nav-accountInner">{auth.user?.username || 'Account'}</span>
+                  <span className="sl-nav-accountInner">Dashboard</span>
                 </Link>
 
                 <button onClick={() => setOpen(true)} className="sl-btn-primary sl-nav-logoutBtn">
