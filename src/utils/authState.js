@@ -3,25 +3,55 @@ import { hasSupabaseConfig, supabase } from './supabaseClient';
 
 const AuthCtx = createContext(null);
 
-function getApiBaseUrl() {
-  if (typeof window !== 'undefined') {
-    return window.__docusaurus?.customFields?.API_BASE_URL || 'http://localhost:5000';
-  }
-  return 'http://localhost:5000';
+function deriveUsername(user) {
+  const metadata = user?.user_metadata || {};
+  return metadata.username || metadata.name || metadata.full_name || null;
 }
 
-async function syncProfile(accessToken) {
-  const res = await fetch(`${getApiBaseUrl()}/auth/sync`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${accessToken}`,
-    },
+function logAdminDebug(user, profile) {
+  if (process.env.NODE_ENV === 'production') return;
+  // eslint-disable-next-line no-console
+  console.log('[auth-debug] session user:', {
+    id: user?.id || null,
+    email: user?.email || null,
   });
+  // eslint-disable-next-line no-console
+  console.log('[auth-debug] profile row:', {
+    id: profile?.id || null,
+    email: profile?.email || null,
+    role: profile?.role || null,
+  });
+  // eslint-disable-next-line no-console
+  console.log('[auth-debug] isAdmin:', profile?.role === 'admin');
+}
 
-  const data = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error(data.error || 'Failed to sync profile');
-  return data.profile || null;
+async function fetchOrInitProfile(user) {
+  if (!supabase || !user?.id) return null;
+
+  const { data: existing, error: selectError } = await supabase
+    .from('profiles')
+    .select('id, email, role, username')
+    .eq('id', user.id)
+    .maybeSingle();
+
+  if (selectError) throw selectError;
+  if (existing) return existing;
+
+  const upsertPayload = {
+    id: user.id,
+    email: user.email || null,
+    username: deriveUsername(user),
+    role: 'user',
+  };
+
+  const { data: created, error: upsertError } = await supabase
+    .from('profiles')
+    .upsert(upsertPayload, { onConflict: 'id' })
+    .select('id, email, role, username')
+    .single();
+
+  if (upsertError) throw upsertError;
+  return created || null;
 }
 
 export function AuthProvider({ children }) {
@@ -48,13 +78,15 @@ export function AuthProvider({ children }) {
       setSession(nextSession);
       setUser(nextSession?.user || null);
 
-      if (nextSession?.access_token) {
+      if (nextSession?.user) {
         try {
-          const syncedProfile = await syncProfile(nextSession.access_token);
-          setProfile(syncedProfile);
-        } catch (syncError) {
+          const nextProfile = await fetchOrInitProfile(nextSession.user);
+          setProfile(nextProfile);
+          logAdminDebug(nextSession.user, nextProfile);
+        } catch (profileError) {
           // eslint-disable-next-line no-console
-          console.error('[auth] profile sync failed:', syncError);
+          console.error('[auth] profile fetch failed:', profileError);
+          setProfile(null);
         }
       } else {
         setProfile(null);
@@ -74,17 +106,19 @@ export function AuthProvider({ children }) {
     if (!supabase || !hasSupabaseConfig) return undefined;
 
     const { data } = supabase.auth.onAuthStateChange((_event, nextSession) => {
+      setLoading(true);
       setSession(nextSession || null);
       setUser(nextSession?.user || null);
 
-      if (nextSession?.access_token) {
-        syncProfile(nextSession.access_token)
-          .then((syncedProfile) => {
-            setProfile(syncedProfile);
+      if (nextSession?.user) {
+        fetchOrInitProfile(nextSession.user)
+          .then((nextProfile) => {
+            setProfile(nextProfile);
+            logAdminDebug(nextSession.user, nextProfile);
           })
-          .catch((syncError) => {
+          .catch((profileError) => {
             // eslint-disable-next-line no-console
-            console.error('[auth] profile sync failed:', syncError);
+            console.error('[auth] profile fetch failed:', profileError);
             setProfile(null);
           })
           .finally(() => setLoading(false));

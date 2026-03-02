@@ -26,7 +26,10 @@ export default function AdminFeedbackPage() {
       if (auth?.loading) return;
 
       if (!auth?.isLoggedIn || !userId) {
-        if (mounted) setLoading(false);
+        if (mounted) {
+          setLoading(false);
+          window.location.href = '/login';
+        }
         return;
       }
 
@@ -51,7 +54,8 @@ export default function AdminFeedbackPage() {
         if (!authorized) {
           if (mounted) {
             setIsAdmin(false);
-            window.location.href = '/';
+            setLoading(false);
+            window.location.href = '/account';
           }
           return;
         }

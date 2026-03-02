@@ -91,7 +91,14 @@ export default function Account() {
       <RequireAuth>
         <div className={styles.pageWrap}>
           <header className={styles.headerBlock}>
-            <h1 className={styles.pageTitle}>Account Dashboard</h1>
+            <div className={styles.headerTopRow}>
+              <h1 className={styles.pageTitle}>Account Dashboard</h1>
+              {auth?.profile?.role === 'admin' ? (
+                <Link to="/admin/feedback" className="sl-btn-ghost">
+                  Admin: Feedback
+                </Link>
+              ) : null}
+            </div>
             <p className={styles.pageSub}>Account details and course progress in one place.</p>
           </header>
 

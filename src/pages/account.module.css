@@ -8,6 +8,14 @@
   margin-bottom: 1.4rem;
 }
 
+.headerTopRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
 .pageTitle {
   margin: 0;
   font-size: var(--sl-h1);
