@@ -7,10 +7,13 @@ export default function SignUp() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [msg, setMsg] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    if (loading) return;
     setMsg('');
+    setLoading(true);
     try {
       if (!supabase || !hasSupabaseConfig) {
         setMsg('Supabase is not configured.');
@@ -36,7 +39,11 @@ export default function SignUp() {
 
       window.location.href = '/account';
     } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error(err?.message || String(err));
       setMsg(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -60,12 +67,12 @@ export default function SignUp() {
         <h1 style={{ fontWeight: 900 }}>Sign Up</h1>
 
         <form onSubmit={onSubmit} style={{ marginTop: '1.5rem' }}>
-          <input value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Username" style={inputStyle} />
-          <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" style={inputStyle} />
-          <input value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password (min 8 chars)" type="password" style={inputStyle} />
+          <input value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Username" style={inputStyle} disabled={loading} />
+          <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" style={inputStyle} disabled={loading} />
+          <input value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password (min 8 chars)" type="password" style={inputStyle} disabled={loading} />
 
-          <button type="submit" style={btnStyle}>
-            Create account
+          <button type="submit" style={btnStyle} disabled={loading}>
+            {loading ? 'Creating…' : 'Create account'}
           </button>
 
           <button type="button" onClick={onGoogle} style={oauthBtnStyle}>
