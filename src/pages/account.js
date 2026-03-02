@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
 import { useAuth } from '@site/src/utils/authState';
+import RequireAuth from '@site/src/components/RequireAuth';
 import { getCourseProgress, COURSE_EVENT } from '@site/src/utils/progress';
 import { getLesson } from '@site/src/course/courseMap';
 import { HOMEPAGE_COURSES } from '@site/src/course/courseCatalog';
@@ -23,13 +24,6 @@ export default function Account() {
   const auth = useAuth();
   const [progressTick, setProgressTick] = useState(0);
   const [activeTab, setActiveTab] = useState('in_progress');
-
-  useEffect(() => {
-    if (!auth) return;
-    if (!auth.loading && !auth.isLoggedIn) {
-      window.location.href = '/login';
-    }
-  }, [auth]);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -92,64 +86,64 @@ export default function Account() {
     [courseCards, activeTab],
   );
 
-  if (!auth || auth.loading) return null;
-
   return (
     <Layout title="Account">
-      <div className={styles.pageWrap}>
-        <header className={styles.headerBlock}>
-          <h1 className={styles.pageTitle}>Account Dashboard</h1>
-          <p className={styles.pageSub}>Account details and course progress in one place.</p>
-        </header>
+      <RequireAuth>
+        <div className={styles.pageWrap}>
+          <header className={styles.headerBlock}>
+            <h1 className={styles.pageTitle}>Account Dashboard</h1>
+            <p className={styles.pageSub}>Account details and course progress in one place.</p>
+          </header>
 
-        <section className={styles.summaryCard}>
-          <h2 className={styles.sectionTitle}>Account Summary</h2>
+          <section className={styles.summaryCard}>
+            <h2 className={styles.sectionTitle}>Account Summary</h2>
 
-          <div className={styles.summaryGrid}>
-            <SummaryItem label="Username" value={auth.user?.username || '-'} />
-            <SummaryItem label="Email" value={auth.user?.email || '-'} />
-            <SummaryItem label="Access" value="All courses available" />
-          </div>
-        </section>
-
-        <section className={styles.coursesSection}>
-          <h2 className={styles.sectionTitle}>Courses and Progress</h2>
-          <div className={styles.filtersWrap}>
-            <div className={styles.courseFilters} role="tablist" aria-label="Course progress filters">
-              {COURSE_TABS.map((tab) => {
-                const active = tab.id === activeTab;
-                return (
-                  <button
-                    key={tab.id}
-                    type="button"
-                    role="tab"
-                    aria-selected={active}
-                    className={`${styles.filterTab} ${active ? styles.filterTabActive : ''}`}
-                    onClick={() => setActiveTab(tab.id)}
-                  >
-                    {tab.label}
-                  </button>
-                );
-              })}
+            <div className={styles.summaryGrid}>
+              <SummaryItem label="Username" value={auth.profile?.username || auth.user?.user_metadata?.username || '-'} />
+              <SummaryItem label="Email" value={auth.profile?.email || auth.user?.email || '-'} />
+              <SummaryItem label="Access" value="All courses available" />
             </div>
-            <p className={styles.filterSummary}>Showing {filteredCards.length} of {courseCards.length} courses</p>
-          </div>
+          </section>
 
-          <div className={styles.coursesGrid}>
-            {filteredCards.map((courseCard) => (
-              <CourseCard
-                key={courseCard.id}
-                title={courseCard.title}
-                completedLessons={courseCard.completedLessons}
-                totalLessons={courseCard.totalLessons}
-                percent={courseCard.percent}
-                ctaHref={courseCard.ctaHref}
-                ctaText={courseCard.ctaText}
-              />
-            ))}
-          </div>
-        </section>
-      </div>
+          <section className={styles.coursesSection}>
+            <h2 className={styles.sectionTitle}>Courses and Progress</h2>
+            <div className={styles.filtersWrap}>
+              <div className={styles.courseFilters} role="tablist" aria-label="Course progress filters">
+                {COURSE_TABS.map((tab) => {
+                  const active = tab.id === activeTab;
+                  return (
+                    <button
+                      key={tab.id}
+                      type="button"
+                      role="tab"
+                      aria-selected={active}
+                      className={`${styles.filterTab} ${active ? styles.filterTabActive : ''}`}
+                      onClick={() => setActiveTab(tab.id)}
+                    >
+                      {tab.label}
+                    </button>
+                  );
+                })}
+              </div>
+              <p className={styles.filterSummary}>Showing {filteredCards.length} of {courseCards.length} courses</p>
+            </div>
+
+            <div className={styles.coursesGrid}>
+              {filteredCards.map((courseCard) => (
+                <CourseCard
+                  key={courseCard.id}
+                  title={courseCard.title}
+                  completedLessons={courseCard.completedLessons}
+                  totalLessons={courseCard.totalLessons}
+                  percent={courseCard.percent}
+                  ctaHref={courseCard.ctaHref}
+                  ctaText={courseCard.ctaText}
+                />
+              ))}
+            </div>
+          </section>
+        </div>
+      </RequireAuth>
     </Layout>
   );
 }

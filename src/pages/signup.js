@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Layout from '@theme/Layout';
-import { api, setToken } from '../utils/auth';
+import { hasSupabaseConfig, supabase } from '@site/src/utils/supabaseClient';
 
 export default function SignUp() {
   const [username, setUsername] = useState('');
@@ -12,15 +12,46 @@ export default function SignUp() {
     e.preventDefault();
     setMsg('');
     try {
-      const data = await api('/auth/register', {
-        method: 'POST',
-        body: JSON.stringify({ username, email, password }),
+      if (!supabase || !hasSupabaseConfig) {
+        setMsg('Supabase is not configured.');
+        return;
+      }
+
+      const { data, error } = await supabase.auth.signUp({
+        email: email.trim(),
+        password,
+        options: {
+          data: {
+            username: username.trim() || null,
+          },
+        },
       });
-      setToken(data.token);
-      window.location.href = '/';
+
+      if (error) throw error;
+
+      if (!data?.session) {
+        setMsg('Check your email to confirm your account.');
+        return;
+      }
+
+      window.location.href = '/account';
     } catch (err) {
       setMsg(err.message);
     }
+  };
+
+  const onGoogle = async () => {
+    if (!supabase || !hasSupabaseConfig) {
+      setMsg('Google login is not configured.');
+      return;
+    }
+    setMsg('');
+    const redirectTo = `${window.location.origin}/auth/callback`;
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo },
+    });
+    if (error) setMsg(error.message);
   };
 
   return (
@@ -35,6 +66,10 @@ export default function SignUp() {
 
           <button type="submit" style={btnStyle}>
             Create account
+          </button>
+
+          <button type="button" onClick={onGoogle} style={oauthBtnStyle}>
+            Continue with Google
           </button>
 
           {msg ? (
@@ -68,4 +103,16 @@ const btnStyle = {
   cursor: 'pointer',
   background: '#7cf2b0',
   color: '#0b0f14',
+};
+
+const oauthBtnStyle = {
+  width: '100%',
+  padding: '0.95rem 1rem',
+  borderRadius: 14,
+  border: '1px solid rgba(255,255,255,0.18)',
+  fontWeight: 900,
+  cursor: 'pointer',
+  background: 'rgba(255,255,255,0.06)',
+  color: 'rgba(255,255,255,0.92)',
+  marginTop: '0.75rem',
 };

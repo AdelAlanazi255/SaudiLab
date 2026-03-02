@@ -1,25 +1,52 @@
 import React, { useState } from 'react';
 import Layout from '@theme/Layout';
-import { api, setToken } from '../utils/auth';
+import { getSupabaseConfigStatus, supabase } from '@site/src/utils/supabaseClient';
 
 export default function Login() {
   const [usernameOrEmail, setUsernameOrEmail] = useState('');
   const [password, setPassword] = useState('');
   const [msg, setMsg] = useState('');
+  const supabaseConfig = getSupabaseConfigStatus();
+  const supabaseMissingMsg = `Supabase is not configured. Missing: ${supabaseConfig.missing.join(', ')}`;
 
   const onSubmit = async (e) => {
     e.preventDefault();
     setMsg('');
     try {
-      const data = await api('/auth/login', {
-        method: 'POST',
-        body: JSON.stringify({ usernameOrEmail, password }),
+      if (!supabase || !supabaseConfig.ok) {
+        setMsg(supabaseMissingMsg);
+        return;
+      }
+
+      const identifier = usernameOrEmail.trim();
+      if (!identifier.includes('@')) {
+        setMsg('Use email for password login (username login not supported yet).');
+        return;
+      }
+
+      const { error } = await supabase.auth.signInWithPassword({
+        email: identifier,
+        password,
       });
-      setToken(data.token);
-      window.location.href = '/';
+
+      if (error) throw error;
+      window.location.href = '/account';
     } catch (err) {
       setMsg(err.message);
     }
+  };
+
+  const onGoogle = async () => {
+    if (!supabase || !supabaseConfig.ok) {
+      setMsg(supabaseMissingMsg);
+      return;
+    }
+    setMsg('');
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: `${window.location.origin}/auth/callback` },
+    });
+    if (error) setMsg(error.message);
   };
 
   return (
@@ -45,6 +72,16 @@ export default function Login() {
           <button type="submit" style={btnStyle}>
             Login
           </button>
+
+          <button type="button" onClick={onGoogle} style={oauthBtnStyle} disabled={!supabaseConfig.ok}>
+            Continue with Google
+          </button>
+
+          {!supabaseConfig.ok ? (
+            <div style={{ marginTop: '0.85rem', color: '#ffb0b0', fontWeight: 700 }}>
+              {supabaseMissingMsg}
+            </div>
+          ) : null}
 
           {msg ? (
             <div style={{ marginTop: '1rem', color: '#ff8a8a', fontWeight: 700 }}>
@@ -77,4 +114,16 @@ const btnStyle = {
   cursor: 'pointer',
   background: '#7cf2b0',
   color: '#0b0f14',
+};
+
+const oauthBtnStyle = {
+  width: '100%',
+  padding: '0.95rem 1rem',
+  borderRadius: 14,
+  border: '1px solid rgba(255,255,255,0.18)',
+  fontWeight: 900,
+  cursor: 'pointer',
+  background: 'rgba(255,255,255,0.06)',
+  color: 'rgba(255,255,255,0.92)',
+  marginTop: '0.75rem',
 };

@@ -1,28 +1,16 @@
-// server/index.js
 require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const validator = require('validator');
-
-const db = require('./db');
+const { getSupabaseConfigStatus, supabase } = require('./supabase');
+const { requireAuth } = require('./middleware/requireAuth');
 
 const app = express();
 
-// ===== hard fail if JWT secret missing/weak =====
-if (!process.env.JWT_SECRET || process.env.JWT_SECRET.length < 16) {
-  console.error('JWT_SECRET missing or too short. Put a 16+ char secret in server/.env');
-  process.exit(1);
-}
-
-// ===== security middleware =====
 app.use(helmet());
 app.use(express.json({ limit: '25kb' }));
 
-// CORS (dev + production)
 const allowedOrigins = [
   'http://localhost:3000',
   'http://localhost:3001',
@@ -41,147 +29,86 @@ app.use(
     },
     methods: ['GET', 'POST', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
-  })
+  }),
 );
 
-// handle preflight
 app.options(/.*/, (req, res) => res.sendStatus(204));
 
-// ===== helpers =====
-function signToken(user) {
-  return jwt.sign(
-    { id: user.id, username: user.username, email: user.email },
-    process.env.JWT_SECRET,
-    { expiresIn: '7d' }
-  );
+function pickProfileUsername(user) {
+  const metadata = user?.user_metadata || {};
+  return metadata.username || metadata.name || metadata.full_name || null;
 }
 
-function authMiddleware(req, res, next) {
-  const header = req.headers.authorization || '';
-  const token = header.startsWith('Bearer ') ? header.slice(7) : null;
-
-  if (!token) return res.status(401).json({ error: 'Not authenticated' });
-
-  try {
-    req.user = jwt.verify(token, process.env.JWT_SECRET);
-    return next();
-  } catch {
-    return res.status(401).json({ error: 'Invalid token' });
-  }
+function pickProfileAvatar(user) {
+  const metadata = user?.user_metadata || {};
+  return metadata.avatar_url || metadata.picture || null;
 }
 
-function cleanUsername(u) {
-  const s = (u || '').trim().toLowerCase();
-  if (!/^[a-z0-9._]{3,20}$/.test(s)) return null;
-  return s;
-}
-
-function cleanEmail(e) {
-  const s = (e || '').trim().toLowerCase();
-  if (!validator.isEmail(s)) return null;
-  return s;
-}
-
-function passwordPolicy(pw) {
-  const p = pw || '';
-  if (p.length < 8) return 'Password must be at least 8 characters.';
-  if (p.length > 72) return 'Password too long.';
-  if (!/[A-Za-z]/.test(p) || !/[0-9]/.test(p)) {
-    return 'Password must include at least 1 letter and 1 number.';
-  }
-  return null;
-}
-
-function safeUser(u) {
-  return { id: u.id, username: u.username, email: u.email };
-}
-
-// ===== routes =====
 app.get('/health', (req, res) => res.json({ ok: true }));
 
-// REGISTER
-app.post('/auth/register', (req, res) => {
+app.post('/auth/sync', requireAuth, async (req, res) => {
   try {
-    const { username, email, password } = req.body || {};
-
-    const u = cleanUsername(username);
-    const e = cleanEmail(email);
-    const pwErr = passwordPolicy(password);
-
-    if (!u) return res.status(400).json({ error: 'Invalid username (3–20, a-z 0-9 . _).' });
-    if (!e) return res.status(400).json({ error: 'Invalid email.' });
-    if (pwErr) return res.status(400).json({ error: pwErr });
-
-    const existing = db
-      .prepare('SELECT id FROM users WHERE username = ? OR email = ?')
-      .get(u, e);
-
-    if (existing) return res.status(409).json({ error: 'Username or email already exists.' });
-
-    const password_hash = bcrypt.hashSync(password, 12);
-    const now = new Date().toISOString();
-
-    const info = db
-      .prepare('INSERT INTO users (username, email, password_hash, created_at) VALUES (?, ?, ?, ?)')
-      .run(u, e, password_hash, now);
-
-    const user = { id: info.lastInsertRowid, username: u, email: e };
-    const token = signToken(user);
-
-    return res.json({ token, user });
-  } catch (err) {
-    console.error('REGISTER ERROR:', err);
-    return res.status(500).json({ error: 'Server error' });
-  }
-});
-
-// LOGIN
-app.post('/auth/login', (req, res) => {
-  try {
-    const { usernameOrEmail, password } = req.body || {};
-    const key = (usernameOrEmail || '').trim().toLowerCase();
-
-    if (!key || !password) {
-      return res.status(400).json({ error: 'usernameOrEmail and password required.' });
+    const user = req.user;
+    const configStatus = getSupabaseConfigStatus();
+    if (!configStatus.ok || !supabase) {
+      return res.status(500).json({
+        error: `Supabase server auth is not configured. Missing: ${configStatus.missing.join(', ')}`,
+      });
     }
 
-    const isEmail = validator.isEmail(key);
-    const lookup = isEmail ? cleanEmail(key) : cleanUsername(key);
-    if (!lookup) return res.status(400).json({ error: 'Invalid username/email format.' });
+    const payload = {
+      id: user.id,
+      email: user.email || null,
+      username: pickProfileUsername(user),
+      avatar_url: pickProfileAvatar(user),
+    };
 
-    const user = db
-      .prepare('SELECT id, username, email, password_hash FROM users WHERE username = ? OR email = ?')
-      .get(lookup, lookup);
+    const { data, error } = await supabase
+      .from('profiles')
+      .upsert(payload, { onConflict: 'id' })
+      .select('*')
+      .single();
 
-    if (!user) return res.status(401).json({ error: 'Invalid credentials.' });
+    if (error) {
+      console.error('SYNC PROFILE ERROR:', error);
+      return res.status(500).json({ error: 'Failed to sync profile' });
+    }
 
-    const ok = bcrypt.compareSync(password, user.password_hash);
-    if (!ok) return res.status(401).json({ error: 'Invalid credentials.' });
-
-    const token = signToken(user);
-    return res.json({ token, user: safeUser(user) });
+    return res.json({ profile: data });
   } catch (err) {
-    console.error('LOGIN ERROR:', err);
+    console.error('SYNC PROFILE ERROR:', err);
     return res.status(500).json({ error: 'Server error' });
   }
 });
 
-// ME
-app.get('/auth/me', authMiddleware, (req, res) => {
+app.get('/auth/me', requireAuth, async (req, res) => {
   try {
-    const u = db
-      .prepare('SELECT id, username, email, created_at FROM users WHERE id = ?')
-      .get(req.user.id);
+    const user = req.user;
+    const configStatus = getSupabaseConfigStatus();
+    if (!configStatus.ok || !supabase) {
+      return res.status(500).json({
+        error: `Supabase server auth is not configured. Missing: ${configStatus.missing.join(', ')}`,
+      });
+    }
 
-    if (!u) return res.status(404).json({ error: 'User not found' });
-    return res.json({ user: u });
+    const { data: profile, error } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', user.id)
+      .maybeSingle();
+
+    if (error) {
+      console.error('SUPABASE ME ERROR:', error);
+      return res.status(500).json({ error: 'Failed to load profile' });
+    }
+
+    return res.json({ user, profile: profile || null });
   } catch (err) {
-    console.error('ME ERROR:', err);
+    console.error('SUPABASE ME ERROR:', err);
     return res.status(500).json({ error: 'Server error' });
   }
 });
 
-// 404
 app.use((req, res) => res.status(404).json({ error: 'Not found' }));
 
 app.listen(process.env.PORT || 5000, () => {

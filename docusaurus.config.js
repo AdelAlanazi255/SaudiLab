@@ -1,4 +1,23 @@
 ﻿// docusaurus.config.js
+require('dotenv').config({ path: '.env.local' });
+require('dotenv').config();
+const webpack = require('webpack');
+
+function supabaseEnvPlugin() {
+  return {
+    name: 'supabase-env-injection',
+    configureWebpack() {
+      return {
+        plugins: [
+          new webpack.DefinePlugin({
+            'process.env.REACT_APP_SUPABASE_URL': JSON.stringify(process.env.REACT_APP_SUPABASE_URL || ''),
+            'process.env.REACT_APP_SUPABASE_ANON_KEY': JSON.stringify(process.env.REACT_APP_SUPABASE_ANON_KEY || ''),
+          }),
+        ],
+      };
+    },
+  };
+}
 module.exports = {
   title: 'SaudiLab',
   tagline: 'Gateway to learning Coding and Cyber Security',
@@ -12,6 +31,8 @@ module.exports = {
   projectName: 'learn-html',
   customFields: {
     API_BASE_URL: process.env.API_BASE_URL || 'http://localhost:5000',
+    SUPABASE_URL: process.env.REACT_APP_SUPABASE_URL,
+    SUPABASE_ANON_KEY: process.env.REACT_APP_SUPABASE_ANON_KEY,
   },
 
   markdown: {
@@ -55,6 +76,7 @@ module.exports = {
   ],
 
   plugins: [
+    supabaseEnvPlugin,
     [
       '@docusaurus/plugin-content-docs',
       {
@@ -176,3 +198,4 @@ module.exports = {
     },
   },
 };
+

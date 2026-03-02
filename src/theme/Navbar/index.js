@@ -12,7 +12,11 @@ export default function Navbar() {
   const auth = useAuth();
   const [open, setOpen] = useState(false);
   const displayName =
-    auth?.user?.name?.split(' ')?.[0]
+    auth?.profile?.username?.split(' ')?.[0]
+    ?? auth?.user?.user_metadata?.username
+    ?? auth?.user?.user_metadata?.name?.split(' ')?.[0]
+    ?? auth?.user?.user_metadata?.full_name?.split(' ')?.[0]
+    ?? auth?.user?.name?.split(' ')?.[0]
     ?? auth?.user?.username
     ?? auth?.user?.email?.split('@')?.[0]
     ?? 'there';
@@ -72,9 +76,10 @@ export default function Navbar() {
         confirmText="Logout"
         cancelText="Cancel"
         onCancel={() => setOpen(false)}
-        onConfirm={() => {
+        onConfirm={async () => {
           setOpen(false);
-          auth.logout();
+          if (auth.signOut) await auth.signOut();
+          else await auth.logout();
         }}
       />
     </>
