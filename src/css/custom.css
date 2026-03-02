@@ -214,13 +214,13 @@ h3 {
 }
 
 .navbar .navbar__inner {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
   min-height: var(--ifm-navbar-height) !important;
   height: var(--ifm-navbar-height);
   align-items: center !important;
   padding: 0 1rem;
-  gap: 12px;
+  gap: 16px;
 }
 
 @media (min-width: 996px) {
@@ -244,11 +244,21 @@ h3 {
   align-items: center;
 }
 
-.sl-nav-left {
+.sl-nav-leftSlot {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: nowrap;
+  justify-self: start;
   flex-shrink: 0;
 }
 
-.sl-nav-right {
+.sl-nav-rightSlot {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: nowrap;
+  justify-self: end;
   flex-shrink: 0;
 }
 
@@ -345,18 +355,26 @@ h3 {
   gap: 0.45rem;
 }
 
-.sl-nav-centerWelcome {
-  flex: 1;
+.sl-nav-centerSlot {
+  justify-self: center;
   min-width: 0;
+  overflow: hidden;
   text-align: center;
+}
+
+.sl-nav-centerText {
+  display: block;
   font-size: 0.88rem;
   font-weight: 500;
   letter-spacing: 0.02em;
   color: rgba(232, 238, 245, 0.64);
-  pointer-events: none;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.welcomeMobile {
+  display: none;
 }
 
 .sl-nav-logoutBtn {
@@ -639,7 +657,28 @@ h3 {
     display: none;
   }
 
-  .sl-nav-right {
+  .sl-nav-outer {
+    padding-bottom: 6px;
+  }
+
+  .welcomeMobile {
+    display: block;
+    text-align: center;
+    font-size: 12px;
+    opacity: 0.75;
+    margin-top: 6px;
+    color: rgba(232, 238, 245, 0.75);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0 1rem;
+  }
+
+  .sl-nav-rightSlot {
+    gap: 10px;
+  }
+
+  .sl-nav-leftSlot {
     gap: 10px;
   }
 }

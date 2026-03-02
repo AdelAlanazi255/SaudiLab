@@ -26,9 +26,9 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="navbar navbar--fixed-top" role="navigation" aria-label="Main navigation">
-        <div className="navbar__inner">
-          <div className="navbar__items sl-nav-left">
+      <nav className="navbar navbar--fixed-top sl-nav-outer" role="navigation" aria-label="Main navigation">
+        <div className="navbar__inner sl-nav-grid">
+          <div className="navbar__items sl-nav-leftSlot">
             <Link className="navbar__brand sl-nav-brand" to="/">
               <span className="sl-nav-brandText">
                 <span className="sl-nav-wordmarkWrap">
@@ -37,22 +37,24 @@ export default function Navbar() {
                 </span>
               </span>
             </Link>
-            <button
-              type="button"
-              onClick={() => setFeedbackOpen(true)}
-              className="sl-btn-ghost sl-nav-feedbackBtn"
-            >
-              Give Feedback
-            </button>
+            {auth?.isLoggedIn ? (
+              <button
+                type="button"
+                onClick={() => setFeedbackOpen(true)}
+                className="sl-btn-ghost sl-nav-feedbackBtn"
+              >
+                Give Feedback
+              </button>
+            ) : null}
           </div>
 
           {auth?.isLoggedIn ? (
-            <div className="sl-nav-centerWelcome navbarWelcome">
-              Welcome, {formattedName}
+            <div className="sl-nav-centerSlot navbarWelcome">
+              <span className="sl-nav-centerText">Welcome, {formattedName}</span>
             </div>
           ) : null}
 
-          <div className="navbar__items navbar__items--right sl-nav-right">
+          <div className="navbar__items navbar__items--right sl-nav-rightSlot">
             {!auth?.isLoggedIn ? (
               <div className="sl-nav-guestActions">
                 <Link className="sl-btn-ghost sl-nav-authBtn sl-nav-linkBtn" to="/login">
@@ -76,6 +78,9 @@ export default function Navbar() {
             )}
           </div>
         </div>
+        {auth?.isLoggedIn ? (
+          <div className="welcomeMobile">Welcome, {formattedName}</div>
+        ) : null}
       </nav>
 
       <ConfirmModal
