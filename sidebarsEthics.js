@@ -14,7 +14,6 @@ module.exports = {
         'lesson8',
         'lesson9',
         'lesson10',
-        'ethics-complete',
       ],
     },
   ],

@@ -22,10 +22,10 @@ function getLessonNumber(lesson) {
 }
 
 function getAccessState({ course, lessonId, docId }) {
-  const parsed = docId ? parseDocId(docId) : null;
+  const parsed = docId ? parseDocId(docId, course || null) : null;
   const resolvedCourse = course || parsed?.course || null;
   const resolvedLessonId = lessonId || parsed?.lessonId || null;
-  const kind = parsed?.kind || (resolvedLessonId ? 'lesson' : null);
+  const kind = resolvedLessonId ? 'lesson' : null;
 
   if (!isBrowser()) {
     return { allowed: true, reason: 'ssr', redirectTo: null, requiredLessonId: null };
@@ -37,7 +37,6 @@ function getAccessState({ course, lessonId, docId }) {
 
   migrateProgressOnce();
 
-  const courseMeta = COURSES[resolvedCourse];
   const lesson = resolvedLessonId ? getLesson(resolvedCourse, resolvedLessonId) : null;
 
   if (kind === 'lesson' && !lesson) {
@@ -55,20 +54,6 @@ function getAccessState({ course, lessonId, docId }) {
         reason: 'prerequisite',
         redirectTo: buildLockedRedirect(needPath),
         requiredLessonId,
-      };
-    }
-  }
-
-  if (kind === 'complete') {
-    const lastLessonId = courseMeta.lessons[courseMeta.lessons.length - 1]?.lessonId || `lesson${courseMeta.totalLessons}`;
-    if (!isCompleted(resolvedCourse, lastLessonId)) {
-      const lastLesson = getLesson(resolvedCourse, lastLessonId);
-      const needPath = lastLesson?.permalink || `/${resolvedCourse}/${lastLessonId}`;
-      return {
-        allowed: false,
-        reason: 'prerequisite',
-        redirectTo: buildLockedRedirect(needPath),
-        requiredLessonId: lastLessonId,
       };
     }
   }

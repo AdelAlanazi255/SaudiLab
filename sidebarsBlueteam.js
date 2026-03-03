@@ -14,7 +14,6 @@
         'lesson8',
         'lesson9',
         'lesson10',
-        'blueteam-complete',
       ],
     },
   ],

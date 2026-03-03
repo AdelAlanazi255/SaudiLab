@@ -37,6 +37,7 @@ export default function CompleteButton({ lessonId, course = 'html' }) {
   }, [lessonId, course]);
 
   const onClick = () => {
+    if (done) return;
     markCompleted(course, lessonId);
     setDone(true);
 

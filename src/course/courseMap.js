@@ -41,8 +41,6 @@ export const COURSES = {
       paidFromLesson: 4,
     },
     lessons: mapToCourseLessons(htmlLessons, 'html'),
-    completeDocId: 'html/html-complete',
-    completePermalink: '/html/html-complete',
   },
   css: {
     id: 'css',
@@ -53,8 +51,6 @@ export const COURSES = {
       paidFromLesson: 1,
     },
     lessons: mapToCourseLessons(cssLessons, 'css'),
-    completeDocId: 'css/css-complete',
-    completePermalink: '/css/css-complete',
   },
   javascript: {
     id: 'javascript',
@@ -65,8 +61,6 @@ export const COURSES = {
       paidFromLesson: 1,
     },
     lessons: mapToCourseLessons(javascriptLessons, 'javascript'),
-    completeDocId: 'javascript/javascript-complete',
-    completePermalink: '/javascript/javascript-complete',
   },
   cse: {
     id: 'cse',
@@ -77,8 +71,6 @@ export const COURSES = {
       paidFromLesson: 1,
     },
     lessons: mapToCourseLessons(cseLessons, 'cse'),
-    completeDocId: 'cse/cse-complete',
-    completePermalink: '/cse/cse-complete',
   },
   crypto: {
     id: 'crypto',
@@ -89,8 +81,6 @@ export const COURSES = {
       paidFromLesson: 1,
     },
     lessons: mapToCourseLessons(cryptoLessons, 'crypto', 'cryptography'),
-    completeDocId: 'crypto/crypto-complete',
-    completePermalink: '/cryptography/crypto-complete',
   },
   websecurity: {
     id: 'websecurity',
@@ -101,8 +91,6 @@ export const COURSES = {
       paidFromLesson: 1,
     },
     lessons: mapToCourseLessons(webSecurityLessons, 'websecurity', 'web-security'),
-    completeDocId: 'websecurity/web-security-complete',
-    completePermalink: '/web-security/web-security-complete',
   },
   networkbasics: {
     id: 'networkbasics',
@@ -113,8 +101,6 @@ export const COURSES = {
       paidFromLesson: 1,
     },
     lessons: mapToCourseLessons(networkBasicsLessons, 'networkbasics', 'network-basics'),
-    completeDocId: 'networkbasics/network-basics-complete',
-    completePermalink: '/network-basics/network-basics-complete',
   },
   ethics: {
     id: 'ethics',
@@ -125,8 +111,6 @@ export const COURSES = {
       paidFromLesson: 1,
     },
     lessons: mapToCourseLessons(ethicsLessons, 'ethics', 'ethics'),
-    completeDocId: 'ethics/ethics-complete',
-    completePermalink: '/ethics/ethics-complete',
   },
   pcs: {
     id: 'pcs',
@@ -137,8 +121,6 @@ export const COURSES = {
       paidFromLesson: 1,
     },
     lessons: mapToCourseLessons(pcsLessons, 'pcs', 'pcs'),
-    completeDocId: 'pcs/pcs-complete',
-    completePermalink: '/pcs/pcs-complete',
   },
   kalitools: {
     id: 'kalitools',
@@ -149,8 +131,6 @@ export const COURSES = {
       paidFromLesson: 1,
     },
     lessons: mapToCourseLessons(kaliToolsLessons, 'kalitools', 'kali'),
-    completeDocId: 'kalitools/kali-tools-complete',
-    completePermalink: '/kali/kali-tools-complete',
   },
   forensics: {
     id: 'forensics',
@@ -161,8 +141,6 @@ export const COURSES = {
       paidFromLesson: 1,
     },
     lessons: mapToCourseLessons(forensicsLessons, 'forensics', 'forensics'),
-    completeDocId: 'forensics/forensics-complete',
-    completePermalink: '/forensics/forensics-complete',
   },
   blueteam: {
     id: 'blueteam',
@@ -173,8 +151,6 @@ export const COURSES = {
       paidFromLesson: 1,
     },
     lessons: mapToCourseLessons(blueteamLessons, 'blueteam', 'blueteam'),
-    completeDocId: 'blueteam/blueteam-complete',
-    completePermalink: '/blueteam/blueteam-complete',
   },
   career: {
     id: 'career',
@@ -185,8 +161,6 @@ export const COURSES = {
       paidFromLesson: 1,
     },
     lessons: mapToCourseLessons(careerLessons, 'career', 'career'),
-    completeDocId: 'career/career-complete',
-    completePermalink: '/career/career-complete',
   },
 };
 
@@ -222,27 +196,36 @@ export function getLessonByRoute(course, routeId) {
   return c.lessons.find((lesson) => lesson.routeId === routeId) || null;
 }
 
-export function getCompletePage(course) {
-  const c = COURSES[course];
-  if (!c) return null;
-  return {
-    docId: c.completeDocId,
-    permalink: c.completePermalink,
-  };
-}
-
 export function isValidLesson(course, lessonId) {
   return Boolean(getLesson(course, lessonId));
 }
 
-export function parseDocId(docId = '') {
-  const id = String(docId || '');
-  for (const course of Object.keys(COURSES)) {
-    const c = COURSES[course];
-    if (id === c.completeDocId) {
-      return { course, kind: 'complete', lessonId: null };
+export function parseDocId(docId = '', courseHint = null) {
+  const id = String(docId || '').trim().toLowerCase();
+  if (!id) return null;
+
+  const candidates = [];
+  if (courseHint && COURSES[courseHint]) {
+    candidates.push(courseHint);
+  }
+  if (!candidates.length && id.includes('/')) {
+    const maybeCourse = id.split('/')[0];
+    if (COURSES[maybeCourse]) {
+      candidates.push(maybeCourse);
     }
-    const lesson = c.lessons.find((item) => item.docId === id);
+  }
+  if (!candidates.length) {
+    return null;
+  }
+
+  for (const course of candidates) {
+    const c = COURSES[course];
+    const lesson = c.lessons.find((item) => {
+      const normalized = String(item.docId).toLowerCase();
+      const lessonId = String(item.lessonId).toLowerCase();
+      const routeId = String(item.routeId).toLowerCase();
+      return id === normalized || id === lessonId || id === routeId || id === `${course}/${routeId}`;
+    });
     if (lesson) {
       return { course, kind: 'lesson', lessonId: lesson.lessonId };
     }

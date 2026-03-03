@@ -9,7 +9,7 @@ export default function LessonGate({
   children,
   course = 'html',
   lessonId = null,
-  docId = 'html/html-complete',
+  docId = null,
 }) {
   const access = useLessonAccess({ course, lessonId, docId });
 

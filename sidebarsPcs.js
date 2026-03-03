@@ -16,7 +16,6 @@ module.exports = {
         'lesson10',
         'lesson11',
         'lesson12',
-        'pcs-complete',
       ],
     },
   ],
