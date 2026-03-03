@@ -3,6 +3,7 @@ import Layout from '@theme/Layout';
 import { hasSupabaseConfig, supabase } from '@site/src/utils/supabaseClient';
 import PageContainer from '@site/src/components/layout/PageContainer';
 import Section from '@site/src/components/layout/Section';
+import OAuthButtons from '@site/src/components/auth/OAuthButtons';
 
 export default function SignUp() {
   const [username, setUsername] = useState('');
@@ -49,20 +50,6 @@ export default function SignUp() {
     }
   };
 
-  const onGoogle = async () => {
-    if (!supabase || !hasSupabaseConfig) {
-      setMsg('Google login is not configured.');
-      return;
-    }
-    setMsg('');
-    const redirectTo = `${window.location.origin}/auth/callback`;
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: { redirectTo },
-    });
-    if (error) setMsg(error.message);
-  };
-
   return (
     <Layout title="Sign Up">
       <PageContainer size="narrow">
@@ -70,16 +57,25 @@ export default function SignUp() {
           <h1 style={{ fontWeight: 900, margin: 0 }}>Sign Up</h1>
 
           <form onSubmit={onSubmit} style={{ marginTop: '1.5rem' }}>
+            <OAuthButtons
+              disabled={!hasSupabaseConfig}
+              onError={(nextMsg) => {
+                if (nextMsg || !hasSupabaseConfig) setMsg(nextMsg || 'OAuth login is not configured.');
+              }}
+            />
+
+            <div style={dividerWrapStyle} aria-hidden="true">
+              <span style={dividerLineStyle} />
+              <span style={dividerTextStyle}>or</span>
+              <span style={dividerLineStyle} />
+            </div>
+
             <input value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Username" style={inputStyle} disabled={loading} />
             <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" style={inputStyle} disabled={loading} />
             <input value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password (min 8 chars)" type="password" style={inputStyle} disabled={loading} />
 
             <button type="submit" style={btnStyle} disabled={loading}>
               {loading ? 'Creating...' : 'Create account'}
-            </button>
-
-            <button type="button" onClick={onGoogle} style={oauthBtnStyle}>
-              Continue with Google
             </button>
 
             {msg ? (
@@ -116,14 +112,22 @@ const btnStyle = {
   color: '#0b0f14',
 };
 
-const oauthBtnStyle = {
-  width: '100%',
-  padding: '0.95rem 1rem',
-  borderRadius: 14,
-  border: '1px solid rgba(255,255,255,0.18)',
-  fontWeight: 900,
-  cursor: 'pointer',
-  background: 'rgba(255,255,255,0.06)',
-  color: 'rgba(255,255,255,0.92)',
-  marginTop: '0.75rem',
+const dividerWrapStyle = {
+  margin: '18px 0',
+  display: 'flex',
+  alignItems: 'center',
+  gap: 12,
+};
+
+const dividerLineStyle = {
+  flex: 1,
+  height: 1,
+  background: 'rgba(255,255,255,0.18)',
+};
+
+const dividerTextStyle = {
+  color: 'rgba(255,255,255,0.72)',
+  fontSize: 13,
+  fontWeight: 700,
+  textTransform: 'lowercase',
 };

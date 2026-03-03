@@ -3,6 +3,7 @@ import Layout from '@theme/Layout';
 import { getSupabaseConfigStatus, supabase } from '@site/src/utils/supabaseClient';
 import PageContainer from '@site/src/components/layout/PageContainer';
 import Section from '@site/src/components/layout/Section';
+import OAuthButtons from '@site/src/components/auth/OAuthButtons';
 
 export default function Login() {
   const [usernameOrEmail, setUsernameOrEmail] = useState('');
@@ -38,19 +39,6 @@ export default function Login() {
     }
   };
 
-  const onGoogle = async () => {
-    if (!supabase || !supabaseConfig.ok) {
-      setMsg(supabaseMissingMsg);
-      return;
-    }
-    setMsg('');
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: { redirectTo: `${window.location.origin}/auth/callback` },
-    });
-    if (error) setMsg(error.message);
-  };
-
   return (
     <Layout title="Login">
       <PageContainer size="narrow">
@@ -58,6 +46,19 @@ export default function Login() {
           <h1 style={{ fontWeight: 900, margin: 0 }}>Login</h1>
 
           <form onSubmit={onSubmit} style={{ marginTop: '1.5rem' }}>
+            <OAuthButtons
+              disabled={!supabaseConfig.ok}
+              onError={(nextMsg) => {
+                if (nextMsg || !supabaseConfig.ok) setMsg(nextMsg || supabaseMissingMsg);
+              }}
+            />
+
+            <div style={dividerWrapStyle} aria-hidden="true">
+              <span style={dividerLineStyle} />
+              <span style={dividerTextStyle}>or</span>
+              <span style={dividerLineStyle} />
+            </div>
+
             <input
               value={usernameOrEmail}
               onChange={(e) => setUsernameOrEmail(e.target.value)}
@@ -74,10 +75,6 @@ export default function Login() {
 
             <button type="submit" style={btnStyle}>
               Login
-            </button>
-
-            <button type="button" onClick={onGoogle} style={oauthBtnStyle} disabled={!supabaseConfig.ok}>
-              Continue with Google
             </button>
 
             {!supabaseConfig.ok ? (
@@ -120,14 +117,22 @@ const btnStyle = {
   color: '#0b0f14',
 };
 
-const oauthBtnStyle = {
-  width: '100%',
-  padding: '0.95rem 1rem',
-  borderRadius: 14,
-  border: '1px solid rgba(255,255,255,0.18)',
-  fontWeight: 900,
-  cursor: 'pointer',
-  background: 'rgba(255,255,255,0.06)',
-  color: 'rgba(255,255,255,0.92)',
-  marginTop: '0.75rem',
+const dividerWrapStyle = {
+  margin: '18px 0',
+  display: 'flex',
+  alignItems: 'center',
+  gap: 12,
+};
+
+const dividerLineStyle = {
+  flex: 1,
+  height: 1,
+  background: 'rgba(255,255,255,0.18)',
+};
+
+const dividerTextStyle = {
+  color: 'rgba(255,255,255,0.72)',
+  fontSize: 13,
+  fontWeight: 700,
+  textTransform: 'lowercase',
 };
