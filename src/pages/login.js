@@ -6,7 +6,7 @@ import Section from '@site/src/components/layout/Section';
 import OAuthButtons from '@site/src/components/auth/OAuthButtons';
 
 export default function Login() {
-  const [usernameOrEmail, setUsernameOrEmail] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [msg, setMsg] = useState('');
   const supabaseConfig = getSupabaseConfigStatus();
@@ -21,14 +21,24 @@ export default function Login() {
         return;
       }
 
-      const identifier = usernameOrEmail.trim();
-      if (!identifier.includes('@')) {
-        setMsg('Use email for password login (username login not supported yet).');
+      const emailTrimmed = email.trim().toLowerCase();
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      if (!emailTrimmed) {
+        setMsg('Email is required.');
+        return;
+      }
+      if (!emailPattern.test(emailTrimmed)) {
+        setMsg('Enter a valid email address.');
+        return;
+      }
+      if (!password) {
+        setMsg('Password is required.');
         return;
       }
 
       const { error } = await supabase.auth.signInWithPassword({
-        email: identifier,
+        email: emailTrimmed,
         password,
       });
 
@@ -60,9 +70,11 @@ export default function Login() {
             </div>
 
             <input
-              value={usernameOrEmail}
-              onChange={(e) => setUsernameOrEmail(e.target.value)}
-              placeholder="Username or Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Email"
+              type="email"
+              aria-label="Email"
               style={inputStyle}
             />
             <input
@@ -70,6 +82,7 @@ export default function Login() {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Password"
               type="password"
+              aria-label="Password"
               style={inputStyle}
             />
 

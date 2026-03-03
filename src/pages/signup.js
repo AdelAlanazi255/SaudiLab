@@ -6,7 +6,7 @@ import Section from '@site/src/components/layout/Section';
 import OAuthButtons from '@site/src/components/auth/OAuthButtons';
 
 export default function SignUp() {
-  const [username, setUsername] = useState('');
+  const [nickname, setNickname] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [msg, setMsg] = useState('');
@@ -23,17 +23,51 @@ export default function SignUp() {
         return;
       }
 
+      const emailTrimmed = email.trim().toLowerCase();
+      const nicknameTrimmed = nickname.trim();
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      if (!emailTrimmed) {
+        setMsg('Email is required.');
+        return;
+      }
+      if (!emailPattern.test(emailTrimmed)) {
+        setMsg('Enter a valid email address.');
+        return;
+      }
+      if (!password) {
+        setMsg('Password is required.');
+        return;
+      }
+
       const { data, error } = await supabase.auth.signUp({
-        email: email.trim(),
+        email: emailTrimmed,
         password,
         options: {
           data: {
-            username: username.trim() || null,
+            username: nicknameTrimmed || null,
           },
         },
       });
 
       if (error) throw error;
+
+      if (data?.user?.id) {
+        const { error: profileError } = await supabase
+          .from('profiles')
+          .upsert(
+            {
+              id: data.user.id,
+              username: nicknameTrimmed || null,
+              email: emailTrimmed,
+            },
+            { onConflict: 'id' },
+          );
+
+        if (profileError && data?.session) {
+          throw profileError;
+        }
+      }
 
       if (!data?.session) {
         setMsg('Check your email to confirm your account.');
@@ -70,9 +104,32 @@ export default function SignUp() {
               <span style={dividerLineStyle} />
             </div>
 
-            <input value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Username" style={inputStyle} disabled={loading} />
-            <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" style={inputStyle} disabled={loading} />
-            <input value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password (min 8 chars)" type="password" style={inputStyle} disabled={loading} />
+            <input
+              value={nickname}
+              onChange={(e) => setNickname(e.target.value)}
+              placeholder="First name / Nickname"
+              aria-label="First name / Nickname"
+              style={inputStyle}
+              disabled={loading}
+            />
+            <input
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Email"
+              type="email"
+              aria-label="Email"
+              style={inputStyle}
+              disabled={loading}
+            />
+            <input
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Password (min 8 chars)"
+              type="password"
+              aria-label="Password"
+              style={inputStyle}
+              disabled={loading}
+            />
 
             <button type="submit" style={btnStyle} disabled={loading}>
               {loading ? 'Creating...' : 'Create account'}

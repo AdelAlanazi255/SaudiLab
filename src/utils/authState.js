@@ -30,12 +30,37 @@ async function fetchOrInitProfile(user) {
 
   const { data: existing, error: selectError } = await supabase
     .from('profiles')
-    .select('id, email, role, username')
+    .select('id, email, role, username, last_email_change_at')
     .eq('id', user.id)
     .maybeSingle();
 
   if (selectError) throw selectError;
-  if (existing) return existing;
+  if (existing) {
+    const authEmail = String(user.email || '').trim().toLowerCase();
+    const profileEmail = String(existing.email || '').trim().toLowerCase();
+
+    if (authEmail && authEmail !== profileEmail) {
+      const nowIso = new Date().toISOString();
+      const { data: synced, error: syncError } = await supabase
+        .from('profiles')
+        .update({
+          email: authEmail,
+          last_email_change_at: nowIso,
+        })
+        .eq('id', user.id)
+        .select('id, email, role, username, last_email_change_at')
+        .single();
+
+      if (syncError) {
+        // eslint-disable-next-line no-console
+        console.error('[auth] profile email sync failed:', syncError);
+        return existing;
+      }
+      return synced || existing;
+    }
+
+    return existing;
+  }
 
   const upsertPayload = {
     id: user.id,
@@ -47,7 +72,7 @@ async function fetchOrInitProfile(user) {
   const { data: created, error: upsertError } = await supabase
     .from('profiles')
     .upsert(upsertPayload, { onConflict: 'id' })
-    .select('id, email, role, username')
+    .select('id, email, role, username, last_email_change_at')
     .single();
 
   if (upsertError) throw upsertError;

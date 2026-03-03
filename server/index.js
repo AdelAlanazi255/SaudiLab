@@ -46,6 +46,16 @@ function pickProfileAvatar(user) {
 
 app.get('/health', (req, res) => res.json({ ok: true }));
 
+const FIVE_DAYS_MS = 5 * 24 * 60 * 60 * 1000;
+
+function validateEmail(raw) {
+  const email = String(raw || '').trim().toLowerCase();
+  if (!email) return { ok: false, email: '', error: 'Email is required' };
+  const basicPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!basicPattern.test(email)) return { ok: false, email, error: 'Email is not valid' };
+  return { ok: true, email, error: null };
+}
+
 app.post('/auth/sync', requireAuth, async (req, res) => {
   try {
     const user = req.user;
@@ -105,6 +115,81 @@ app.get('/auth/me', requireAuth, async (req, res) => {
     return res.json({ user, profile: profile || null });
   } catch (err) {
     console.error('SUPABASE ME ERROR:', err);
+    return res.status(500).json({ error: 'Server error' });
+  }
+});
+
+app.post('/account/change-email', requireAuth, async (req, res) => {
+  try {
+    const user = req.user;
+    const configStatus = getSupabaseConfigStatus();
+    if (!configStatus.ok || !supabase) {
+      return res.status(500).json({
+        error: `Supabase server auth is not configured. Missing: ${configStatus.missing.join(', ')}`,
+      });
+    }
+
+    const checked = validateEmail(req.body?.email);
+    if (!checked.ok) {
+      return res.status(400).json({ error: checked.error });
+    }
+    if ((user.email || '').toLowerCase() === checked.email) {
+      return res.status(400).json({ error: 'New email must be different from current email' });
+    }
+
+    const { data: profile, error: profileError } = await supabase
+      .from('profiles')
+      .select('id, last_email_change_at')
+      .eq('id', user.id)
+      .maybeSingle();
+
+    if (profileError) {
+      console.error('CHANGE EMAIL PROFILE ERROR:', profileError);
+      return res.status(500).json({ error: 'Failed to load profile cooldown state' });
+    }
+    if (!profile) {
+      return res.status(404).json({ error: 'Profile was not found for this user' });
+    }
+
+    if (profile.last_email_change_at) {
+      const elapsedMs = Date.now() - new Date(profile.last_email_change_at).getTime();
+      const remainingMs = FIVE_DAYS_MS - elapsedMs;
+      if (remainingMs > 0) {
+        return res.status(429).json({
+          error: 'Email can only be changed once every 5 days',
+          remainingDays: Math.ceil(remainingMs / (24 * 60 * 60 * 1000)),
+        });
+      }
+    }
+
+    const { error: updateAuthError } = await supabase.auth.admin.updateUserById(user.id, {
+      email: checked.email,
+    });
+    if (updateAuthError) {
+      console.error('CHANGE EMAIL AUTH ERROR:', updateAuthError);
+      return res.status(400).json({ error: updateAuthError.message || 'Failed to update auth email' });
+    }
+
+    const nowIso = new Date().toISOString();
+    const { data: updatedProfile, error: updateProfileError } = await supabase
+      .from('profiles')
+      .update({ last_email_change_at: nowIso })
+      .eq('id', user.id)
+      .select('last_email_change_at')
+      .single();
+
+    if (updateProfileError) {
+      console.error('CHANGE EMAIL PROFILE UPDATE ERROR:', updateProfileError);
+      return res.status(500).json({ error: 'Email changed, but failed to update cooldown state' });
+    }
+
+    return res.json({
+      ok: true,
+      message: 'Email updated successfully',
+      lastEmailChangeAt: updatedProfile?.last_email_change_at || nowIso,
+    });
+  } catch (err) {
+    console.error('CHANGE EMAIL ERROR:', err);
     return res.status(500).json({ error: 'Server error' });
   }
 });
