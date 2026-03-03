@@ -1,10 +1,12 @@
 .pageWrap {
-  padding-top: 2rem;
-  padding-bottom: 2.6rem;
+  padding-top: 2.2rem;
+  padding-bottom: 3rem;
+  display: grid;
+  gap: 1.1rem;
 }
 
 .headerBlock {
-  margin-bottom: 1.4rem;
+  margin-bottom: 0.2rem;
 }
 
 .headerTopRow {
@@ -19,57 +21,96 @@
   margin: 0;
   font-size: var(--sl-h1);
   font-weight: 900;
+  letter-spacing: -0.01em;
 }
 
 .pageSub {
-  margin-top: 0.62rem;
+  margin-top: 0.5rem;
   max-width: 56ch;
   color: var(--sl-muted);
-  line-height: 1.7;
+  line-height: 1.6;
 }
 
 .sectionTitle {
   margin: 0;
-  font-size: var(--sl-h3);
-  font-weight: 850;
+  font-size: 1.12rem;
+  font-weight: 800;
+  color: rgba(226, 238, 251, 0.92);
 }
 
 .summaryCard,
 .courseCard {
-  border: 1px solid var(--sl-border);
-  border-radius: var(--sl-radius-card);
-  background: linear-gradient(180deg, var(--sl-surface), var(--sl-surface-2));
-  box-shadow: var(--sl-shadow);
+  border: 1px solid rgba(226, 238, 251, 0.14);
+  border-radius: 15px;
+  background: rgba(17, 25, 34, 0.82);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
 }
 
 .summaryCard {
-  margin-top: 1rem;
-  padding: 1.25rem 1.35rem;
+  margin-top: 0;
+  padding: 1.25rem 1.25rem 1.15rem;
+}
+
+.panelHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.panelDivider {
+  margin-top: 0.75rem;
+  height: 1px;
+  background: rgba(226, 238, 251, 0.1);
+}
+
+.memberSinceRow {
+  margin-top: 0.95rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.4rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(226, 238, 251, 0.1);
+  font-size: 0.9rem;
+}
+
+.memberSinceLabel {
+  color: var(--sl-muted);
+  font-weight: 700;
+}
+
+.memberSinceValue {
+  font-weight: 600;
+  color: rgba(226, 238, 251, 0.88);
 }
 
 .summaryGrid {
   margin-top: 1rem;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-  gap: 0.9rem;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.8rem;
 }
 
 .summaryItem {
-  padding: 0.82rem 0.9rem;
-  border-radius: 12px;
-  border: 1px solid var(--sl-border);
-  background: rgba(111, 132, 157, 0.08);
+  padding: 0.92rem 0.92rem;
+  border-radius: 14px;
+  border: 1px solid rgba(226, 238, 251, 0.12);
+  background: rgba(111, 132, 157, 0.05);
+  min-height: 130px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 
 .summaryInput {
   width: 100%;
-  height: 40px;
+  height: 41px;
   margin-top: 0.42rem;
   padding: 0 0.72rem;
   border-radius: 10px;
-  border: 1px solid var(--sl-border);
-  background: rgba(226, 238, 251, 0.05);
-  color: var(--sl-text);
+  border: 1px solid rgba(226, 238, 251, 0.2);
+  background: rgba(226, 238, 251, 0.03);
+  color: rgba(226, 238, 251, 0.95);
 }
 
 .summaryInput:focus-visible {
@@ -79,12 +120,29 @@
 
 .summaryBtn {
   margin-top: 0.58rem;
-  height: 36px;
-  width: 100%;
+  height: 34px;
+  width: auto;
+  min-width: 118px;
+  align-self: flex-start;
+  padding-left: 0.8rem;
+  padding-right: 0.8rem;
+  font-size: 0.83rem;
+  border-color: rgba(226, 238, 251, 0.24);
+  background: transparent;
+  color: rgba(226, 238, 251, 0.92);
+}
+
+.summaryBtn:hover {
+  border-color: rgba(226, 238, 251, 0.38);
+  background: rgba(226, 238, 251, 0.05);
 }
 
 .nameModal {
   max-width: 520px;
+  border-radius: 14px;
+  border: 1px solid rgba(226, 238, 251, 0.14);
+  background: rgba(17, 25, 34, 0.95);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.28);
 }
 
 .modalHelp {
@@ -106,6 +164,7 @@
   align-items: center;
   gap: 0.56rem;
   font-size: 0.9rem;
+  color: rgba(226, 238, 251, 0.88);
 }
 
 .modalError {
@@ -120,6 +179,28 @@
   display: flex;
   justify-content: flex-end;
   gap: 0.6rem;
+}
+
+.modalBtn {
+  height: 36px;
+  min-width: 110px;
+}
+
+.modalDeleteBtn {
+  border-color: rgba(255, 130, 130, 0.52);
+  color: #ffd4d4;
+  background: transparent;
+}
+
+.modalDeleteBtn:hover {
+  border-color: rgba(255, 130, 130, 0.72);
+  color: #ffe3e3;
+  background: rgba(255, 130, 130, 0.08);
+}
+
+.modalDeleteBtn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
 }
 
 .cooldownText {
@@ -138,13 +219,61 @@
 .value {
   font-size: 0.95rem;
   font-weight: 800;
+  color: rgba(226, 238, 251, 0.95);
 }
 
 .summaryActions {
-  margin-top: 0.7rem;
+  margin-top: 0.78rem;
   display: flex;
   gap: 0.55rem;
   flex-wrap: wrap;
+}
+
+.dangerCard {
+  margin-top: 1.35rem;
+  border: 1px solid rgba(255, 132, 132, 0.25);
+  border-left: 3px solid rgba(255, 132, 132, 0.58);
+  border-radius: 15px;
+  background: rgba(17, 25, 34, 0.82);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  padding: 1.15rem 1.2rem;
+}
+
+.dangerText {
+  margin: 0.45rem 0 0;
+  color: rgba(226, 238, 251, 0.74);
+  line-height: 1.5;
+  font-size: 0.9rem;
+}
+
+.dangerBtn {
+  margin-top: 0.82rem;
+  min-width: 128px;
+  height: 36px;
+  border-color: rgba(255, 130, 130, 0.56);
+  color: #ffcaca;
+  background: transparent;
+}
+
+.dangerBtn:hover {
+  border-color: rgba(255, 130, 130, 0.76);
+  color: #ffe0e0;
+  background: rgba(255, 130, 130, 0.08);
+}
+
+.accountDeletedToast {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 10002;
+  padding: 0.62rem 0.8rem;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 128, 128, 0.28);
+  background: rgba(23, 18, 18, 0.95);
+  color: #ffd8d8;
+  font-weight: 800;
+  font-size: 0.85rem;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.24);
 }
 
 .message {
@@ -161,12 +290,12 @@
 }
 
 .coursesSection {
-  margin-top: 0.35rem;
+  margin-top: 0.18rem;
 }
 
 .coursesGrid {
   margin-top: 1.2rem;
-  gap: 22px;
+  gap: 18px;
   align-items: stretch;
 }
 
@@ -174,8 +303,8 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  padding: 1.2rem 1.05rem 1.05rem;
+  gap: 10px;
+  padding: 1.1rem 1rem 1rem;
 }
 
 .courseTitleClamp {
@@ -198,8 +327,11 @@
 }
 
 .cardBtn {
-  width: 100%;
-  height: 38px;
+  width: auto;
+  min-width: 106px;
+  height: 34px;
+  padding-left: 0.8rem;
+  padding-right: 0.8rem;
   font-size: 0.88rem;
 }
 
@@ -269,5 +401,10 @@
   .pageWrap {
     padding-top: 2.6rem;
     padding-bottom: 3.2rem;
+    gap: 1.35rem;
+  }
+
+  .summaryGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }

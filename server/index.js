@@ -27,7 +27,7 @@ app.use(
       if (origin.endsWith('.vercel.app')) return cb(null, true);
       return cb(new Error('Not allowed by CORS'));
     },
-    methods: ['GET', 'POST', 'OPTIONS'],
+    methods: ['GET', 'POST', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
   }),
 );
@@ -190,6 +190,39 @@ app.post('/account/change-email', requireAuth, async (req, res) => {
     });
   } catch (err) {
     console.error('CHANGE EMAIL ERROR:', err);
+    return res.status(500).json({ error: 'Server error' });
+  }
+});
+
+app.delete('/api/account', requireAuth, async (req, res) => {
+  try {
+    const user = req.user;
+    const configStatus = getSupabaseConfigStatus();
+    if (!configStatus.ok || !supabase) {
+      return res.status(500).json({
+        error: `Supabase server auth is not configured. Missing: ${configStatus.missing.join(', ')}`,
+      });
+    }
+
+    const { error: deleteAuthError } = await supabase.auth.admin.deleteUser(user.id);
+    if (deleteAuthError) {
+      console.error('DELETE ACCOUNT AUTH ERROR:', deleteAuthError);
+      return res.status(500).json({ error: deleteAuthError.message || 'Failed to delete auth user' });
+    }
+
+    const { error: deleteProfileError } = await supabase
+      .from('profiles')
+      .delete()
+      .eq('id', user.id);
+
+    if (deleteProfileError) {
+      console.error('DELETE ACCOUNT PROFILE ERROR:', deleteProfileError);
+      // Auth user already removed. Return ok to avoid blocked finalization.
+    }
+
+    return res.json({ ok: true });
+  } catch (err) {
+    console.error('DELETE ACCOUNT ERROR:', err);
     return res.status(500).json({ error: 'Server error' });
   }
 });

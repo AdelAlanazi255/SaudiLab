@@ -13,6 +13,7 @@ export default function Navbar() {
   const auth = useAuth();
   const [open, setOpen] = useState(false);
   const [feedbackOpen, setFeedbackOpen] = useState(false);
+  const [feedbackToast, setFeedbackToast] = useState('');
   const displayName =
     auth?.profile?.username?.split(' ')?.[0]
     ?? auth?.user?.user_metadata?.username
@@ -37,16 +38,14 @@ export default function Navbar() {
                 </span>
               </span>
             </Link>
-            {auth?.isLoggedIn ? (
-              <button
-                type="button"
-                onClick={() => setFeedbackOpen(true)}
-                className="sl-btn-ghost sl-nav-feedbackBtn"
-              >
-                <span className="sl-show-mobile">Feedback</span>
-                <span className="sl-hide-mobile">Give Feedback</span>
-              </button>
-            ) : null}
+            <button
+              type="button"
+              onClick={() => setFeedbackOpen(true)}
+              className="sl-btn-ghost sl-nav-feedbackBtn"
+            >
+              <span className="sl-show-mobile">Feedback</span>
+              <span className="sl-hide-mobile">Give Feedback</span>
+            </button>
           </div>
 
           {auth?.isLoggedIn ? (
@@ -100,7 +99,32 @@ export default function Navbar() {
         onClose={() => setFeedbackOpen(false)}
         userEmail={auth?.user?.email || auth?.profile?.email || ''}
         userId={auth?.user?.id || null}
+        onSuccess={(text) => {
+          setFeedbackToast(text || 'Thanks for the feedback.');
+          window.setTimeout(() => setFeedbackToast(''), 1800);
+        }}
       />
+
+      {feedbackToast ? (
+        <div style={toastStyle} role="status" aria-live="polite">
+          {feedbackToast}
+        </div>
+      ) : null}
     </>
   );
 }
+
+const toastStyle = {
+  position: 'fixed',
+  right: '1rem',
+  bottom: '1rem',
+  zIndex: 10002,
+  padding: '0.62rem 0.8rem',
+  borderRadius: 10,
+  border: '1px solid rgba(124,242,176,0.35)',
+  background: 'rgba(10, 17, 24, 0.92)',
+  color: '#c6f8dc',
+  fontWeight: 800,
+  fontSize: '0.85rem',
+  boxShadow: '0 8px 22px rgba(0,0,0,0.35)',
+};

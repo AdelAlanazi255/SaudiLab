@@ -1,7 +1,13 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { hasSupabaseConfig, supabase } from '@site/src/utils/supabaseClient';
 
-export default function FeedbackModal({ open, onClose, userEmail = '', userId = null }) {
+export default function FeedbackModal({
+  open,
+  onClose,
+  userEmail = '',
+  userId = null,
+  onSuccess = null,
+}) {
   const [email, setEmail] = useState(userEmail || '');
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
@@ -79,15 +85,10 @@ export default function FeedbackModal({ open, onClose, userEmail = '', userId = 
       return;
     }
 
-    if (!userId) {
-      setMsg('Please login to submit feedback.');
-      return;
-    }
-
     setLoading(true);
     try {
       const payload = {
-        user_id: userId,
+        user_id: userId || null,
         email: trimmedEmail,
         message: trimmedMessage,
         page_url: typeof window !== 'undefined' ? window.location.pathname : null,
@@ -97,6 +98,7 @@ export default function FeedbackModal({ open, onClose, userEmail = '', userId = 
       if (error) throw error;
 
       setMsg('Thanks for the feedback.');
+      if (onSuccess) onSuccess('Thanks for the feedback.');
       window.setTimeout(() => {
         onClose();
       }, 650);

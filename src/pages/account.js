@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import { useAuth } from '@site/src/utils/authState';
 import RequireAuth from '@site/src/components/RequireAuth';
 import PageContainer from '@site/src/components/layout/PageContainer';
@@ -27,6 +28,7 @@ function resolveCourseStatus(completedLessons, totalLessons) {
 }
 
 export default function Account() {
+  const { siteConfig } = useDocusaurusContext();
   const auth = useAuth();
   const [progressTick, setProgressTick] = useState(0);
   const [activeTab, setActiveTab] = useState('in_progress');
@@ -34,6 +36,7 @@ export default function Account() {
     loading: false,
     username: '',
     email: '',
+    profileCreatedAt: null,
     lastUsernameChangeAt: null,
     lastEmailChangeAt: null,
   });
@@ -47,8 +50,13 @@ export default function Account() {
   const [savingUsername, setSavingUsername] = useState(false);
   const [sendingEmailConfirmation, setSendingEmailConfirmation] = useState(false);
   const [sendingReset, setSendingReset] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [deleteConfirmText, setDeleteConfirmText] = useState('');
+  const [deletingAccount, setDeletingAccount] = useState(false);
+  const [accountDeletedToast, setAccountDeletedToast] = useState('');
   const [summaryMsg, setSummaryMsg] = useState({ type: '', text: '' });
   const supabaseConfig = getSupabaseConfigStatus();
+  const apiBaseUrl = String(siteConfig?.customFields?.API_BASE_URL || '').replace(/\/$/, '');
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -78,7 +86,7 @@ export default function Account() {
       setSummaryState((prev) => ({ ...prev, loading: true }));
       const { data, error } = await supabase
         .from('profiles')
-        .select('username, email, last_username_change_at, last_email_change_at')
+        .select('username, email, created_at, last_username_change_at, last_email_change_at')
         .eq('id', auth.user.id)
         .maybeSingle();
 
@@ -94,6 +102,7 @@ export default function Account() {
         loading: false,
         username: nextUsername,
         email: nextEmail,
+        profileCreatedAt: data?.created_at || null,
         lastUsernameChangeAt: data?.last_username_change_at || null,
         lastEmailChangeAt: data?.last_email_change_at || null,
       });
@@ -125,6 +134,8 @@ export default function Account() {
     && !emailValidationError
     && nextEmail
     && nextEmail !== currentEmail.toLowerCase();
+  const memberSince = formatMemberSince(summaryState.profileCreatedAt || auth?.user?.created_at || null);
+  const canConfirmDelete = deleteConfirmText.trim() === 'DELETE' && !deletingAccount;
 
   const onResetPassword = async () => {
     if (sendingReset) return;
@@ -149,6 +160,48 @@ export default function Account() {
       return;
     }
     setSummaryMsg({ type: 'success', text: 'Password reset email sent.' });
+  };
+
+  const onDeleteAccount = async () => {
+    if (!canConfirmDelete) return;
+    if (!supabase || !supabaseConfig.ok) {
+      setSummaryMsg({ type: 'error', text: 'Supabase is not configured.' });
+      return;
+    }
+    if (!apiBaseUrl) {
+      setSummaryMsg({ type: 'error', text: 'API base URL is not configured.' });
+      return;
+    }
+
+    setDeletingAccount(true);
+    setSummaryMsg({ type: '', text: '' });
+
+    try {
+      const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+      if (sessionError || !sessionData?.session?.access_token) {
+        throw new Error('Could not get authenticated session token.');
+      }
+
+      const response = await fetch(`${apiBaseUrl}/api/account`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${sessionData.session.access_token}`,
+        },
+      });
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok || !payload?.ok) {
+        throw new Error(payload?.error || 'Failed to delete account.');
+      }
+
+      await supabase.auth.signOut();
+      setAccountDeletedToast('Account deleted.');
+      window.setTimeout(() => {
+        window.location.href = '/';
+      }, 800);
+    } catch (err) {
+      setSummaryMsg({ type: 'error', text: err?.message || 'Failed to delete account.' });
+      setDeletingAccount(false);
+    }
   };
 
   const onSaveUsername = async () => {
@@ -183,6 +236,7 @@ export default function Account() {
       ...prev,
       username: data?.username || trimmed,
       email: data?.email || prev.email,
+      profileCreatedAt: prev.profileCreatedAt,
       lastUsernameChangeAt: data?.last_username_change_at || nowIso,
       lastEmailChangeAt: data?.last_email_change_at || prev.lastEmailChangeAt,
     }));
@@ -232,6 +286,17 @@ export default function Account() {
   const closeEmailModal = () => {
     setEmailModalOpen(false);
     resetEmailModalState();
+  };
+
+  const openDeleteModal = () => {
+    setDeleteOpen(true);
+    setDeleteConfirmText('');
+  };
+
+  const closeDeleteModal = () => {
+    if (deletingAccount) return;
+    setDeleteOpen(false);
+    setDeleteConfirmText('');
   };
 
   const onSendEmailConfirmation = async () => {
@@ -313,7 +378,10 @@ export default function Account() {
           </header>
 
           <Section className={styles.summaryCard}>
-            <h2 className={styles.sectionTitle}>Account Summary</h2>
+            <div className={styles.panelHeader}>
+              <h2 className={styles.sectionTitle}>Account Summary</h2>
+            </div>
+            <div className={styles.panelDivider} aria-hidden="true" />
 
             <div className={styles.summaryGrid}>
               <div className={styles.summaryItem}>
@@ -349,8 +417,11 @@ export default function Account() {
                   <div className={styles.cooldownText}>You can change your email again in {emailRemainingDays} day(s).</div>
                 ) : null}
               </div>
+            </div>
 
-              <SummaryItem label="Access" value="All courses available" />
+            <div className={styles.memberSinceRow}>
+              <span className={styles.memberSinceLabel}>Member since:</span>
+              <span className={styles.memberSinceValue}>{memberSince || '-'}</span>
             </div>
 
             <div className={styles.summaryActions}>
@@ -400,6 +471,20 @@ export default function Account() {
             remainingDays={emailRemainingDays}
             successMessage={emailModalSuccess}
           />
+          <DeleteAccountModal
+            open={deleteOpen}
+            onClose={closeDeleteModal}
+            confirmText={deleteConfirmText}
+            onChangeConfirmText={setDeleteConfirmText}
+            onConfirmDelete={onDeleteAccount}
+            canConfirmDelete={canConfirmDelete}
+            deleting={deletingAccount}
+          />
+          {accountDeletedToast ? (
+            <div className={styles.accountDeletedToast} role="status" aria-live="polite">
+              {accountDeletedToast}
+            </div>
+          ) : null}
 
           <Section className={styles.coursesSection}>
             <h2 className={styles.sectionTitle}>Courses and Progress</h2>
@@ -438,6 +523,21 @@ export default function Account() {
               ))}
             </CardGrid>
           </Section>
+
+          <Section className={styles.dangerCard}>
+            <h2 className={styles.sectionTitle}>Danger Zone</h2>
+            <p className={styles.dangerText}>
+              Permanently delete your account and profile data. This action cannot be undone.
+            </p>
+            <button
+              type="button"
+              className={`sl-btn-ghost ${styles.dangerBtn}`}
+              onClick={openDeleteModal}
+              disabled={deletingAccount}
+            >
+              Delete account
+            </button>
+          </Section>
         </PageContainer>
       </RequireAuth>
     </Layout>
@@ -465,15 +565,6 @@ function CourseCard({ title, completedLessons, totalLessons, percent, ctaHref, c
   );
 }
 
-function SummaryItem({ label: l, value: v }) {
-  return (
-    <div className={styles.summaryItem}>
-      <div className={styles.label}>{l}</div>
-      <div className={styles.value}>{v}</div>
-    </div>
-  );
-}
-
 function getRemainingDays(lastChangeAt) {
   if (!lastChangeAt) return 0;
   const stamp = new Date(lastChangeAt).getTime();
@@ -481,6 +572,16 @@ function getRemainingDays(lastChangeAt) {
   const remainingMs = FIVE_DAYS_MS - (Date.now() - stamp);
   if (remainingMs <= 0) return 0;
   return Math.ceil(remainingMs / (24 * 60 * 60 * 1000));
+}
+
+function formatMemberSince(value) {
+  if (!value) return null;
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return null;
+  return new Intl.DateTimeFormat('en-US', {
+    month: 'long',
+    year: 'numeric',
+  }).format(date);
 }
 
 function validateName(value) {
@@ -556,8 +657,8 @@ function ChangeNameModal({
         ) : null}
 
         <div className={styles.modalActions}>
-          <button type="button" className="sl-btn-ghost" onClick={onClose} disabled={saving}>Cancel</button>
-          <button type="button" className="sl-btn-primary" onClick={onSave} disabled={!canSave || saving}>
+          <button type="button" className={`sl-btn-ghost ${styles.modalBtn}`} onClick={onClose} disabled={saving}>Cancel</button>
+          <button type="button" className={`sl-btn-primary ${styles.modalBtn}`} onClick={onSave} disabled={!canSave || saving}>
             {saving ? 'Saving...' : 'Save'}
           </button>
         </div>
@@ -633,9 +734,61 @@ function ChangeEmailModal({
         {successMessage ? <div className={styles.messageSuccess}>{successMessage}</div> : null}
 
         <div className={styles.modalActions}>
-          <button type="button" className="sl-btn-ghost" onClick={onClose} disabled={sending}>Cancel</button>
-          <button type="button" className="sl-btn-primary" onClick={onSend} disabled={!canSend || disableInputs}>
+          <button type="button" className={`sl-btn-ghost ${styles.modalBtn}`} onClick={onClose} disabled={sending}>Cancel</button>
+          <button type="button" className={`sl-btn-primary ${styles.modalBtn}`} onClick={onSend} disabled={!canSend || disableInputs}>
             {sending ? 'Sending...' : 'Send confirmation'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function DeleteAccountModal({
+  open,
+  onClose,
+  confirmText,
+  onChangeConfirmText,
+  onConfirmDelete,
+  canConfirmDelete,
+  deleting,
+}) {
+  if (!open) return null;
+
+  return (
+    <div className="sl-modalBackdrop" role="dialog" aria-modal="true" aria-labelledby="sl-delete-account-title">
+      <div className={`sl-modal ${styles.nameModal}`}>
+        <div className="sl-modalHead">
+          <div>
+            <h2 id="sl-delete-account-title" className="sl-modalTitle">Delete your account?</h2>
+            <p className={`${styles.modalHelp} sl-modalMsg`}>
+              This will permanently delete your account and your profile data. This cannot be undone.
+            </p>
+          </div>
+          <button type="button" className="sl-modalX" onClick={onClose} aria-label="Close delete account modal" disabled={deleting}>
+            x
+          </button>
+        </div>
+
+        <label className={styles.modalLabel} htmlFor="sl-delete-confirm">Type DELETE to confirm</label>
+        <input
+          id="sl-delete-confirm"
+          className={styles.summaryInput}
+          value={confirmText}
+          onChange={(e) => onChangeConfirmText(e.target.value)}
+          placeholder="DELETE"
+          disabled={deleting}
+        />
+
+        <div className={styles.modalActions}>
+          <button type="button" className={`sl-btn-ghost ${styles.modalBtn}`} onClick={onClose} disabled={deleting}>Cancel</button>
+          <button
+            type="button"
+            className={`sl-btn-ghost ${styles.modalBtn} ${styles.modalDeleteBtn}`}
+            onClick={onConfirmDelete}
+            disabled={!canConfirmDelete || deleting}
+          >
+            {deleting ? 'Deleting...' : 'Delete account'}
           </button>
         </div>
       </div>
