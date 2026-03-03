@@ -54,6 +54,7 @@ module.exports = {
 
   scripts: [
     { src: '/js/custom.js', defer: false, async: false },
+    { src: '/_vercel/insights/script.js', defer: true },
   ],
 
   stylesheets: [],
