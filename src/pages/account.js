@@ -9,7 +9,7 @@ import CardGrid from '@site/src/components/layout/CardGrid';
 import { getCourseProgress, COURSE_EVENT } from '@site/src/utils/progress';
 import { getLesson } from '@site/src/course/courseMap';
 import { HOMEPAGE_COURSES } from '@site/src/course/courseCatalog';
-import { getSupabaseConfigStatus, supabase } from '@site/src/utils/supabaseClient';
+import { getSupabaseConfigStatus, siteUrl, supabase } from '@site/src/utils/supabaseClient';
 import styles from './account.module.css';
 
 const FIVE_DAYS_MS = 5 * 24 * 60 * 60 * 1000;
@@ -139,8 +139,9 @@ export default function Account() {
 
     setSendingReset(true);
     setSummaryMsg({ type: '', text: '' });
+    const resetRedirect = `${siteUrl}/auth/reset`;
     const { error } = await supabase.auth.resetPasswordForEmail(auth.user.email, {
-      redirectTo: `${window.location.origin}/auth/reset`,
+      redirectTo: resetRedirect,
     });
     setSendingReset(false);
 
@@ -186,6 +187,17 @@ export default function Account() {
       lastUsernameChangeAt: data?.last_username_change_at || nowIso,
       lastEmailChangeAt: data?.last_email_change_at || prev.lastEmailChangeAt,
     }));
+
+    if (supabase && supabaseConfig.ok && typeof window !== 'undefined') {
+      const { error: metadataError } = await supabase.auth.updateUser({
+        data: { display_name: data?.username || trimmed },
+      });
+      if (metadataError) {
+        setSummaryMsg({ type: 'error', text: metadataError.message || 'Name saved, but metadata sync failed.' });
+        return;
+      }
+    }
+
     setNameModalOpen(false);
     resetNameModalState();
     setSummaryMsg({ type: 'success', text: 'Username updated.' });

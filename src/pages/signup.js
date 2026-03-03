@@ -46,6 +46,7 @@ export default function SignUp() {
         options: {
           data: {
             username: nicknameTrimmed || null,
+            display_name: nicknameTrimmed || null,
           },
         },
       });
