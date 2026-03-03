@@ -44,6 +44,7 @@ export default function SignUp() {
         email: emailTrimmed,
         password,
         options: {
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
           data: {
             username: nicknameTrimmed || null,
             display_name: nicknameTrimmed || null,
@@ -70,12 +71,7 @@ export default function SignUp() {
         }
       }
 
-      if (!data?.session) {
-        setMsg('Check your email to confirm your account.');
-        return;
-      }
-
-      window.location.href = '/';
+      window.location.href = '/login?verify=1';
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error(err?.message || String(err));

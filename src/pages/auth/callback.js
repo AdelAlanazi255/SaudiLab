@@ -3,7 +3,7 @@ import Layout from '@theme/Layout';
 import { getSupabaseConfigStatus, supabase } from '@site/src/utils/supabaseClient';
 
 export default function AuthCallback() {
-  const [msg, setMsg] = useState('Signing you in...');
+  const [msg, setMsg] = useState('Confirming your email...');
   const supabaseConfig = getSupabaseConfigStatus();
 
   useEffect(() => {
@@ -14,17 +14,21 @@ export default function AuthCallback() {
       }
 
       try {
-        for (let attempt = 0; attempt < 10; attempt += 1) {
-          const { data } = await supabase.auth.getSession();
-          if (data?.session) {
-            window.location.href = '/';
-            return;
-          }
-          await new Promise((resolve) => setTimeout(resolve, 300));
+        const hasCode = window.location.search.includes('code=');
+        const hasHash = Boolean(window.location.hash);
+
+        let sessionData = await supabase.auth.getSession();
+
+        if (!sessionData?.data?.session && (hasCode || hasHash)) {
+          await supabase.auth.exchangeCodeForSession(window.location.href);
+          sessionData = await supabase.auth.getSession();
         }
-        window.location.href = '/login';
+
+        window.history.replaceState({}, '', '/');
+        window.location.href = '/';
       } catch {
-        window.location.href = '/login';
+        window.history.replaceState({}, '', '/');
+        window.location.href = '/';
       }
     };
 

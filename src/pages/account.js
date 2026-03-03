@@ -9,7 +9,7 @@ import CardGrid from '@site/src/components/layout/CardGrid';
 import { getCourseProgress, COURSE_EVENT } from '@site/src/utils/progress';
 import { getLesson } from '@site/src/course/courseMap';
 import { HOMEPAGE_COURSES } from '@site/src/course/courseCatalog';
-import { getSupabaseConfigStatus, siteUrl, supabase } from '@site/src/utils/supabaseClient';
+import { getSupabaseConfigStatus, supabase } from '@site/src/utils/supabaseClient';
 import styles from './account.module.css';
 
 const FIVE_DAYS_MS = 5 * 24 * 60 * 60 * 1000;
@@ -139,9 +139,8 @@ export default function Account() {
 
     setSendingReset(true);
     setSummaryMsg({ type: '', text: '' });
-    const resetRedirect = `${siteUrl}/auth/reset`;
     const { error } = await supabase.auth.resetPasswordForEmail(auth.user.email, {
-      redirectTo: resetRedirect,
+      redirectTo: `${window.location.origin}/auth/callback`,
     });
     setSendingReset(false);
 
@@ -244,7 +243,10 @@ export default function Account() {
 
     setSendingEmailConfirmation(true);
     setSummaryMsg({ type: '', text: '' });
-    const { error } = await supabase.auth.updateUser({ email: nextEmail });
+    const { error } = await supabase.auth.updateUser(
+      { email: nextEmail },
+      { emailRedirectTo: `${window.location.origin}/auth/callback` },
+    );
     setSendingEmailConfirmation(false);
     if (error) {
       setSummaryMsg({ type: 'error', text: error.message || 'Could not send email confirmation.' });

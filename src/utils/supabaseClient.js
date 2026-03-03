@@ -2,7 +2,6 @@ import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = process.env.REACT_APP_SUPABASE_URL;
 const supabaseAnonKey = process.env.REACT_APP_SUPABASE_ANON_KEY;
-const siteUrl = (process.env.REACT_APP_SITE_URL || 'https://www.saudilab.io').replace(/\/$/, '');
 
 function getSupabaseConfigStatus() {
   const missing = [];
@@ -32,4 +31,3 @@ export const supabase = hasSupabaseConfig
 
 export { getSupabaseConfigStatus };
 export { hasSupabaseConfig };
-export { siteUrl };

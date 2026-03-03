@@ -126,6 +126,20 @@ export function AuthProvider({ children }) {
   };
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (!supabase || !hasSupabaseConfig) return;
+
+    const hash = String(window.location.hash || '');
+    const hasAuthTokens = hash.includes('access_token=') || hash.includes('refresh_token=');
+    if (!hasAuthTokens) return;
+
+    supabase.auth.getSession().finally(() => {
+      const cleanUrl = `${window.location.pathname}${window.location.search || ''}`;
+      window.history.replaceState({}, '', cleanUrl || '/');
+    });
+  }, []);
+
+  useEffect(() => {
     refresh();
 
     if (!supabase || !hasSupabaseConfig) return undefined;

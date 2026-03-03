@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Layout from '@theme/Layout';
 import { getSupabaseConfigStatus, supabase } from '@site/src/utils/supabaseClient';
 import PageContainer from '@site/src/components/layout/PageContainer';
@@ -9,8 +9,21 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [msg, setMsg] = useState('');
+  const [verifyModalOpen, setVerifyModalOpen] = useState(false);
   const supabaseConfig = getSupabaseConfigStatus();
   const supabaseMissingMsg = `Supabase is not configured. Missing: ${supabaseConfig.missing.join(', ')}`;
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const url = new URL(window.location.href);
+    if (url.searchParams.get('verify') !== '1') return;
+
+    setVerifyModalOpen(true);
+    url.searchParams.delete('verify');
+    const nextSearch = url.searchParams.toString();
+    const nextPath = `${url.pathname}${nextSearch ? `?${nextSearch}` : ''}${url.hash || ''}`;
+    window.history.replaceState({}, '', nextPath || '/login');
+  }, []);
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -104,7 +117,45 @@ export default function Login() {
           </form>
         </Section>
       </PageContainer>
+      <VerifyNoticeModal open={verifyModalOpen} onClose={() => setVerifyModalOpen(false)} />
     </Layout>
+  );
+}
+
+function VerifyNoticeModal({ open, onClose }) {
+  useEffect(() => {
+    if (!open || typeof window === 'undefined') return undefined;
+    const onKeyDown = (event) => {
+      if (event.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [open, onClose]);
+
+  if (!open) return null;
+
+  const onBackdrop = (event) => {
+    if (event.target === event.currentTarget) onClose();
+  };
+
+  return (
+    <div className="sl-modalBackdrop" onMouseDown={onBackdrop}>
+      <div className="sl-modal" role="dialog" aria-modal="true" aria-labelledby="sl-verify-title">
+        <div className="sl-modalHead">
+          <div>
+            <div id="sl-verify-title" className="sl-modalTitle">Email verification</div>
+            <div className="sl-modalMsg">Please verify your email before logging in</div>
+          </div>
+          <button onClick={onClose} className="sl-modalX" aria-label="Close">
+            x
+          </button>
+        </div>
+
+        <div className="sl-modalActions">
+          <button onClick={onClose} className="sl-btn-primary">Close</button>
+        </div>
+      </div>
+    </div>
   );
 }
 
