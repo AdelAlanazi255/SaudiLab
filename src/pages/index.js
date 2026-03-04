@@ -60,18 +60,13 @@ export default function Home() {
                   </div>
                   <p>{course.description}</p>
                   <div className="course-actions">
-                    {course.ctaHref ? (
+                    {course.active && course.ctaHref ? (
                       <a href={course.ctaHref} className="btn btn-primary btn-small">
                         Start
                       </a>
                     ) : (
                       <span className="coming-soon">Coming soon</span>
                     )}
-                    {course.notify ? (
-                      <a href="/account" className="notify-link">
-                        Notify me
-                      </a>
-                    ) : null}
                   </div>
                 </article>
               ))}
