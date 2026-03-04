@@ -67,7 +67,7 @@ const textareaStyle = {
   caretColor: 'var(--sl-text)',
   fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
   fontSize: '14px',
-  lineHeight: 1.6,
+  lineHeight: 1.5,
   whiteSpace: 'pre',
   overflow: 'auto',
 };
@@ -82,7 +82,7 @@ const highlightPreStyle = {
   pointerEvents: 'none',
   fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
   fontSize: '14px',
-  lineHeight: 1.6,
+  lineHeight: 1.5,
   overflow: 'auto',
   borderRadius: '8px',
   whiteSpace: 'pre',
@@ -814,6 +814,109 @@ export default function TryPage({ course = 'html', lessonId = 'lesson1' }) {
     setCseSubmittedOutcome(null);
   }, [isCse, lessonId, cseStepConfig]);
 
+  useEffect(() => {
+    if (process.env.NODE_ENV === 'production') return;
+    if (typeof window === 'undefined') return;
+    if (isCse) return;
+
+    const logEditorDiagnostics = () => {
+      const root = document.querySelector('.CodeMirror, .cm-editor, .sl-try-editorInputWrap');
+      if (!root) {
+        // eslint-disable-next-line no-console
+        console.warn('[try-editor-diagnostic] Editor root not found');
+        return;
+      }
+
+      // eslint-disable-next-line no-console
+      console.group('[try-editor-diagnostic]');
+      // eslint-disable-next-line no-console
+      console.log('editorRoot:', root.className || root.tagName);
+
+      const nonDefaultParentEffects = [];
+      let current = root.parentElement;
+
+      while (current && current !== document.body.parentElement) {
+        const cs = window.getComputedStyle(current);
+        const issues = [];
+
+        if (cs.transform && cs.transform !== 'none') issues.push(`transform=${cs.transform}`);
+        if (cs.zoom && cs.zoom !== 'normal') issues.push(`zoom=${cs.zoom}`);
+        if (cs.filter && cs.filter !== 'none') issues.push(`filter=${cs.filter}`);
+        if (cs.backdropFilter && cs.backdropFilter !== 'none') issues.push(`backdrop-filter=${cs.backdropFilter}`);
+        if (cs.perspective && cs.perspective !== 'none') issues.push(`perspective=${cs.perspective}`);
+        if (cs.willChange && cs.willChange.includes('transform')) issues.push(`will-change=${cs.willChange}`);
+
+        if (issues.length > 0) {
+          nonDefaultParentEffects.push({
+            element: current,
+            selector: current.className || current.tagName,
+            issues,
+          });
+        }
+
+        current = current.parentElement;
+      }
+
+      if (nonDefaultParentEffects.length > 0) {
+        // eslint-disable-next-line no-console
+        console.log('parentEffects:', nonDefaultParentEffects);
+        const first = nonDefaultParentEffects[0];
+        // eslint-disable-next-line no-console
+        console.warn(`CULPRIT FOUND: ${first.selector} -> ${first.issues.join(', ')}`);
+      } else {
+        // eslint-disable-next-line no-console
+        console.log('CULPRIT FOUND: none (no transformed/filtered ancestors)');
+      }
+
+      const cm5Root = document.querySelector('.CodeMirror');
+      const cm6Root = document.querySelector('.cm-editor');
+      const customPre = document.querySelector('.sl-try-highlightPre');
+      const customTextarea = document.querySelector('.sl-try-editorTextarea');
+
+      const logTypography = (label, node) => {
+        if (!node) return;
+        const cs = window.getComputedStyle(node);
+        // eslint-disable-next-line no-console
+        console.log(`${label}:`, {
+          lineHeight: cs.lineHeight,
+          fontSize: cs.fontSize,
+          letterSpacing: cs.letterSpacing,
+          whiteSpace: cs.whiteSpace,
+        });
+      };
+
+      if (cm5Root) {
+        logTypography('.CodeMirror', cm5Root);
+        logTypography('.CodeMirror pre', cm5Root.querySelector('pre'));
+        logTypography('.CodeMirror-line', cm5Root.querySelector('.CodeMirror-line'));
+      } else if (cm6Root) {
+        logTypography('.cm-editor', cm6Root);
+        logTypography('.cm-content', cm6Root.querySelector('.cm-content'));
+        logTypography('.cm-line', cm6Root.querySelector('.cm-line'));
+      } else {
+        logTypography('.sl-try-highlightPre', customPre);
+        logTypography('.sl-try-editorTextarea', customTextarea);
+
+        if (customPre && customTextarea) {
+          const preCS = window.getComputedStyle(customPre);
+          const textCS = window.getComputedStyle(customTextarea);
+          if (preCS.lineHeight !== textCS.lineHeight || preCS.fontSize !== textCS.fontSize) {
+            // eslint-disable-next-line no-console
+            console.warn(
+              `CULPRIT FOUND: typography mismatch pre(line-height=${preCS.lineHeight}, font-size=${preCS.fontSize}) vs textarea(line-height=${textCS.lineHeight}, font-size=${textCS.fontSize})`,
+            );
+          }
+        }
+      }
+
+      // eslint-disable-next-line no-console
+      console.groupEnd();
+    };
+
+    const t = window.setTimeout(logEditorDiagnostics, 120);
+    return () => window.clearTimeout(t);
+  }, [course, lessonId, isCse]);
+
   const cseChoicesChangedAfterSubmit = useMemo(() => {
     if (!isCse || !cseSubmittedChoices) return false;
     return JSON.stringify(cseChoices) !== JSON.stringify(cseSubmittedChoices);
@@ -943,14 +1046,24 @@ export default function TryPage({ course = 'html', lessonId = 'lesson1' }) {
                     </div>
                   </div>
                 ) : (
-                  <div style={editorInputWrapStyle}>
-                    <pre ref={preRef} style={highlightPreStyle} className={codeClass} aria-hidden>
+                  <div style={editorInputWrapStyle} className="sl-try-editorInputWrap">
+                    <pre
+                      ref={preRef}
+                      style={highlightPreStyle}
+                      className={`sl-try-highlightPre ${codeClass}`}
+                      aria-hidden
+                    >
                       <code className={codeClass} dangerouslySetInnerHTML={{ __html: highlighted }} />
                     </pre>
                     <textarea
+                      className="sl-try-editorTextarea"
                       value={code}
                       onChange={(e) => setCode(e.target.value)}
                       onScroll={syncScroll}
+                      wrap="off"
+                      autoComplete="off"
+                      autoCorrect="off"
+                      autoCapitalize="off"
                       spellCheck={false}
                       style={textareaStyle}
                     />

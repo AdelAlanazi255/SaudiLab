@@ -110,6 +110,51 @@ h3 {
   border-color: rgba(111, 132, 157, 0.34);
 }
 
+.sl-lessonContent {
+  color: rgba(255, 255, 255, 0.72);
+  line-height: 1.65;
+}
+
+.sl-lessonContent h1,
+.sl-lessonContent h2,
+.sl-lessonContent h3,
+.sl-lessonContent h4,
+.sl-lessonContent strong,
+.sl-lessonContent .sectionTitle {
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.sl-lessonContent p,
+.sl-lessonContent li {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.sl-lessonContent .muted,
+.sl-lessonContent .explanationText {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.sl-lessonContent .sectionTitle {
+  font-weight: 800;
+  margin: 0.25rem 0 0.35rem;
+}
+
+.sl-lessonContent .explanationBlock {
+  margin-top: 0.95rem;
+  padding: 0.85rem 0.95rem;
+  border-radius: 12px;
+  border: 1px solid rgba(111, 132, 157, 0.34);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.sl-lessonContent .explanationBlock ul {
+  margin: 0.45rem 0 0;
+}
+
+.sl-docProgress .sl-lessonProgress {
+  margin: 0 0 0.9rem;
+}
+
 .sl-muted {
   color: var(--sl-muted);
 }
@@ -218,6 +263,77 @@ h3 {
 .sl-card-glow:hover {
   border-color: rgba(124, 242, 176, 0.26);
   box-shadow: var(--sl-shadow), var(--sl-glow);
+}
+
+code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+/* Global inline code styling for dark theme content. */
+:not(pre) > code {
+  background: rgba(255, 255, 255, 0.06);
+  color: #9fe8c6;
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-size: 0.9em;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Keep docs-rendered code blocks stable during scroll/reflow. */
+.theme-doc-markdown pre {
+  white-space: pre;
+  overflow-x: auto;
+  overflow-y: hidden;
+  min-width: 100%;
+  width: 100%;
+}
+
+.theme-doc-markdown pre code {
+  white-space: pre;
+  display: block;
+}
+
+/* Ensure markdown wrappers do not collapse code formatting. */
+.theme-doc-markdown pre,
+.theme-code-block {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+/* Try editor safety rules (custom textarea + Prism overlay, not CodeMirror). */
+.sl-try-editorInputWrap {
+  min-height: 320px;
+}
+
+.sl-try-highlightPre,
+.sl-try-highlightPre code,
+.sl-try-editorTextarea {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  letter-spacing: normal;
+  white-space: pre;
+  tab-size: 2;
+}
+
+.sl-try-highlightPre {
+  overflow: auto;
+  min-width: 0;
+  width: auto;
+}
+
+.sl-try-editorTextarea {
+  overflow: auto;
+  overflow-wrap: normal;
+  word-break: normal;
+  white-space: pre !important;
+  transform: none;
+  filter: none;
+}
+
+.sl-try-editorTextarea::selection {
+  background: rgba(124, 242, 176, 0.22);
+  color: transparent;
 }
 
 .sl-card-disabled {
@@ -705,19 +821,39 @@ h3 {
 }
 
 .sl-completeBtn {
+  min-height: 46px;
+  padding: 0.72rem 1.1rem;
+  border-radius: var(--sl-radius-btn);
+  font-weight: 900;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.18s ease;
+}
+
+.sl-completeBtnPending {
   border: 1px solid rgba(124, 242, 176, 0.34);
+  background: #7cf2b0;
+  color: #04110a;
+}
+
+.sl-completeBtnPending:hover {
+  background: #93f6c1;
+  border-color: rgba(124, 242, 176, 0.5);
 }
 
 .sl-completeBtnDone {
-  border-color: rgba(111, 132, 157, 0.36);
-  background: rgba(111, 132, 157, 0.12);
-  color: var(--sl-accent);
+  border: 1px solid #7cffb4;
+  background: rgba(120, 255, 180, 0.1);
+  color: #7cffb4;
   box-shadow: none;
 }
 
 .sl-completeBtnDone:hover {
-  color: var(--sl-accent);
-  background: rgba(111, 132, 157, 0.16);
+  color: #7cffb4;
+  background: rgba(120, 255, 180, 0.14);
   box-shadow: none;
 }
 
