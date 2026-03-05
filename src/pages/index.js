@@ -49,10 +49,13 @@ export default function Home() {
               <h2 className="section-title">Courses</h2>
             </div>
             <CardGrid className="courses-grid" columns="four">
-              {HOMEPAGE_COURSES.map((course) => (
+              {HOMEPAGE_COURSES.map((course) => {
+                const isAvailable = course.available === true;
+                return (
                 <article
                   key={course.title}
-                  className={`course-card ${course.active ? 'course-card-active' : 'course-card-soon'}`}
+                  className={`course-card ${isAvailable ? 'course-card-active' : 'course-card-unavailable'}`}
+                  aria-disabled={!isAvailable}
                 >
                   <div className="course-head">
                     <h3>{course.title}</h3>
@@ -60,7 +63,7 @@ export default function Home() {
                   </div>
                   <p>{course.description}</p>
                   <div className="course-actions">
-                    {course.active && course.ctaHref ? (
+                    {isAvailable && course.ctaHref ? (
                       <a href={course.ctaHref} className="btn btn-primary btn-small">
                         Start
                       </a>
@@ -69,7 +72,8 @@ export default function Home() {
                     )}
                   </div>
                 </article>
-              ))}
+                );
+              })}
             </CardGrid>
           </PageContainer>
         </Section>

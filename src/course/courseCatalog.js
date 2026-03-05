@@ -1,12 +1,13 @@
 export const HOMEPAGE_COURSES = [
-  { courseId: 'html', title: 'HTML', description: 'Learn the structure of the web.', active: true, ctaHref: '/html' },
-  { courseId: 'css', title: 'CSS', description: 'Style and layout your websites.', active: true, ctaHref: '/css' },
-  { courseId: 'javascript', title: 'JavaScript', description: 'Make your websites interactive.', active: true, ctaHref: '/javascript' },
+  { courseId: 'html', title: 'HTML', description: 'Learn the structure of the web.', active: true, available: true, ctaHref: '/html' },
+  { courseId: 'css', title: 'CSS', description: 'Style and layout your websites.', active: true, available: false, ctaHref: '/css' },
+  { courseId: 'javascript', title: 'JavaScript', description: 'Make your websites interactive.', active: true, available: false, ctaHref: '/javascript' },
   {
     courseId: 'cse',
     title: 'Cyber Security Essentials',
     description: 'Learn core security concepts and safe online habits.',
     active: true,
+    available: false,
     ctaHref: '/cse',
   },
   {
@@ -14,6 +15,7 @@ export const HOMEPAGE_COURSES = [
     title: 'Personal Cyber Safety',
     description: 'Protect accounts, devices, and personal data safely.',
     active: false,
+    available: false,
     ctaHref: '/pcs',
   },
   {
@@ -21,6 +23,7 @@ export const HOMEPAGE_COURSES = [
     title: 'Security Ethics',
     description: 'Learn ethical hacking boundaries, responsibility, and mindset.',
     active: false,
+    available: false,
     ctaHref: '/ethics',
   },
   {
@@ -28,6 +31,7 @@ export const HOMEPAGE_COURSES = [
     title: 'Intro to Security Tools (Kali Linux)',
     description: 'Learn common security tools and concepts used by professionals - safely and responsibly.',
     active: false,
+    available: false,
     ctaHref: '/kali',
   },
   {
@@ -35,6 +39,7 @@ export const HOMEPAGE_COURSES = [
     title: 'Cryptography',
     description: 'Understand encryption, hashing, and modern crypto basics.',
     active: true,
+    available: false,
     ctaHref: '/cryptography',
   },
   {
@@ -42,6 +47,7 @@ export const HOMEPAGE_COURSES = [
     title: 'Web Security',
     description: 'Learn how websites are protected against common attacks.',
     active: false,
+    available: false,
     ctaHref: '/web-security',
   },
   {
@@ -49,6 +55,7 @@ export const HOMEPAGE_COURSES = [
     title: 'Digital Forensics',
     description: 'Learn how investigators analyze digital evidence.',
     active: false,
+    available: false,
     ctaHref: '/forensics',
   },
   {
@@ -56,6 +63,7 @@ export const HOMEPAGE_COURSES = [
     title: 'Blue Team Fundamentals',
     description: 'Learn defensive security, monitoring, and incident response basics.',
     active: false,
+    available: false,
     ctaHref: '/blueteam',
   },
   {
@@ -63,6 +71,7 @@ export const HOMEPAGE_COURSES = [
     title: 'Cyber Security Career Paths',
     description: 'Beginner guide to understanding cyber security roles, skills, and career paths.',
     active: false,
+    available: false,
     ctaHref: '/career',
   },
 ];
