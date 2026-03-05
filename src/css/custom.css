@@ -811,6 +811,108 @@ code {
   margin-bottom: 0.12rem;
 }
 
+#hint-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  transition: background 300ms ease, opacity 300ms ease;
+}
+
+#hint-overlay.hint-closing {
+  background: transparent;
+}
+
+#hint-modal {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+#try-hint {
+  width: 100%;
+  max-width: 720px;
+}
+
+#try-hint-content {
+  transform-origin: top left;
+}
+
+#hint-modal #try-hint-content {
+  width: min(720px, 90%);
+  background: rgba(12, 16, 22, 0.96);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.35),
+    0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+#try-hint > #try-hint-content {
+  width: 100%;
+}
+
+.sl-try-hintHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.7rem;
+}
+
+.sl-try-hintClose {
+  border: 1px solid var(--sl-border);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--sl-text);
+  font-size: 0.75rem;
+  line-height: 1;
+  padding: 0.35rem 0.55rem;
+  cursor: pointer;
+}
+
+.sl-try-hintClose:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+@keyframes runHighlight {
+  0% {
+    box-shadow: 0 0 0 rgba(120, 255, 180, 0);
+  }
+  50% {
+    box-shadow: 0 0 18px rgba(120, 255, 180, 0.45);
+  }
+  100% {
+    box-shadow: 0 0 0 rgba(120, 255, 180, 0);
+  }
+}
+
+@keyframes editorPulse {
+  0% {
+    box-shadow: 0 0 0 rgba(120, 255, 180, 0);
+  }
+  50% {
+    box-shadow:
+      0 0 0 2px rgba(120, 255, 180, 0.25),
+      0 0 22px rgba(120, 255, 180, 0.45),
+      0 0 40px rgba(120, 255, 180, 0.18);
+  }
+  100% {
+    box-shadow: 0 0 0 rgba(120, 255, 180, 0);
+  }
+}
+
+.run-highlight {
+  animation: runHighlight 1.2s ease-out 1;
+}
+
+.editor-pulse {
+  animation: editorPulse 1.8s ease-out 1;
+}
+
 .sl-try-editorFooter {
   position: sticky;
   bottom: 0;

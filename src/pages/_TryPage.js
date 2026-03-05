@@ -1,4 +1,5 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import BrowserOnly from '@docusaurus/BrowserOnly';
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
@@ -917,11 +918,96 @@ function getHtmlTryHint(lessonId) {
   return null;
 }
 
-function TryHint({ hint }) {
+function TryHint({ hint, onDismissed }) {
+  const inlineSlotRef = useRef(null);
+  const overlayRef = useRef(null);
+  const modalWrapRef = useRef(null);
+  const hintRef = useRef(null);
+  const [inlineNode, setInlineNode] = useState(null);
+  const [modalNode, setModalNode] = useState(null);
+  const [overlayVisible, setOverlayVisible] = useState(true);
+  const [isClosing, setIsClosing] = useState(false);
+  const [portalTarget, setPortalTarget] = useState('overlay');
   const ListTag = hint.ordered ? 'ol' : 'ul';
-  return (
-    <div className="sl-try-hint">
-      <div className="sl-try-hintTitle">{hint.title}</div>
+  const portalContainer = portalTarget === 'overlay' && overlayVisible ? modalNode : inlineNode;
+  const canPortal = Boolean(portalContainer);
+  const setModalRef = useCallback((node) => {
+    modalWrapRef.current = node;
+    setModalNode((prev) => (prev === node ? prev : node));
+  }, []);
+  const setInlineRef = useCallback((node) => {
+    inlineSlotRef.current = node;
+    setInlineNode((prev) => (prev === node ? prev : node));
+  }, []);
+
+  useEffect(() => {
+    setOverlayVisible(true);
+    setIsClosing(false);
+    setPortalTarget('overlay');
+  }, [hint]);
+
+  const onClose = () => {
+    if (!hintRef.current || !inlineNode || !overlayRef.current) {
+      setOverlayVisible(false);
+      return;
+    }
+
+    const hintEl = hintRef.current;
+    const first = hintEl.getBoundingClientRect();
+    const overlay = overlayRef.current;
+    const inlineSlot = inlineNode;
+    inlineSlot.style.minHeight = `${first.height}px`;
+    overlay.classList.add('hint-closing');
+    setIsClosing(true);
+    setPortalTarget('inline');
+
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => {
+        if (!hintRef.current) {
+          setOverlayVisible(false);
+          setIsClosing(false);
+          return;
+        }
+        const movedHintEl = hintRef.current;
+        const last = movedHintEl.getBoundingClientRect();
+        const dx = first.left - last.left;
+        const dy = first.top - last.top;
+        const sx = last.width > 0 ? first.width / last.width : 1;
+        const sy = last.height > 0 ? first.height / last.height : 1;
+        const anim = movedHintEl.animate(
+          [
+            { transform: `translate(${dx}px, ${dy}px) scale(${sx}, ${sy})` },
+            { transform: 'translate(0, 0) scale(1, 1)' },
+          ],
+          {
+            duration: 420,
+            easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+            fill: 'both',
+          },
+        );
+        anim.onfinish = () => {
+          inlineSlot.style.minHeight = '';
+          overlay.classList.remove('hint-closing');
+          setIsClosing(false);
+          setOverlayVisible(false);
+          if (typeof onDismissed === 'function') {
+            onDismissed();
+          }
+        };
+      });
+    });
+  };
+
+  const hintContent = (
+    <div id="try-hint-content" ref={hintRef} className="sl-try-hint">
+      <div className="sl-try-hintHeader">
+        <div className="sl-try-hintTitle">{hint.title}</div>
+        {overlayVisible ? (
+          <button id="hint-close" type="button" className="sl-try-hintClose" onClick={onClose}>
+            Got it
+          </button>
+        ) : null}
+      </div>
       <p>{hint.intro}</p>
       <ListTag>
         {hint.items.map((item, index) => (
@@ -931,9 +1017,25 @@ function TryHint({ hint }) {
       <p>{hint.tip}</p>
     </div>
   );
+
+  return (
+    <>
+      {overlayVisible ? (
+        <div id="hint-overlay" ref={overlayRef} className={isClosing ? 'hint-closing' : ''} aria-hidden="true">
+          <div id="hint-modal" ref={setModalRef} />
+        </div>
+      ) : null}
+      <div id="try-hint" ref={setInlineRef} style={overlayVisible && !isClosing ? { visibility: 'hidden' } : undefined} />
+      {canPortal ? createPortal(hintContent, portalContainer) : null}
+    </>
+  );
 }
 
 export default function TryPage({ course = 'html', lessonId = 'lesson1' }) {
+  const runButtonRef = useRef(null);
+  const editorContainerRef = useRef(null);
+  const runGuideTimeoutRef = useRef(null);
+  const editorGuideTimeoutRef = useRef(null);
   const lessonNumber = getLessonNumber(lessonId);
   const isCse = course === 'cse';
   const htmlTryHint = useMemo(() => (course === 'html' ? getHtmlTryHint(lessonId) : null), [course, lessonId]);
@@ -991,6 +1093,47 @@ export default function TryPage({ course = 'html', lessonId = 'lesson1' }) {
     setCseSubmittedOutcome(null);
   }, [isCse, lessonId, cseStepConfig]);
 
+  useEffect(
+    () => () => {
+      if (runGuideTimeoutRef.current) {
+        window.clearTimeout(runGuideTimeoutRef.current);
+      }
+      if (editorGuideTimeoutRef.current) {
+        window.clearTimeout(editorGuideTimeoutRef.current);
+      }
+    },
+    [],
+  );
+
+  const triggerHintGuidance = useCallback(() => {
+    const runBtn = runButtonRef.current;
+    const editor = editorContainerRef.current;
+
+    if (runBtn) {
+      runBtn.classList.remove('run-highlight');
+      void runBtn.offsetWidth;
+      runBtn.classList.add('run-highlight');
+      if (runGuideTimeoutRef.current) {
+        window.clearTimeout(runGuideTimeoutRef.current);
+      }
+      runGuideTimeoutRef.current = window.setTimeout(() => {
+        runBtn.classList.remove('run-highlight');
+      }, 1300);
+    }
+
+    if (editor) {
+      editor.classList.remove('editor-pulse');
+      void editor.offsetWidth;
+      editor.classList.add('editor-pulse');
+      if (editorGuideTimeoutRef.current) {
+        window.clearTimeout(editorGuideTimeoutRef.current);
+      }
+      editorGuideTimeoutRef.current = window.setTimeout(() => {
+        editor.classList.remove('editor-pulse');
+      }, 1700);
+    }
+  }, []);
+
   const cseChoicesChangedAfterSubmit = useMemo(() => {
     if (!isCse || !cseSubmittedChoices) return false;
     return JSON.stringify(cseChoices) !== JSON.stringify(cseSubmittedChoices);
@@ -1022,11 +1165,11 @@ export default function TryPage({ course = 'html', lessonId = 'lesson1' }) {
       <div className="sl-try-page">
         <h1 className="sl-try-title">{`${label} Lesson ${lessonNumber}: ${lessonTitle} - Try It Yourself`}</h1>
         <LandscapeTip />
-        {htmlTryHint ? <TryHint hint={htmlTryHint} /> : null}
+        {htmlTryHint ? <TryHint hint={htmlTryHint} onDismissed={triggerHintGuidance} /> : null}
 
         <div className="sl-try-layout">
           <div className="sl-try-col">
-            <div style={editorShellStyle} className="sl-try-panel sl-try-editor-panel">
+            <div ref={editorContainerRef} style={editorShellStyle} className="sl-try-panel sl-try-editor-panel editor-container">
               <div style={panelHeaderStyle}>{isCse ? 'Scenario' : 'Editor'}</div>
               <div style={editorBodyStyle} className="sl-try-editorBody">
                 {isCse ? (
@@ -1142,10 +1285,11 @@ export default function TryPage({ course = 'html', lessonId = 'lesson1' }) {
                   </button>
                 ) : (
                   <button
+                    ref={runButtonRef}
                     onClick={() => setOutput(code)}
                     onMouseEnter={() => setRunHover(true)}
                     onMouseLeave={() => setRunHover(false)}
-                    className="sl-try-action-btn sl-try-action-primary"
+                    className="sl-try-action-btn sl-try-action-primary run-button"
                     style={{
                       ...buttonBase,
                       ...primaryButtonStyle,
