@@ -42,7 +42,7 @@ export default function Footer() {
         <div>
           <div className="sl-footerHeading">Support</div>
           <div className="sl-footerLinks">
-            <a href="https://example.com/support" target="_blank" rel="noopener noreferrer" className="sl-footerPill">
+            <a href="https://buymeacoffee.com/adelalanazi" target="_blank" rel="noopener noreferrer" className="sl-footerPill">
               Support SaudiLab
             </a>
           </div>
