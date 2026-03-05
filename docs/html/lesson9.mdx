@@ -1,11 +1,13 @@
 ---
 id: lesson9
-title: "Lesson 9: Form inputs"
+title: "Lesson 9: Form Inputs"
 ---
 
 import LessonShell from '@site/src/components/LessonShell';
 
-# Lesson 9: Form inputs
+# Lesson 9: Form Inputs
+
+Form inputs let users type and choose information. In this lesson, you will learn common input types and useful attributes.
 
 <LessonShell
   course="html"
@@ -14,30 +16,63 @@ import LessonShell from '@site/src/components/LessonShell';
   lessonId="lesson9"
 >
 
-What You'll Learn
-- Core concept for lesson 9
-- Practical HTML pattern for lesson 9
-- How to practice this concept in the try editor
+<div className="sectionTitle">What You&apos;ll Learn</div>
+- Common input types: <code>text</code>, <code>email</code>, <code>password</code>, <code>number</code>, <code>radio</code>, <code>checkbox</code>
+- Key attributes: <code>placeholder</code>, <code>required</code>, <code>min</code>, <code>max</code>, <code>name</code>, <code>value</code>
+- How to build a simple editable form
 
 ---
 
-Lesson Overview
+<div className="sectionTitle">Common Input Types</div>
 
-TODO: Write lesson content for lesson 9.
+Use <code>text</code> for names, <code>email</code> for email addresses, and <code>password</code> for passwords.
+
+Use <code>number</code> when users enter numbers, and <code>radio</code>/<code>checkbox</code> when users choose options.
 
 ---
 
-Example
+<div className="sectionTitle">Helpful Attributes</div>
 
-~~~html
+<code>placeholder</code> shows a hint inside the input.
+
+<code>required</code> makes a field mandatory.
+
+For numeric inputs, <code>min</code> and <code>max</code> set allowed limits.
+
+<code>name</code> and <code>value</code> help identify selected values in forms.
+
+---
+
+<div className="sectionTitle">Example: Simple Form</div>
+
+```html
 <!DOCTYPE html>
 <html>
+  <head>
+    <title>Form Inputs</title>
+  </head>
   <body>
-    <h1>Lesson 9 example</h1>
-    <p>TODO: Add the final lesson example.</p>
+    <h1>Quick Form</h1>
+
+    <form onsubmit="return false;">
+      <label for="name">Name</label>
+      <input id="name" type="text" placeholder="Enter your name" />
+
+      <button type="submit">Submit</button>
+    </form>
   </body>
 </html>
-~~~
+```
+
+<div className="explanationBlock">
+  <div className="sectionTitle">Explanation</div>
+  <ul className="explanationText">
+    <li><code>text</code>, <code>email</code>, <code>password</code>, <code>number</code> are common input types</li>
+    <li><code>radio</code> and <code>checkbox</code> are used for selections</li>
+    <li><code>placeholder</code> shows helper text and <code>required</code> enforces input</li>
+    <li><code>min</code>/<code>max</code> limit number ranges, and <code>name</code>/<code>value</code> identify submitted values</li>
+  </ul>
+</div>
 
 </LessonShell>
 

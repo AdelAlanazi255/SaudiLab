@@ -1,12 +1,8 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+import BrowserOnly from '@docusaurus/BrowserOnly';
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
 import LandscapeTip from '@site/src/components/LandscapeTip';
-import Prism from 'prismjs';
-import 'prismjs/components/prism-markup';
-import 'prismjs/components/prism-css';
-import 'prismjs/components/prism-javascript';
-import 'prismjs/themes/prism-tomorrow.css';
 import { getTryStarter } from '@site/src/pages/_tryData';
 import { canAccessLesson, getLastUnlockedLessonPath } from '@site/src/utils/lessonAccess';
 import { getLessonMeta } from '@site/src/data/lessons';
@@ -38,6 +34,8 @@ const panelHeaderStyle = {
 
 const editorBodyStyle = {
   flex: 1,
+  minHeight: 0,
+  overflow: 'hidden',
   padding: '0.5rem',
 };
 
@@ -50,42 +48,6 @@ const editorFooterStyle = {
   gap: '0.6rem',
   justifyContent: 'flex-start',
   background: 'rgba(226, 238, 251, 0.02)',
-};
-
-const textareaStyle = {
-  position: 'absolute',
-  inset: 0,
-  width: '100%',
-  height: '100%',
-  padding: '1rem',
-  resize: 'none',
-  border: 'none',
-  borderRadius: '12px',
-  outline: 'none',
-  background: 'transparent',
-  color: 'transparent',
-  caretColor: 'var(--sl-text)',
-  fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
-  fontSize: '14px',
-  lineHeight: 1.5,
-  whiteSpace: 'pre',
-  overflow: 'auto',
-};
-
-const highlightPreStyle = {
-  position: 'absolute',
-  inset: 0,
-  margin: 0,
-  padding: '1rem',
-  background: '#0a0f14',
-  color: 'var(--sl-text)',
-  pointerEvents: 'none',
-  fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
-  fontSize: '14px',
-  lineHeight: 1.5,
-  overflow: 'auto',
-  borderRadius: '8px',
-  whiteSpace: 'pre',
 };
 
 const editorInputWrapStyle = {
@@ -249,17 +211,52 @@ function buildOutputDoc(course, source) {
   return withPreviewTheme(source);
 }
 
+function codeMirrorModeForCourse(course) {
+  if (course === 'css') return 'css';
+  if (course === 'javascript') return 'javascript';
+  return 'htmlmixed';
+}
+
+function TryCodeEditor({ value, options, onBeforeChange }) {
+  return (
+    <BrowserOnly fallback={<div className="sl-try-editorLoading">Loading editor...</div>}>
+      {() => {
+        // Load CodeMirror only in the browser to avoid SSR navigator issues.
+        // eslint-disable-next-line global-require
+        const { Controlled: CodeMirror } = require('react-codemirror2');
+        // eslint-disable-next-line global-require
+        require('codemirror/lib/codemirror.css');
+        // eslint-disable-next-line global-require
+        require('codemirror/theme/material-darker.css');
+        // eslint-disable-next-line global-require
+        require('codemirror/mode/xml/xml');
+        // eslint-disable-next-line global-require
+        require('codemirror/mode/javascript/javascript');
+        // eslint-disable-next-line global-require
+        require('codemirror/mode/css/css');
+        // eslint-disable-next-line global-require
+        require('codemirror/mode/htmlmixed/htmlmixed');
+
+        return (
+          <CodeMirror
+            value={value}
+            options={options}
+            editorDidMount={(editor) => {
+              editor.refresh();
+            }}
+            onBeforeChange={onBeforeChange}
+          />
+        );
+      }}
+    </BrowserOnly>
+  );
+}
+
 function courseLabel(course) {
   if (course === 'css') return 'CSS';
   if (course === 'javascript') return 'JavaScript';
   if (course === 'cse') return 'CSE';
   return 'HTML';
-}
-
-function prismLanguageForCourse(course) {
-  if (course === 'css') return 'css';
-  if (course === 'javascript') return 'javascript';
-  return 'html';
 }
 
 function getLessonNumber(lessonId) {
@@ -767,9 +764,179 @@ function getRiskColor(riskLevel) {
   return 'var(--ifm-color-danger)';
 }
 
+function getHtmlTryHint(lessonId) {
+  if (lessonId === 'lesson1') {
+    return {
+      title: 'Hint',
+      intro: 'Start simple and test each change with RUN.',
+      ordered: false,
+      items: [
+        <>Press RUN once to see the starter page in Preview.</>,
+        <>Edit the text inside <code>&lt;h1&gt;</code> and <code>&lt;p&gt;</code>, then run again.</>,
+        <>Add one more <code>&lt;p&gt;</code> line to practice page structure.</>,
+      ],
+      tip: <>Tip: Small edits + RUN make it easy to understand what changed.</>,
+    };
+  }
+
+  if (lessonId === 'lesson2') {
+    return {
+      title: 'Hint',
+      intro: 'Practice structure with headings and paragraphs.',
+      ordered: false,
+      items: [
+        <>Use one <code>&lt;h1&gt;</code>, then add <code>&lt;h2&gt;</code> and <code>&lt;h3&gt;</code> as sub-sections.</>,
+        <>Write 2-3 short <code>&lt;p&gt;</code> paragraphs under your headings.</>,
+        <>Change the topic text to your own example and press RUN.</>,
+      ],
+      tip: <>Tip: Pick heading levels by structure, not by size.</>,
+    };
+  }
+
+  if (lessonId === 'lesson3') {
+    return {
+      title: 'Hint',
+      intro: 'Try text formatting tags to compare meaning and readability.',
+      ordered: false,
+      items: [
+        <>Wrap important words with <code>&lt;strong&gt;</code> and emphasized words with <code>&lt;em&gt;</code>.</>,
+        <>Use one <code>&lt;br&gt;</code> for a single line break inside a paragraph.</>,
+        <>Press RUN and compare formatted text with normal text.</>,
+      ],
+      tip: <>Tip: Example: <code>&lt;strong&gt;Important&lt;/strong&gt;</code> and <code>&lt;em&gt;Note&lt;/em&gt;</code>.</>,
+    };
+  }
+
+  if (lessonId === 'lesson4') {
+    return {
+      title: 'Hint',
+      intro: 'Practice links by changing text and destinations.',
+      ordered: false,
+      items: [
+        <>Edit the clickable words between <code>&lt;a&gt;</code> and <code>&lt;/a&gt;</code>.</>,
+        <>Replace the URL in <code>href</code> with another website.</>,
+        <>Keep <code>target="_blank"</code> so links open in a new tab.</>,
+      ],
+      tip: <>Tip: Try linking to your favorite site and give it clear link text.</>,
+    };
+  }
+
+  if (lessonId === 'lesson5') {
+    return {
+      title: 'Try Your Own Image',
+      intro: 'You can try using your own image from the internet.',
+      ordered: true,
+      items: [
+        <>Search for a photo on Google.</>,
+        <>Right-click the image.</>,
+        <>Click <strong>"Copy Image Address"</strong>.</>,
+        <>Replace the URL inside the <code>src</code> attribute.</>,
+        <>Update the <code>alt</code> description to match your image.</>,
+      ],
+      tip: <><em>Tip: Try finding a picture of a city, animal, or car and display it on your page.</em></>,
+    };
+  }
+
+  if (lessonId === 'lesson6') {
+    return {
+      title: 'Hint',
+      intro: 'Practice both list types and then build one nested list.',
+      ordered: true,
+      items: [
+        <>Add a new <code>&lt;li&gt;</code> item to the unordered list.</>,
+        <>Reorder the ordered list items and run again.</>,
+        <>Create a nested <code>&lt;ul&gt;</code> under one list item.</>,
+      ],
+      tip: <>Challenge: Make a "Top 3" list of anything you like and a separate bullet list of hobbies.</>,
+    };
+  }
+
+  if (lessonId === 'lesson7') {
+    return {
+      title: 'Hint',
+      intro: 'Build confidence with table structure one step at a time.',
+      ordered: true,
+      items: [
+        <>Add a new row (<code>&lt;tr&gt;</code>) with 3 cells (<code>&lt;td&gt;</code>).</>,
+        <>Change one header (<code>&lt;th&gt;</code>) text.</>,
+        <>Add a <code>&lt;caption&gt;</code> to your table.</>,
+      ],
+      tip: <>Challenge: Make a table for "Top 3 Movies" with columns: Title, Year, Rating.</>,
+    };
+  }
+
+  if (lessonId === 'lesson8') {
+    return {
+      title: 'Hint',
+      intro: 'Practice editing this form.',
+      ordered: true,
+      items: [
+        <>Change the text inside the "Name" label.</>,
+        <>Change the placeholder text inside the name input.</>,
+        <>Change the text on the button.</>,
+      ],
+      tip: <>Challenge: Change the form title to your own name.</>,
+    };
+  }
+
+  if (lessonId === 'lesson9') {
+    return {
+      title: 'Hint',
+      intro: 'Practice editing and adding simple form inputs.',
+      ordered: true,
+      items: [
+        <>Change the placeholder text inside the Name input.</>,
+        <>Add a new input for "Password" using <code>&lt;input type="password"&gt;</code>.</>,
+        <>Change the text on the submit button.</>,
+      ],
+      tip: <>Challenge: Add one more input field for "Email".</>,
+    };
+  }
+
+  if (lessonId === 'lesson10') {
+    return {
+      title: 'Hint',
+      intro: 'Try editing parts of this webpage layout.',
+      ordered: true,
+      items: [
+        <>Change the website title inside the <code>&lt;header&gt;</code>.</>,
+        <>Change the text inside the table.</>,
+        <>Add another item to the list.</>,
+      ],
+      tip: (
+        <>
+          Challenge: Add another <code>&lt;section&gt;</code> with a short paragraph about yourself.
+          <br />
+          <br />
+          Challenge 2: Include a photo from the internet using the <code>&lt;img&gt;</code> tag.
+        </>
+      ),
+    };
+  }
+
+  return null;
+}
+
+function TryHint({ hint }) {
+  const ListTag = hint.ordered ? 'ol' : 'ul';
+  return (
+    <div className="sl-try-hint">
+      <div className="sl-try-hintTitle">{hint.title}</div>
+      <p>{hint.intro}</p>
+      <ListTag>
+        {hint.items.map((item, index) => (
+          <li key={`${hint.title}-${index + 1}`}>{item}</li>
+        ))}
+      </ListTag>
+      <p>{hint.tip}</p>
+    </div>
+  );
+}
+
 export default function TryPage({ course = 'html', lessonId = 'lesson1' }) {
   const lessonNumber = getLessonNumber(lessonId);
   const isCse = course === 'cse';
+  const htmlTryHint = useMemo(() => (course === 'html' ? getHtmlTryHint(lessonId) : null), [course, lessonId]);
   const cseScenario = useMemo(() => getCseScenario(lessonId), [lessonId]);
   const cseStepConfig = useMemo(() => (isCse ? cseScenario.steps : []), [isCse, cseScenario]);
   const totalCseSteps = cseStepConfig.length;
@@ -788,14 +955,24 @@ export default function TryPage({ course = 'html', lessonId = 'lesson1' }) {
   const lessonTitle = lessonMeta.title;
   const lesson = useMemo(() => getLesson(course, lessonId), [course, lessonId]);
   const backPath = lesson?.permalink || `/${course}/lesson${lessonNumber}`;
-  const prismLanguage = prismLanguageForCourse(course);
-  const codeClass = `language-${prismLanguage}`;
-  const preRef = useRef(null);
-
-  const highlighted = useMemo(() => {
-    const grammar = Prism.languages[prismLanguage] || Prism.languages.markup;
-    return Prism.highlight(code, grammar, prismLanguage);
-  }, [code, prismLanguage]);
+  const codeMirrorMode = useMemo(() => codeMirrorModeForCourse(course), [course]);
+  const codeMirrorOptions = useMemo(
+    () => ({
+      mode: codeMirrorMode,
+      theme: 'material-darker',
+      lineNumbers: true,
+      lineWrapping: false,
+      smartIndent: true,
+      indentUnit: 2,
+      tabSize: 2,
+      autofocus: false,
+      viewportMargin: Infinity,
+      extraKeys: {
+        Tab: (cm) => cm.replaceSelection('  ', 'end'),
+      },
+    }),
+    [codeMirrorMode],
+  );
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -814,119 +991,10 @@ export default function TryPage({ course = 'html', lessonId = 'lesson1' }) {
     setCseSubmittedOutcome(null);
   }, [isCse, lessonId, cseStepConfig]);
 
-  useEffect(() => {
-    if (process.env.NODE_ENV === 'production') return;
-    if (typeof window === 'undefined') return;
-    if (isCse) return;
-
-    const logEditorDiagnostics = () => {
-      const root = document.querySelector('.CodeMirror, .cm-editor, .sl-try-editorInputWrap');
-      if (!root) {
-        // eslint-disable-next-line no-console
-        console.warn('[try-editor-diagnostic] Editor root not found');
-        return;
-      }
-
-      // eslint-disable-next-line no-console
-      console.group('[try-editor-diagnostic]');
-      // eslint-disable-next-line no-console
-      console.log('editorRoot:', root.className || root.tagName);
-
-      const nonDefaultParentEffects = [];
-      let current = root.parentElement;
-
-      while (current && current !== document.body.parentElement) {
-        const cs = window.getComputedStyle(current);
-        const issues = [];
-
-        if (cs.transform && cs.transform !== 'none') issues.push(`transform=${cs.transform}`);
-        if (cs.zoom && cs.zoom !== 'normal') issues.push(`zoom=${cs.zoom}`);
-        if (cs.filter && cs.filter !== 'none') issues.push(`filter=${cs.filter}`);
-        if (cs.backdropFilter && cs.backdropFilter !== 'none') issues.push(`backdrop-filter=${cs.backdropFilter}`);
-        if (cs.perspective && cs.perspective !== 'none') issues.push(`perspective=${cs.perspective}`);
-        if (cs.willChange && cs.willChange.includes('transform')) issues.push(`will-change=${cs.willChange}`);
-
-        if (issues.length > 0) {
-          nonDefaultParentEffects.push({
-            element: current,
-            selector: current.className || current.tagName,
-            issues,
-          });
-        }
-
-        current = current.parentElement;
-      }
-
-      if (nonDefaultParentEffects.length > 0) {
-        // eslint-disable-next-line no-console
-        console.log('parentEffects:', nonDefaultParentEffects);
-        const first = nonDefaultParentEffects[0];
-        // eslint-disable-next-line no-console
-        console.warn(`CULPRIT FOUND: ${first.selector} -> ${first.issues.join(', ')}`);
-      } else {
-        // eslint-disable-next-line no-console
-        console.log('CULPRIT FOUND: none (no transformed/filtered ancestors)');
-      }
-
-      const cm5Root = document.querySelector('.CodeMirror');
-      const cm6Root = document.querySelector('.cm-editor');
-      const customPre = document.querySelector('.sl-try-highlightPre');
-      const customTextarea = document.querySelector('.sl-try-editorTextarea');
-
-      const logTypography = (label, node) => {
-        if (!node) return;
-        const cs = window.getComputedStyle(node);
-        // eslint-disable-next-line no-console
-        console.log(`${label}:`, {
-          lineHeight: cs.lineHeight,
-          fontSize: cs.fontSize,
-          letterSpacing: cs.letterSpacing,
-          whiteSpace: cs.whiteSpace,
-        });
-      };
-
-      if (cm5Root) {
-        logTypography('.CodeMirror', cm5Root);
-        logTypography('.CodeMirror pre', cm5Root.querySelector('pre'));
-        logTypography('.CodeMirror-line', cm5Root.querySelector('.CodeMirror-line'));
-      } else if (cm6Root) {
-        logTypography('.cm-editor', cm6Root);
-        logTypography('.cm-content', cm6Root.querySelector('.cm-content'));
-        logTypography('.cm-line', cm6Root.querySelector('.cm-line'));
-      } else {
-        logTypography('.sl-try-highlightPre', customPre);
-        logTypography('.sl-try-editorTextarea', customTextarea);
-
-        if (customPre && customTextarea) {
-          const preCS = window.getComputedStyle(customPre);
-          const textCS = window.getComputedStyle(customTextarea);
-          if (preCS.lineHeight !== textCS.lineHeight || preCS.fontSize !== textCS.fontSize) {
-            // eslint-disable-next-line no-console
-            console.warn(
-              `CULPRIT FOUND: typography mismatch pre(line-height=${preCS.lineHeight}, font-size=${preCS.fontSize}) vs textarea(line-height=${textCS.lineHeight}, font-size=${textCS.fontSize})`,
-            );
-          }
-        }
-      }
-
-      // eslint-disable-next-line no-console
-      console.groupEnd();
-    };
-
-    const t = window.setTimeout(logEditorDiagnostics, 120);
-    return () => window.clearTimeout(t);
-  }, [course, lessonId, isCse]);
-
   const cseChoicesChangedAfterSubmit = useMemo(() => {
     if (!isCse || !cseSubmittedChoices) return false;
     return JSON.stringify(cseChoices) !== JSON.stringify(cseSubmittedChoices);
   }, [isCse, cseChoices, cseSubmittedChoices]);
-
-  const syncScroll = (e) => {
-    if (!preRef.current) return;
-    preRef.current.scrollTop = e.target.scrollTop;
-    preRef.current.scrollLeft = e.target.scrollLeft;
-  };
 
   const onResetCse = () => {
     setCseStep(1);
@@ -954,12 +1022,13 @@ export default function TryPage({ course = 'html', lessonId = 'lesson1' }) {
       <div className="sl-try-page">
         <h1 className="sl-try-title">{`${label} Lesson ${lessonNumber}: ${lessonTitle} - Try It Yourself`}</h1>
         <LandscapeTip />
+        {htmlTryHint ? <TryHint hint={htmlTryHint} /> : null}
 
         <div className="sl-try-layout">
           <div className="sl-try-col">
             <div style={editorShellStyle} className="sl-try-panel sl-try-editor-panel">
               <div style={panelHeaderStyle}>{isCse ? 'Scenario' : 'Editor'}</div>
-              <div style={editorBodyStyle}>
+              <div style={editorBodyStyle} className="sl-try-editorBody">
                 {isCse ? (
                   <div
                     style={{
@@ -1046,31 +1115,20 @@ export default function TryPage({ course = 'html', lessonId = 'lesson1' }) {
                     </div>
                   </div>
                 ) : (
-                  <div style={editorInputWrapStyle} className="sl-try-editorInputWrap">
-                    <pre
-                      ref={preRef}
-                      style={highlightPreStyle}
-                      className={`sl-try-highlightPre ${codeClass}`}
-                      aria-hidden
-                    >
-                      <code className={codeClass} dangerouslySetInnerHTML={{ __html: highlighted }} />
-                    </pre>
-                    <textarea
-                      className="sl-try-editorTextarea"
-                      value={code}
-                      onChange={(e) => setCode(e.target.value)}
-                      onScroll={syncScroll}
-                      wrap="off"
-                      autoComplete="off"
-                      autoCorrect="off"
-                      autoCapitalize="off"
-                      spellCheck={false}
-                      style={textareaStyle}
-                    />
-                  </div>
+                  <>
+                    <div style={editorInputWrapStyle} className="sl-try-editorRoot sl-try-editorInputWrap">
+                      <TryCodeEditor
+                        value={code}
+                        options={codeMirrorOptions}
+                        onBeforeChange={(_editor, _data, value) => {
+                          setCode(value);
+                        }}
+                      />
+                    </div>
+                  </>
                 )}
               </div>
-              <div style={editorFooterStyle} className="sl-try-actions">
+              <div style={editorFooterStyle} className="sl-try-actions sl-try-editorFooter">
                 {isCse ? (
                   <button
                     onClick={onResetCse}

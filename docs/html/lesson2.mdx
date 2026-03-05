@@ -7,6 +7,8 @@ import LessonShell from '@site/src/components/LessonShell';
 
 # Lesson 2: Headings and Paragraphs
 
+Headings and paragraphs are the most common building blocks on a page. Headings create structure, and paragraphs hold readable text.
+
 <LessonShell
   course="html"
   current={2}
@@ -14,30 +16,58 @@ import LessonShell from '@site/src/components/LessonShell';
   lessonId="lesson2"
 >
 
-What You'll Learn
-- Core concept for lesson 2
-- Practical HTML pattern for lesson 2
-- How to practice this concept in the try editor
+<div className="sectionTitle">What You'll Learn</div>
+- What headings are (h1-h6)
+- When to use paragraphs (<code>&lt;p&gt;</code>)
+- How to structure a simple page with headings + text
 
 ---
 
-Lesson Overview
+<div className="sectionTitle">Headings</div>
 
-TODO: Write lesson content for lesson 2.
+- <code>&lt;h1&gt;</code> is the main page topic (usually one per page).
+- <code>&lt;h2&gt;</code> and <code>&lt;h3&gt;</code> are used for sub-sections.
+- Don&apos;t choose heading level based on size; choose based on structure and importance.
 
 ---
 
-Example
+<div className="sectionTitle">Paragraphs</div>
 
-~~~html
+- Use <code>&lt;p&gt;</code> for normal readable text.
+- Browsers ignore extra spaces and line breaks in HTML, so paragraphs help with spacing and readability.
+
+---
+
+<div className="sectionTitle">Headings and Paragraphs Example</div>
+
+```html
 <!DOCTYPE html>
 <html>
+  <head>
+    <title>Headings and Paragraphs</title>
+  </head>
   <body>
-    <h1>Lesson 2 example</h1>
-    <p>TODO: Add the final lesson example.</p>
+    <h1>My First Blog Post</h1>
+    <p>This is my first paragraph on the web.</p>
+
+    <h2>What I learned today</h2>
+    <p>Headings create structure and paragraphs hold readable text.</p>
+
+    <h3>Next step</h3>
+    <p>I will practice writing clean HTML.</p>
   </body>
 </html>
-~~~
+```
+
+<div className="explanationBlock">
+  <div className="sectionTitle">Explanation</div>
+  <ul className="explanationText">
+    <li><code>&lt;h1&gt;</code> - main topic of the page</li>
+    <li><code>&lt;h2&gt;</code> / <code>&lt;h3&gt;</code> - subheadings (sections and subsections)</li>
+    <li><code>&lt;p&gt;</code> - a paragraph of normal text</li>
+  </ul>
+  <div className="explanationText">Headings show structure and importance, not just visual size.</div>
+</div>
 
 </LessonShell>
 

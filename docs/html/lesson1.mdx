@@ -7,6 +7,8 @@ import LessonShell from '@site/src/components/LessonShell';
 
 # Lesson 1: Introduction to HTML
 
+HTML is the language used to build the structure of every website. In this lesson you will learn what HTML is and create your first simple webpage.
+
 <LessonShell
   course="html"
   current={1}
@@ -14,28 +16,22 @@ import LessonShell from '@site/src/components/LessonShell';
   lessonId="lesson1"
 >
 
-What You'll Learn
+<div className="sectionTitle">What You'll Learn</div>
 - What HTML is
 - How websites are structured
 - Your first HTML code example
 
 ---
 
-What is HTML?
+<div className="sectionTitle">What is HTML?</div>
 
-HTML stands for **HyperText Markup Language**.  
-It is the foundation of every website.
+HTML stands for HyperText Markup Language.
 
-HTML uses elements (tags) to structure content like:
-
-- Headings
-- Paragraphs
-- Links
-- Images
+It is the language used to structure content on web pages. With HTML you can create headings, paragraphs, links, images and many other elements that make up a webpage.
 
 ---
 
-Your First HTML Example
+<div className="sectionTitle">Your First HTML Example</div>
 
 ```html
 <!DOCTYPE html>
@@ -49,6 +45,20 @@ Your First HTML Example
   </body>
 </html>
 ```
+
+<div className="explanationBlock">
+  <div className="sectionTitle">Explanation</div>
+  <div className="explanationText">This simple HTML document contains:</div>
+
+  <ul className="explanationText">
+    <li><code>&lt;!DOCTYPE html&gt;</code> - tells the browser this is an HTML5 document</li>
+    <li><code>&lt;head&gt;</code> - contains information about the page such as the title</li>
+    <li><code>&lt;body&gt;</code> - contains the visible content displayed on the webpage</li>
+    <li><code>&lt;p&gt;</code> - defines a paragraph of text on the webpage</li>
+  </ul>
+</div>
+
+
 
 </LessonShell>
 

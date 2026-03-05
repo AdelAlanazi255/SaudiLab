@@ -7,6 +7,8 @@ import LessonShell from '@site/src/components/LessonShell';
 
 # Lesson 5: Images
 
+Images allow you to display pictures on your webpage, such as photos, logos, and illustrations.
+
 <LessonShell
   course="html"
   current={5}
@@ -14,30 +16,64 @@ import LessonShell from '@site/src/components/LessonShell';
   lessonId="lesson5"
 >
 
-What You'll Learn
-- Core concept for lesson 5
-- Practical HTML pattern for lesson 5
-- How to practice this concept in the try editor
+<div className="sectionTitle">What You&apos;ll Learn</div>
+- How to add images using the <code>&lt;img&gt;</code> tag
+- What <code>src</code> and <code>alt</code> mean
+- Basic image sizing with <code>width</code>
+- Why alt text is important
 
 ---
 
-Lesson Overview
+<div className="sectionTitle">The &lt;img&gt; Tag</div>
 
-TODO: Write lesson content for lesson 5.
+<code>&lt;img&gt;</code> displays an image on a webpage.
+
+<code>src</code> tells the browser where the image file is located.
+
+<code>alt</code> describes the image if it cannot load.
+
+Also, <code>&lt;img&gt;</code> does not have a closing tag.
 
 ---
 
-Example
+<div className="sectionTitle">Example: Adding an Image</div>
 
-~~~html
+```html
 <!DOCTYPE html>
 <html>
+  <head>
+    <title>Images</title>
+  </head>
   <body>
-    <h1>Lesson 5 example</h1>
-    <p>TODO: Add the final lesson example.</p>
+    <h1>Riyadh Skyline</h1>
+
+    <p>This is a photo of the Kingdom Tower in Riyadh:</p>
+
+    <img 
+      src="https://i.pinimg.com/736x/eb/a6/2d/eba62d4bc16befad3d1c192cdd4d0f5e.jpg"
+      alt="Kingdom Tower in Riyadh"
+      width="400"
+    >
+
   </body>
 </html>
-~~~
+```
+
+<div className="explanationBlock">
+  <div className="sectionTitle">Explanation</div>
+  <ul className="explanationText">
+    <li><code>&lt;img&gt;</code> - displays an image</li>
+    <li><code>src</code> - image URL</li>
+    <li><code>alt</code> - description for accessibility or if image fails</li>
+    <li><code>width</code> - controls displayed image size</li>
+  </ul>
+</div>
+
+---
+
+<div className="sectionTitle">Beginner Tip</div>
+
+Images can come from the internet using a URL, or from files stored on your website.
 
 </LessonShell>
 

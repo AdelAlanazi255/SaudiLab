@@ -131,6 +131,14 @@ export function markCompleted(course, lessonId) {
   writeCanonicalMap(map);
 }
 
+export function unmarkCompleted(course, lessonId) {
+  if (!isBrowser()) return;
+  migrateProgressOnce();
+  const map = readCanonicalMap();
+  delete map[canonicalKey(course, lessonId)];
+  writeCanonicalMap(map);
+}
+
 export function resetProgress(course = 'all') {
   if (!isBrowser()) return;
   migrateProgressOnce();

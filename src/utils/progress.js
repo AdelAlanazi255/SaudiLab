@@ -5,6 +5,7 @@ import {
   canonicalKey,
   isCompleted as isCompletedCanonical,
   markCompleted as markCompletedCanonical,
+  unmarkCompleted as unmarkCompletedCanonical,
   migrateProgressOnce,
   resetProgress as resetProgressCanonical,
   getCourseProgress,
@@ -56,6 +57,11 @@ export function isCompleted(lessonId, course = 'html') {
 // Legacy signature preserved: markCompleted(lessonId, course?)
 export function markCompleted(lessonId, course = 'html') {
   markCompletedCanonical(course, lessonId);
+}
+
+// Legacy signature preserved: unmarkCompleted(lessonId, course?)
+export function unmarkCompleted(lessonId, course = 'html') {
+  unmarkCompletedCanonical(course, lessonId);
 }
 
 export function resetProgress(course = 'all') {

@@ -7,6 +7,8 @@ import LessonShell from '@site/src/components/LessonShell';
 
 # Lesson 3: Text Formatting
 
+Text formatting helps you emphasize important words and improve readability. In this lesson, you will learn how to format text with semantic HTML tags.
+
 <LessonShell
   course="html"
   current={3}
@@ -14,30 +16,61 @@ import LessonShell from '@site/src/components/LessonShell';
   lessonId="lesson3"
 >
 
-What You'll Learn
-- Core concept for lesson 3
-- Practical HTML pattern for lesson 3
-- How to practice this concept in the try editor
+<div className="sectionTitle">What You&apos;ll Learn</div>
+- Bold and italic text
+- Important vs emphasized meaning (semantic)
+- Small text + highlighting
+- Line breaks vs paragraphs
 
 ---
 
-Lesson Overview
+<div className="sectionTitle">Core Tags</div>
 
-TODO: Write lesson content for lesson 3.
+- <code>&lt;strong&gt;</code> vs <code>&lt;b&gt;</code>: use <code>&lt;strong&gt;</code> when text is important in meaning. <code>&lt;b&gt;</code> is mostly visual bold style.
+- <code>&lt;em&gt;</code> vs <code>&lt;i&gt;</code>: use <code>&lt;em&gt;</code> to emphasize meaning. <code>&lt;i&gt;</code> is mostly visual italic style.
+- <code>&lt;mark&gt;</code>: highlights text to draw attention.
+- <code>&lt;small&gt;</code>: shows side notes or less prominent text.
+- <code>&lt;br&gt;</code>: creates a line break. Don&apos;t spam it; use paragraphs for normal text blocks.
 
 ---
 
-Example
+<div className="sectionTitle">Example: Formatted Profile Card</div>
 
-~~~html
+```html
 <!DOCTYPE html>
 <html>
+  <head>
+    <title>Text Formatting</title>
+  </head>
   <body>
-    <h1>Lesson 3 example</h1>
-    <p>TODO: Add the final lesson example.</p>
+    <h1>My Bio</h1>
+
+    <p>
+      Hi, my name is <strong>Adel</strong> and I&apos;m learning <em>HTML</em>.
+      Today I learned how to <mark>format text</mark> to make it clearer.
+    </p>
+
+    <p>
+      This is a new line using a line break.<br>
+      Use <strong>&lt;p&gt;</strong> for paragraphs, and <strong>&lt;br&gt;</strong> only when you really need a line break.
+    </p>
+
+    <small>Tip: Use &lt;strong&gt; and &lt;em&gt; for meaning, not just style.</small>
   </body>
 </html>
-~~~
+```
+
+<div className="explanationBlock">
+  <div className="sectionTitle">Explanation</div>
+  <ul className="explanationText">
+    <li><code>&lt;strong&gt;</code> - marks text as important</li>
+    <li><code>&lt;em&gt;</code> - adds semantic emphasis</li>
+    <li><code>&lt;mark&gt;</code> - highlights key text</li>
+    <li><code>&lt;small&gt;</code> - displays supporting/secondary text</li>
+    <li><code>&lt;br&gt;</code> - adds a line break inside a paragraph</li>
+    <li><code>&lt;p&gt;</code> - defines a paragraph block for readable text</li>
+  </ul>
+</div>
 
 </LessonShell>
 

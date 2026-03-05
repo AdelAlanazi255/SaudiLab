@@ -300,40 +300,72 @@ code {
   overflow-y: hidden;
 }
 
-/* Try editor safety rules (custom textarea + Prism overlay, not CodeMirror). */
-.sl-try-editorInputWrap {
-  min-height: 320px;
+/* Try editor safety rules. */
+.sl-try-page .sl-try-editorRoot,
+.sl-try-page .sl-try-panel,
+.sl-try-page .sl-try-editor-panel,
+.sl-try-page .sl-try-editorInputWrap,
+.sl-try-page .CodeMirror,
+.sl-try-page .cm-editor {
+  transform: none !important;
+  filter: none !important;
+  backdrop-filter: none !important;
+  perspective: none !important;
+  will-change: auto !important;
+  contain: none !important;
 }
 
-.sl-try-highlightPre,
-.sl-try-highlightPre code,
-.sl-try-editorTextarea {
+.sl-try-editorRoot,
+.sl-try-editorInputWrap {
+  min-height: 320px;
+  height: 100%;
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.sl-try-editorRoot .react-codemirror2 {
+  height: 100%;
+  min-height: 0;
+}
+
+.sl-try-editorRoot .CodeMirror {
+  height: 100% !important;
+  min-height: 0;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   font-size: 14px;
   line-height: 1.5;
   letter-spacing: normal;
-  white-space: pre;
   tab-size: 2;
+  white-space: pre;
 }
 
-.sl-try-highlightPre {
-  overflow: auto;
-  min-width: 0;
-  width: auto;
+.sl-try-editorRoot .CodeMirror pre {
+  line-height: 1.5;
 }
 
-.sl-try-editorTextarea {
-  overflow: auto;
-  overflow-wrap: normal;
-  word-break: normal;
-  white-space: pre !important;
-  transform: none;
-  filter: none;
+.sl-try-editorRoot .CodeMirror-scroll {
+  height: 100% !important;
+  min-height: 0;
+  overflow-x: auto !important;
+  overflow-y: auto !important;
 }
 
-.sl-try-editorTextarea::selection {
-  background: rgba(124, 242, 176, 0.22);
-  color: transparent;
+/* Defensive metrics for environments that render CodeMirror. */
+.CodeMirror {
+  line-height: 1.5;
+}
+
+.CodeMirror pre {
+  line-height: 1.5;
+}
+
+.cm-editor {
+  line-height: 1.5;
+}
+
+.cm-content {
+  line-height: 1.5;
 }
 
 .sl-card-disabled {
@@ -719,6 +751,9 @@ code {
 .sl-try-editor-panel {
   height: 45vh !important;
   min-height: 320px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .sl-try-preview-panel {
@@ -730,6 +765,57 @@ code {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
+}
+
+.sl-try-editorBody {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.sl-try-hint {
+  border: 1px solid var(--sl-border);
+  border-radius: 12px;
+  background: rgba(226, 238, 251, 0.03);
+  color: rgba(232, 238, 245, 0.8);
+  padding: 0.52rem 0.68rem;
+  margin-top: 0.7rem;
+  margin-bottom: 0.35rem;
+  font-size: 0.81rem;
+  line-height: 1.45;
+}
+
+.sl-try-hintTitle {
+  color: rgba(244, 248, 252, 0.92);
+  font-weight: 800;
+  margin-bottom: 0.28rem;
+}
+
+.sl-try-hint p {
+  margin: 0;
+}
+
+.sl-try-hint p + ol,
+.sl-try-hint ol + p {
+  margin-top: 0.3rem;
+}
+
+.sl-try-hint ol {
+  margin-bottom: 0;
+  padding-left: 1.1rem;
+}
+
+.sl-try-hint li {
+  margin-bottom: 0.12rem;
+}
+
+.sl-try-editorFooter {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  flex-shrink: 0;
 }
 
 .sl-try-actions a {

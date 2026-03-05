@@ -7,6 +7,8 @@ import LessonShell from '@site/src/components/LessonShell';
 
 # Lesson 7: Tables
 
+Tables are used to show tabular data in rows and columns. They are great for schedules, plans, and simple comparisons.
+
 <LessonShell
   course="html"
   current={7}
@@ -14,30 +16,71 @@ import LessonShell from '@site/src/components/LessonShell';
   lessonId="lesson7"
 >
 
-What You'll Learn
-- Core concept for lesson 7
-- Practical HTML pattern for lesson 7
-- How to practice this concept in the try editor
+<div className="sectionTitle">What You&apos;ll Learn</div>
+- How to use <code>&lt;table&gt;</code>, <code>&lt;tr&gt;</code>, <code>&lt;th&gt;</code>, and <code>&lt;td&gt;</code>
+- The difference between header rows and data rows
+- How to add a simple <code>&lt;caption&gt;</code>
+- Basic styling with border and padding
 
 ---
 
-Lesson Overview
+<div className="sectionTitle">Table Basics</div>
 
-TODO: Write lesson content for lesson 7.
+Use a table when information naturally fits into rows and columns.
+
+A header row usually uses <code>&lt;th&gt;</code>, and normal data rows use <code>&lt;td&gt;</code>.
+
+You can also add <code>&lt;caption&gt;</code> to describe what the table is about.
 
 ---
 
-Example
+<div className="sectionTitle">Example: Weekly Study Plan</div>
 
-~~~html
+```html
 <!DOCTYPE html>
 <html>
+  <head>
+    <title>Tables</title>
+  </head>
   <body>
-    <h1>Lesson 7 example</h1>
-    <p>TODO: Add the final lesson example.</p>
+    <h1>Weekly Study Plan</h1>
+
+    <table border="1" style="border-collapse: collapse;">
+      <caption>My Weekly Study Plan</caption>
+      <tr>
+        <th>Day</th>
+        <th>Subject</th>
+        <th>Duration</th>
+      </tr>
+      <tr>
+        <td>Sunday</td>
+        <td>HTML</td>
+        <td>45 min</td>
+      </tr>
+      <tr>
+        <td>Monday</td>
+        <td>CSS</td>
+        <td>45 min</td>
+      </tr>
+      <tr>
+        <td>Tuesday</td>
+        <td>JavaScript</td>
+        <td>60 min</td>
+      </tr>
+    </table>
   </body>
 </html>
-~~~
+```
+
+<div className="explanationBlock">
+  <div className="sectionTitle">Explanation</div>
+  <ul className="explanationText">
+    <li><code>&lt;table&gt;</code> - wraps the whole table</li>
+    <li><code>&lt;tr&gt;</code> - creates one row</li>
+    <li><code>&lt;th&gt;</code> - creates a header cell</li>
+    <li><code>&lt;td&gt;</code> - creates a data cell</li>
+  </ul>
+</div>
 
 </LessonShell>
 

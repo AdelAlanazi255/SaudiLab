@@ -15,101 +15,313 @@
     <title>Headings and Paragraphs</title>
   </head>
   <body>
-    <h1>Main Heading</h1>
-    <h2>Sub Heading</h2>
-    <p>This is a paragraph.</p>
-    <p>Edit this text and press RUN.</p>
+    <h1>My First Blog Post</h1>
+    <p>This is my first paragraph on the web.</p>
+
+    <h2>What I learned today</h2>
+    <p>Headings create structure and paragraphs hold readable text.</p>
+
+    <h3>Next step</h3>
+    <p>I will practice writing clean HTML.</p>
   </body>
 </html>`,
   'html:lesson3': `<!DOCTYPE html>
 <html>
   <head>
-    <title>Links and Images</title>
+    <title>Text Formatting</title>
   </head>
   <body>
-    <h1>Links and Images</h1>
-    <a href="https://www.google.com">Visit Google</a>
-    <br /><br />
-    <img src="https://via.placeholder.com/150" alt="Example Image" />
-    <p>Edit and press RUN.</p>
+    <h1>My Bio</h1>
+
+    <p>
+      Hi, my name is <strong>Adel</strong> and I'm learning <em>HTML</em>.
+      Today I learned how to <mark>format text</mark> to make it clearer.
+    </p>
+
+    <p>
+      This is a new line using a line break.<br>
+      Use <strong>&lt;p&gt;</strong> for paragraphs, and <strong>&lt;br&gt;</strong> only when you really need a line break.
+    </p>
+
+    <small>Tip: Use &lt;strong&gt; and &lt;em&gt; for meaning, not just style.</small>
   </body>
 </html>`,
   'html:lesson4': `<!DOCTYPE html>
 <html>
+  <head>
+    <title>Links</title>
+  </head>
   <body>
-    <a href="https://google.com" target="_blank">Open Google</a>
+    <h1>My Favorite Links</h1>
+
+    <p>
+      Visit <a href="https://www.google.com" target="_blank">Google</a>
+      to search the web.
+    </p>
+
+    <p>
+      Watch videos on
+      <a href="https://www.youtube.com" target="_blank">YouTube</a>.
+    </p>
+
+    <p>
+      Learn something new on
+      <a href="https://en.wikipedia.org" target="_blank">Wikipedia</a>.
+    </p>
+
+    <p>
+      Explore developer documentation on
+      <a href="https://developer.mozilla.org" target="_blank">MDN Web Docs</a>.
+    </p>
   </body>
 </html>`,
   'html:lesson5': `<!DOCTYPE html>
 <html>
+  <head>
+    <title>Images</title>
+  </head>
   <body>
-    <img src="https://via.placeholder.com/320x180" alt="Placeholder image" />
+
+    <h1>Kingdom Tower</h1>
+
+    <p>Here is an image of the famous Kingdom Tower in Riyadh.</p>
+
+    <img
+      src="https://i.pinimg.com/736x/eb/a6/2d/eba62d4bc16befad3d1c192cdd4d0f5e.jpg"
+      alt="Kingdom Tower in Riyadh"
+      width="400"
+    >
+
   </body>
 </html>`,
   'html:lesson6': `<!DOCTYPE html>
 <html>
+  <head>
+    <title>Lists</title>
+  </head>
   <body>
+    <h1>Lists in HTML</h1>
+
+    <h2>My Favorite Snacks</h2>
     <ul>
-      <li>HTML</li>
-      <li>CSS</li>
-      <li>JavaScript</li>
+      <li>Popcorn</li>
+      <li>Dates</li>
+      <li>Yogurt</li>
+    </ul>
+
+    <h2>Steps to Make Tea</h2>
+    <ol>
+      <li>Boil water</li>
+      <li>Add a tea bag to a cup</li>
+      <li>Pour hot water into the cup</li>
+      <li>Wait 2 minutes and serve</li>
+    </ol>
+
+    <h2>Weekend Plan</h2>
+    <ul>
+      <li>
+        Study
+        <ul>
+          <li>Review HTML lessons</li>
+          <li>Practice in the Try page</li>
+        </ul>
+      </li>
+      <li>Exercise</li>
     </ul>
   </body>
 </html>`,
   'html:lesson7': `<!DOCTYPE html>
 <html>
+  <head>
+    <title>Tables</title>
+    <style>
+      table {
+        border-collapse: collapse;
+      }
+
+      th,
+      td {
+        border: 1px solid #ccc;
+        padding: 8px 10px;
+        text-align: left;
+      }
+    </style>
+  </head>
   <body>
-    <table border="1">
+    <h1>Weekly Study Plan</h1>
+
+    <table>
+      <caption>My Weekly Study Plan</caption>
       <tr>
-        <th>Name</th>
-        <th>Age</th>
+        <th>Day</th>
+        <th>Subject</th>
+        <th>Duration</th>
       </tr>
       <tr>
-        <td>Ahmed</td>
-        <td>22</td>
+        <td>Sunday</td>
+        <td>HTML</td>
+        <td>45 min</td>
+      </tr>
+      <tr>
+        <td>Monday</td>
+        <td>CSS</td>
+        <td>45 min</td>
+      </tr>
+      <tr>
+        <td>Tuesday</td>
+        <td>JavaScript</td>
+        <td>60 min</td>
       </tr>
     </table>
   </body>
 </html>`,
   'html:lesson8': `<!DOCTYPE html>
 <html>
+  <head>
+    <title>Forms Basics</title>
+    <style>
+      form {
+        max-width: 360px;
+        padding: 14px;
+        border: 1px solid #2e3643;
+        border-radius: 10px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 4px;
+      }
+
+      input {
+        width: 100%;
+        padding: 8px 10px;
+        margin-bottom: 10px;
+        border: 1px solid #4b5563;
+        border-radius: 8px;
+        box-sizing: border-box;
+      }
+
+      button {
+        padding: 8px 12px;
+        border: 1px solid #4b5563;
+        border-radius: 8px;
+        background: #111827;
+        color: #e5e7eb;
+        cursor: pointer;
+      }
+    </style>
+  </head>
   <body>
-    <form>
-      <label>Name:</label>
-      <input type="text" />
-      <button type="submit">Submit</button>
+    <h1>Sign Up</h1>
+    <!-- This prevents the page from reloading in the preview. -->
+    <form onsubmit="return false;">
+      <label for="name">Name</label>
+      <input id="name" type="text" placeholder="Enter your name" required />
+
+      <label for="email">Email</label>
+      <input id="email" type="email" placeholder="Enter your email" required />
+
+      <label for="password">Password</label>
+      <input id="password" type="password" placeholder="Create a password" required />
+
+      <button id="createAccountBtn" type="submit">Create Account</button>
+      <div
+        id="successMessage"
+        style="display:none; margin-top:10px; padding:8px 10px; border:1px solid rgba(124,242,176,0.28); border-radius:8px; color:#9fe8c6;"
+      >
+        Account created
+      </div>
     </form>
+
+    <script>
+      document.getElementById('createAccountBtn').addEventListener('click', function () {
+        document.getElementById('successMessage').style.display = 'block';
+      });
+    </script>
   </body>
 </html>`,
   'html:lesson9': `<!DOCTYPE html>
 <html>
+  <head>
+    <title>Form Inputs</title>
+  </head>
   <body>
-    <label>
-      <input type="checkbox" />
-      I agree
-    </label>
+    <h1>Quick Form</h1>
+    <!-- This prevents the page from reloading in the preview. -->
+    <form onsubmit="showMessage(); return false;">
+      <label for="name">Name</label>
+      <input id="name" type="text" placeholder="Enter your name" />
+
+      <button type="submit">Submit</button>
+    </form>
+    <div
+      id="thankYouMessage"
+      style="display:none; margin-top:10px; padding:8px 10px; border:1px solid rgba(124,242,176,0.28); border-radius:8px; color:#9fe8c6;"
+    >
+      Thank you!
+    </div>
+
+    <script>
+      function showMessage() {
+        document.getElementById('thankYouMessage').style.display = 'block';
+      }
+    </script>
   </body>
 </html>`,
   'html:lesson10': `<!DOCTYPE html>
 <html>
+  <head>
+    <title>Semantic Layout</title>
+  </head>
   <body>
     <header>
-      <h1>My Website</h1>
+      <h1>SaudiLab Student Page</h1>
     </header>
 
     <nav>
-      <a href="#">Home</a>
+      <a href="https://www.google.com" target="_blank">Home</a> |
+      <a href="https://www.youtube.com" target="_blank">Lessons</a> |
+      <a href="https://www.wikipedia.org" target="_blank">Profile</a>
     </nav>
 
     <main>
       <section>
-        <h2>About</h2>
-        <p>Welcome to my site.</p>
+        <h2>About This Page</h2>
+        <p>This section combines things you learned earlier in the course.</p>
+        <img src="https://via.placeholder.com/320x160" alt="Learning banner" />
+
+        <h3>My Goals</h3>
+        <ul>
+          <li>Practice HTML daily</li>
+          <li>Build one mini project each week</li>
+          <li>Share progress with friends</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Weekly Plan Table</h2>
+        <table border="1" style="border-collapse: collapse;">
+          <tr>
+            <th>Day</th>
+            <th>Topic</th>
+            <th>Time</th>
+          </tr>
+          <tr>
+            <td>Sunday</td>
+            <td>HTML</td>
+            <td>45 min</td>
+          </tr>
+          <tr>
+            <td>Monday</td>
+            <td>CSS</td>
+            <td>45 min</td>
+          </tr>
+        </table>
       </section>
     </main>
 
     <footer>
-      <p>Copyright 2026</p>
+      <p>Copyright 2026 SaudiLab</p>
     </footer>
   </body>
 </html>`,

@@ -7,6 +7,8 @@ import LessonShell from '@site/src/components/LessonShell';
 
 # Lesson 6: Lists
 
+Lists help you group related items in a clean way. In this lesson, you will learn how to build numbered and bullet lists in HTML.
+
 <LessonShell
   course="html"
   current={6}
@@ -14,30 +16,74 @@ import LessonShell from '@site/src/components/LessonShell';
   lessonId="lesson6"
 >
 
-What You'll Learn
-- Core concept for lesson 6
-- Practical HTML pattern for lesson 6
-- How to practice this concept in the try editor
+<div className="sectionTitle">What You&apos;ll Learn</div>
+- What <code>&lt;ul&gt;</code> and <code>&lt;li&gt;</code> are
+- What <code>&lt;ol&gt;</code> and <code>&lt;li&gt;</code> are
+- The difference between ordered and unordered lists
+- How to create a simple nested list
 
 ---
 
-Lesson Overview
+<div className="sectionTitle">Ordered vs Unordered Lists</div>
 
-TODO: Write lesson content for lesson 6.
+Use <code>&lt;ul&gt;</code> when item order does not matter (bullet points).
+
+Use <code>&lt;ol&gt;</code> when order matters (steps or ranking).
+
+Each list item is written with <code>&lt;li&gt;</code>.
 
 ---
 
-Example
+<div className="sectionTitle">Example: Ordered and Unordered Lists</div>
 
-~~~html
+```html
 <!DOCTYPE html>
 <html>
+  <head>
+    <title>Lists</title>
+  </head>
   <body>
-    <h1>Lesson 6 example</h1>
-    <p>TODO: Add the final lesson example.</p>
+    <h1>Lists in HTML</h1>
+
+    <h2>My Favorite Snacks</h2>
+    <ul>
+      <li>Popcorn</li>
+      <li>Dates</li>
+      <li>Yogurt</li>
+    </ul>
+
+    <h2>Steps to Make Tea</h2>
+    <ol>
+      <li>Boil water</li>
+      <li>Add a tea bag to a cup</li>
+      <li>Pour hot water into the cup</li>
+      <li>Wait 2 minutes and serve</li>
+    </ol>
+
+    <h2>Weekend Plan</h2>
+    <ul>
+      <li>
+        Study
+        <ul>
+          <li>Review HTML lessons</li>
+          <li>Practice in the Try page</li>
+        </ul>
+      </li>
+      <li>Exercise</li>
+    </ul>
   </body>
 </html>
-~~~
+```
+
+<div className="explanationBlock">
+  <div className="sectionTitle">Explanation</div>
+  <ul className="explanationText">
+    <li><code>&lt;ul&gt;</code> - creates an unordered (bulleted) list</li>
+    <li><code>&lt;ol&gt;</code> - creates an ordered (numbered) list</li>
+    <li><code>&lt;li&gt;</code> - creates one list item</li>
+    <li>A nested list means placing a list inside another <code>&lt;li&gt;</code></li>
+  </ul>
+</div>
 
 </LessonShell>
 

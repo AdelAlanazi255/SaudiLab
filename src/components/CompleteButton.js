@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Link from '@docusaurus/Link';
-import { COURSE_EVENT, isCompleted, markCompleted } from '@site/src/utils/progressKeys';
+import { COURSE_EVENT, isCompleted, markCompleted, unmarkCompleted } from '@site/src/utils/progressKeys';
 
 function sanitizeNextPath(value) {
   if (!value || typeof value !== 'string') return null;
@@ -37,9 +37,13 @@ export default function CompleteButton({ lessonId, course = 'html' }) {
   }, [lessonId, course]);
 
   const onClick = () => {
-    if (done) return;
-    markCompleted(course, lessonId);
-    setDone(true);
+    if (done) {
+      unmarkCompleted(course, lessonId);
+      setDone(false);
+    } else {
+      markCompleted(course, lessonId);
+      setDone(true);
+    }
 
     if (typeof window !== 'undefined') {
       window.dispatchEvent(new Event(COURSE_EVENT));
@@ -50,9 +54,9 @@ export default function CompleteButton({ lessonId, course = 'html' }) {
     <div className="sl-completeWrap">
       <button
         onClick={onClick}
-        className={`sl-btn-primary sl-completeBtn ${done ? 'sl-completeBtnDone' : ''}`}
+        className={`sl-completeBtn ${done ? 'sl-completeBtnDone' : 'sl-completeBtnPending'}`}
       >
-        {done ? 'Completed' : 'Mark as Completed'}
+        {done ? 'Completed ✓ (Click to undo)' : 'Mark as Completed'}
       </button>
 
       {done && nextPath ? (

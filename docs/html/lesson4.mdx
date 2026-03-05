@@ -7,6 +7,8 @@ import LessonShell from '@site/src/components/LessonShell';
 
 # Lesson 4: Links
 
+Links connect pages and help users navigate between information. In this lesson, you will learn how to build useful links for websites, sections, and email.
+
 <LessonShell
   course="html"
   current={4}
@@ -14,30 +16,72 @@ import LessonShell from '@site/src/components/LessonShell';
   lessonId="lesson4"
 >
 
-What You'll Learn
-- Core concept for lesson 4
-- Practical HTML pattern for lesson 4
-- How to practice this concept in the try editor
+<div className="sectionTitle">What You&apos;ll Learn</div>
+- Basic link structure with <code>&lt;a&gt;</code>
+- <code>href</code> vs link text
+- Open links in a new tab with <code>target="_blank"</code>
 
 ---
 
-Lesson Overview
+<div className="sectionTitle">Core Concepts</div>
 
-TODO: Write lesson content for lesson 4.
+- A basic link is written as <code>&lt;a href="..."&gt;Link text&lt;/a&gt;</code>.
+- <code>href</code> is the destination, while the visible words are the link text.
+- Absolute URL: full web address like <code>https://example.com</code>.
+- Relative URL: path inside your site like <code>/some-page</code>.
+- To open a link in a new tab, use <code>target="_blank"</code>.
 
 ---
 
-Example
+<div className="sectionTitle">Example: Mini links page</div>
 
-~~~html
+```html
 <!DOCTYPE html>
 <html>
+  <head>
+    <title>Links</title>
+  </head>
   <body>
-    <h1>Lesson 4 example</h1>
-    <p>TODO: Add the final lesson example.</p>
+    <h1>My Favorite Links</h1>
+
+    <p>
+      Visit <a href="https://www.google.com" target="_blank">Google</a>
+      to search the web.
+    </p>
+
+    <p>
+      Watch videos on
+      <a href="https://www.youtube.com" target="_blank">YouTube</a>.
+    </p>
+
+    <p>
+      Learn something new on
+      <a href="https://en.wikipedia.org" target="_blank">Wikipedia</a>.
+    </p>
+
+    <p>
+      Explore developer documentation on
+      <a href="https://developer.mozilla.org" target="_blank">MDN Web Docs</a>.
+    </p>
   </body>
 </html>
-~~~
+```
+
+<div className="explanationBlock">
+  <div className="sectionTitle">Explanation</div>
+  <ul className="explanationText">
+    <li><code>&lt;a&gt;</code> - creates a clickable link</li>
+    <li><code>href</code> - sets the destination URL</li>
+    <li><code>target</code> - controls where the link opens (such as a new tab)</li>
+  </ul>
+</div>
+
+---
+
+<div className="sectionTitle">Common Mistakes</div>
+
+- Missing <code>https://</code> in external links
+- Using vague text like "click here" instead of descriptive link text
 
 </LessonShell>
 

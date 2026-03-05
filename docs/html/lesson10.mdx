@@ -7,6 +7,8 @@ import LessonShell from '@site/src/components/LessonShell';
 
 # Lesson 10: Semantic Layout
 
+Real websites are built by combining the HTML elements you already learned, like headings, paragraphs, images, lists, tables, and forms, into one structured page.
+
 <LessonShell
   course="html"
   current={10}
@@ -14,30 +16,106 @@ import LessonShell from '@site/src/components/LessonShell';
   lessonId="lesson10"
 >
 
-What You'll Learn
-- Core concept for lesson 10
-- Practical HTML pattern for lesson 10
-- How to practice this concept in the try editor
+<div className="sectionTitle">Quick Recap</div>
+
+<div className="explanationBlock">
+  <ul className="explanationText">
+    <li><code>&lt;h1&gt;</code> to <code>&lt;h6&gt;</code> for headings</li>
+    <li><code>&lt;p&gt;</code> for paragraphs</li>
+    <li><code>&lt;a&gt;</code> for links</li>
+    <li><code>&lt;img&gt;</code> for images</li>
+    <li><code>&lt;ul&gt;</code> and <code>&lt;ol&gt;</code> for lists</li>
+    <li><code>&lt;table&gt;</code> for tables</li>
+    <li><code>&lt;form&gt;</code> and <code>&lt;input&gt;</code> for forms</li>
+  </ul>
+</div>
 
 ---
 
-Lesson Overview
+<div className="sectionTitle">Semantic Layout</div>
 
-TODO: Write lesson content for lesson 10.
+- <code>&lt;header&gt;</code> - top part of a webpage
+- <code>&lt;nav&gt;</code> - navigation links
+- <code>&lt;main&gt;</code> - main content area
+- <code>&lt;section&gt;</code> - group of related content
+- <code>&lt;footer&gt;</code> - bottom of the page
+
+These tags help organize content and make pages easier for browsers and developers to understand.
 
 ---
 
-Example
+<div className="sectionTitle">Example Webpage</div>
 
-~~~html
+```html
 <!DOCTYPE html>
 <html>
+  <head>
+    <title>Semantic Layout</title>
+  </head>
   <body>
-    <h1>Lesson 10 example</h1>
-    <p>TODO: Add the final lesson example.</p>
+    <header>
+      <h1>SaudiLab Student Page</h1>
+    </header>
+
+    <nav>
+      <a href="#">Home</a> |
+      <a href="#">Lessons</a> |
+      <a href="#">Profile</a>
+    </nav>
+
+    <main>
+      <section>
+        <h2>About This Page</h2>
+        <p>This section combines things you learned earlier in the course.</p>
+        <img src="https://via.placeholder.com/320x160" alt="Learning banner" />
+
+        <h3>My Goals</h3>
+        <ul>
+          <li>Practice HTML daily</li>
+          <li>Build one mini project each week</li>
+          <li>Share progress with friends</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Weekly Plan Table</h2>
+        <table border="1" style="border-collapse: collapse;">
+          <tr>
+            <th>Day</th>
+            <th>Topic</th>
+            <th>Time</th>
+          </tr>
+          <tr>
+            <td>Sunday</td>
+            <td>HTML</td>
+            <td>45 min</td>
+          </tr>
+          <tr>
+            <td>Monday</td>
+            <td>CSS</td>
+            <td>45 min</td>
+          </tr>
+        </table>
+      </section>
+    </main>
+
+    <footer>
+      <p>Copyright 2026 SaudiLab</p>
+    </footer>
   </body>
 </html>
-~~~
+```
+
+<div className="explanationBlock">
+  <div className="sectionTitle">Explanation</div>
+  <ul className="explanationText">
+    <li><code>&lt;header&gt;</code> - page title area</li>
+    <li><code>&lt;nav&gt;</code> - site navigation</li>
+    <li><code>&lt;main&gt;</code> - main content</li>
+    <li><code>&lt;section&gt;</code> - groups related content</li>
+    <li><code>&lt;footer&gt;</code> - bottom information</li>
+  </ul>
+</div>
 
 </LessonShell>
 

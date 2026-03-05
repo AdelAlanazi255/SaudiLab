@@ -1,6 +1,5 @@
 import React from 'react';
 import Link from '@docusaurus/Link';
-import LessonProgress from '@site/src/components/LessonProgress';
 import CompleteButton from '@site/src/components/CompleteButton';
 import TryItButton from '@site/src/components/TryItButton';
 import useLessonAccess from '@site/src/hooks/useLessonAccess';
@@ -39,20 +38,18 @@ export default function LessonShell({
 
   return (
     <>
-      <LessonProgress current={current} total={total} />
+      <div className="sl-lessonContent">
+        {children}
 
-      {children}
+        {generatedTryPath ? (
+          <>
+            <h2>Ready to Practice?</h2>
+            <TryItButton to={generatedTryPath} />
+          </>
+        ) : null}
 
-      {generatedTryPath ? (
-        <>
-          <h2>Ready to Practice?</h2>
-          <TryItButton to={generatedTryPath} />
-        </>
-      ) : null}
-
-      <hr />
-
-      <CompleteButton lessonId={lessonId} course={course} lessonTitle={resolvedTitle} />
+        <CompleteButton lessonId={lessonId} course={course} lessonTitle={resolvedTitle} />
+      </div>
     </>
   );
 }
