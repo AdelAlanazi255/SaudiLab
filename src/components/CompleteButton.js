@@ -56,8 +56,10 @@ export default function CompleteButton({ lessonId, course = 'html' }) {
         onClick={onClick}
         className={`sl-completeBtn ${done ? 'sl-completeBtnDone' : 'sl-completeBtnPending'}`}
       >
-        {done ? 'Completed ✓ (Click to undo)' : 'Mark as Completed'}
+        {done ? 'Completed \u2713' : 'Mark as Completed'}
       </button>
+
+      {done ? <div className="sl-complete-helper">Click again to undo</div> : null}
 
       {done && nextPath ? (
         <div className="sl-completeContinueWrap">

@@ -720,6 +720,58 @@ code {
   margin-top: 1.35rem;
 }
 
+.sl-lesson-actions-card {
+  margin-top: 24px;
+  padding: 20px;
+  border-radius: 14px;
+  background: rgba(18, 24, 32, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes readyPracticePulse {
+  0% {
+    box-shadow: 0 0 0 rgba(120, 255, 180, 0);
+    border-color: rgba(255, 255, 255, 0.06);
+  }
+  45% {
+    box-shadow: 0 0 65px rgba(120, 255, 180, 0.55);
+    border-color: rgba(120, 255, 180, 0.60);
+  }
+  75% {
+    box-shadow: 0 0 40px rgba(120, 255, 180, 0.35);
+  }
+  100% {
+    box-shadow: 0 0 0 rgba(120, 255, 180, 0);
+    border-color: rgba(255, 255, 255, 0.06);
+  }
+}
+
+.sl-ready-practice-pulse {
+  animation: readyPracticePulse 2.2s ease-out 1;
+}
+
+.sl-lesson-actions-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.sl-lesson-actions-row > * {
+  flex: 1 1 220px;
+  min-width: 0;
+}
+
+.sl-lesson-actions-primary {
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .sl-lesson-actions-row {
+    flex-direction: column;
+  }
+}
+
 .sl-try-page {
   padding: 1.25rem 1rem 1.5rem;
   overflow-x: hidden;
@@ -1088,10 +1140,11 @@ code {
 }
 
 .sl-completeWrap {
-  margin-top: 2.25rem;
+  margin-top: 0;
 }
 
 .sl-completeBtn {
+  width: 100%;
   min-height: 46px;
   padding: 0.72rem 1.1rem;
   border-radius: var(--sl-radius-btn);
@@ -1105,31 +1158,37 @@ code {
 }
 
 .sl-completeBtnPending {
-  border: 1px solid rgba(124, 242, 176, 0.34);
-  background: #7cf2b0;
-  color: #04110a;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(12, 18, 24, 0.62);
+  color: rgba(226, 238, 251, 0.84);
 }
 
 .sl-completeBtnPending:hover {
-  background: #93f6c1;
-  border-color: rgba(124, 242, 176, 0.5);
+  background: rgba(24, 33, 44, 0.75);
+  border-color: rgba(255, 255, 255, 0.24);
 }
 
 .sl-completeBtnDone {
-  border: 1px solid #7cffb4;
-  background: rgba(120, 255, 180, 0.1);
+  border: 1px solid rgba(124, 255, 180, 0.65);
+  background: rgba(15, 27, 22, 0.58);
   color: #7cffb4;
   box-shadow: none;
 }
 
 .sl-completeBtnDone:hover {
   color: #7cffb4;
-  background: rgba(120, 255, 180, 0.14);
+  background: rgba(22, 38, 31, 0.7);
   box-shadow: none;
 }
 
+.sl-complete-helper {
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--sl-muted);
+}
+
 .sl-completeContinueWrap {
-  margin-top: 0.85rem;
+  margin-top: 0.7rem;
 }
 
 .sl-lessonProgress {
