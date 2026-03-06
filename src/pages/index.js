@@ -110,7 +110,6 @@ export default function Home() {
                     aria-label={level.rowType === 'resources' ? 'Resources' : `${level.label} courses`}
                   >
                     <aside className="level-panel">
-                      {level.rowType === 'level' ? <div className="level-kicker">Level</div> : null}
                       <h3 className="level-title">{level.label}</h3>
                       {level.rowType === 'level' ? (
                         <div className="level-count">{courses.length} course{courses.length > 1 ? 's' : ''}</div>
