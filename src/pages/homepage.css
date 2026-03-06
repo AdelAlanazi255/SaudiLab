@@ -281,8 +281,7 @@
   --sl-node-rgb: 124, 242, 176;
   border: 1px solid rgba(124, 242, 176, 0.45);
   background: rgba(124, 242, 176, 0.14);
-  box-shadow: 0 0 0 7px rgba(124, 242, 176, 0.12);
-  animation: slRoadmapPulseGreen 2.9s ease-in-out infinite;
+  box-shadow: 0 0 0 5px rgba(124, 242, 176, 0.1);
 }
 
 .sl-roadmapNode-in_progress {
@@ -297,8 +296,7 @@
   --sl-node-rgb: 255, 98, 98;
   border: 1px solid rgba(255, 108, 108, 0.38);
   background: rgba(255, 98, 98, 0.14);
-  box-shadow: 0 0 0 7px rgba(255, 98, 98, 0.08);
-  animation: slRoadmapPulseRed 3.2s ease-in-out infinite;
+  box-shadow: 0 0 0 5px rgba(255, 98, 98, 0.08);
 }
 
 .sl-roadmapLabelWrap {
@@ -324,16 +322,6 @@
   letter-spacing: 0.08em;
 }
 
-@keyframes slRoadmapPulseGreen {
-  0%,
-  100% {
-    box-shadow: 0 0 0 7px rgba(124, 242, 176, 0.1), 0 0 16px rgba(124, 242, 176, 0.12);
-  }
-  50% {
-    box-shadow: 0 0 0 11px rgba(124, 242, 176, 0.08), 0 0 22px rgba(124, 242, 176, 0.2);
-  }
-}
-
 @keyframes slRoadmapPulseYellow {
   0%,
   100% {
@@ -341,16 +329,6 @@
   }
   50% {
     box-shadow: 0 0 0 13px rgba(255, 213, 99, 0.12), 0 0 26px rgba(255, 213, 99, 0.28);
-  }
-}
-
-@keyframes slRoadmapPulseRed {
-  0%,
-  100% {
-    box-shadow: 0 0 0 7px rgba(255, 98, 98, 0.08), 0 0 14px rgba(255, 98, 98, 0.1);
-  }
-  50% {
-    box-shadow: 0 0 0 11px rgba(255, 98, 98, 0.07), 0 0 18px rgba(255, 98, 98, 0.14);
   }
 }
 
