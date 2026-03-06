@@ -766,6 +766,18 @@ code {
   justify-content: center;
 }
 
+.sl-lessonAuthHint {
+  margin-top: 0.7rem;
+  margin-bottom: 0;
+  font-size: 0.9rem;
+  color: var(--sl-muted);
+}
+
+.sl-lessonAuthHint a {
+  color: var(--sl-text);
+  font-weight: 700;
+}
+
 @media (max-width: 768px) {
   .sl-lesson-actions-row {
     flex-direction: column;

@@ -4,6 +4,7 @@ import { getSupabaseConfigStatus, supabase } from '@site/src/utils/supabaseClien
 import PageContainer from '@site/src/components/layout/PageContainer';
 import Section from '@site/src/components/layout/Section';
 import OAuthButtons from '@site/src/components/auth/OAuthButtons';
+import { getNextPathFromSearch } from '@site/src/utils/nextPath';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -24,6 +25,11 @@ export default function Login() {
     const nextPath = `${url.pathname}${nextSearch ? `?${nextSearch}` : ''}${url.hash || ''}`;
     window.history.replaceState({}, '', nextPath || '/login');
   }, []);
+
+  const resolveNextPath = () => {
+    if (typeof window === 'undefined') return '/';
+    return getNextPathFromSearch(window.location.search || '', '/');
+  };
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -56,7 +62,7 @@ export default function Login() {
       });
 
       if (error) throw error;
-      window.location.href = '/';
+      window.location.href = resolveNextPath();
     } catch (err) {
       setMsg(err.message);
     }
@@ -71,6 +77,7 @@ export default function Login() {
           <form onSubmit={onSubmit} style={{ marginTop: '1.5rem' }}>
             <OAuthButtons
               disabled={!supabaseConfig.ok}
+              nextPath={resolveNextPath()}
               onError={(nextMsg) => {
                 if (nextMsg || !supabaseConfig.ok) setMsg(nextMsg || supabaseMissingMsg);
               }}

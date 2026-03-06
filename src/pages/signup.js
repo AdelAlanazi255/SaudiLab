@@ -4,6 +4,7 @@ import { hasSupabaseConfig, supabase } from '@site/src/utils/supabaseClient';
 import PageContainer from '@site/src/components/layout/PageContainer';
 import Section from '@site/src/components/layout/Section';
 import OAuthButtons from '@site/src/components/auth/OAuthButtons';
+import { buildAuthHref, getNextPathFromSearch } from '@site/src/utils/nextPath';
 
 export default function SignUp() {
   const [nickname, setNickname] = useState('');
@@ -11,6 +12,11 @@ export default function SignUp() {
   const [password, setPassword] = useState('');
   const [msg, setMsg] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const resolveNextPath = () => {
+    if (typeof window === 'undefined') return '/';
+    return getNextPathFromSearch(window.location.search || '', '/');
+  };
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -44,7 +50,7 @@ export default function SignUp() {
         email: emailTrimmed,
         password,
         options: {
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
+          emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(resolveNextPath())}`,
           data: {
             username: nicknameTrimmed || null,
             display_name: nicknameTrimmed || null,
@@ -71,7 +77,8 @@ export default function SignUp() {
         }
       }
 
-      window.location.href = '/login?verify=1';
+      const loginTarget = buildAuthHref('/login', resolveNextPath());
+      window.location.href = `${loginTarget}${loginTarget.includes('?') ? '&' : '?'}verify=1`;
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error(err?.message || String(err));
@@ -90,6 +97,7 @@ export default function SignUp() {
           <form onSubmit={onSubmit} style={{ marginTop: '1.5rem' }}>
             <OAuthButtons
               disabled={!hasSupabaseConfig}
+              nextPath={resolveNextPath()}
               onError={(nextMsg) => {
                 if (nextMsg || !hasSupabaseConfig) setMsg(nextMsg || 'OAuth login is not configured.');
               }}

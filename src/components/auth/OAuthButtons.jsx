@@ -1,5 +1,6 @@
 import React from 'react';
 import { supabase } from '@site/src/utils/supabaseClient';
+import { sanitizeNextPath } from '@site/src/utils/nextPath';
 
 const PROVIDERS = [
   { key: 'google', label: 'Google', Icon: GoogleIcon },
@@ -7,7 +8,7 @@ const PROVIDERS = [
   { key: 'discord', label: 'Discord', Icon: DiscordIcon },
 ];
 
-export default function OAuthButtons({ disabled = false, onError }) {
+export default function OAuthButtons({ disabled = false, onError, nextPath = null }) {
   const onOAuth = async (provider) => {
     if (typeof window === 'undefined') return;
     if (!supabase) {
@@ -15,11 +16,15 @@ export default function OAuthButtons({ disabled = false, onError }) {
       return;
     }
 
+    const safeNext = sanitizeNextPath(nextPath, '/');
+    const callbackUrl = new URL('/auth/callback', window.location.origin);
+    callbackUrl.searchParams.set('next', safeNext);
+
     onError?.('');
     const { error } = await supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
+        redirectTo: callbackUrl.toString(),
       },
     });
     if (error) onError?.(error.message);

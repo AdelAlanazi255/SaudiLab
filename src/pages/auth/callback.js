@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Layout from '@theme/Layout';
 import { getSupabaseConfigStatus, supabase } from '@site/src/utils/supabaseClient';
+import { getNextPathFromSearch } from '@site/src/utils/nextPath';
 
 export default function AuthCallback() {
   const [msg, setMsg] = useState('Confirming your email...');
@@ -13,6 +14,8 @@ export default function AuthCallback() {
         return;
       }
 
+      const nextPath = getNextPathFromSearch(window.location.search || '', '/');
+
       try {
         const hasCode = window.location.search.includes('code=');
         const hasHash = Boolean(window.location.hash);
@@ -24,11 +27,11 @@ export default function AuthCallback() {
           sessionData = await supabase.auth.getSession();
         }
 
-        window.history.replaceState({}, '', '/');
-        window.location.href = '/';
+        window.history.replaceState({}, '', nextPath);
+        window.location.href = nextPath;
       } catch {
-        window.history.replaceState({}, '', '/');
-        window.location.href = '/';
+        window.history.replaceState({}, '', nextPath);
+        window.location.href = nextPath;
       }
     };
 

@@ -1,27 +1,34 @@
 import React, { useEffect, useState } from 'react';
 import Link from '@docusaurus/Link';
 import { COURSE_EVENT, isCompleted, markCompleted, unmarkCompleted } from '@site/src/utils/progressKeys';
-
-function sanitizeNextPath(value) {
-  if (!value || typeof value !== 'string') return null;
-  if (!value.startsWith('/')) return null;
-  if (value.startsWith('/locked')) return null;
-  return value;
-}
+import { useAuth } from '@site/src/utils/authState';
+import { buildAuthHref, sanitizeNextPath } from '@site/src/utils/nextPath';
 
 export default function CompleteButton({ lessonId, course = 'html' }) {
+  const auth = useAuth();
   const [done, setDone] = useState(false);
   const [nextPath, setNextPath] = useState(null);
+  const isGuest = !auth?.loading && !auth?.isLoggedIn;
 
   useEffect(() => {
-    setDone(isCompleted(course, lessonId));
-
-    if (typeof window !== 'undefined') {
-      const params = new URLSearchParams(window.location.search);
-      setNextPath(sanitizeNextPath(params.get('next')));
+    if (isGuest) {
+      setDone(false);
+    } else {
+      setDone(isCompleted(course, lessonId));
     }
 
-    const onProgress = () => setDone(isCompleted(course, lessonId));
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search || '');
+      setNextPath(sanitizeNextPath(params.get('next'), null));
+    }
+
+    const onProgress = () => {
+      if (isGuest) {
+        setDone(false);
+        return;
+      }
+      setDone(isCompleted(course, lessonId));
+    };
 
     if (typeof window !== 'undefined') {
       window.addEventListener(COURSE_EVENT, onProgress);
@@ -34,9 +41,18 @@ export default function CompleteButton({ lessonId, course = 'html' }) {
         window.removeEventListener('storage', onProgress);
       }
     };
-  }, [lessonId, course]);
+  }, [lessonId, course, isGuest]);
 
   const onClick = () => {
+    if (auth?.loading) return;
+    if (isGuest) {
+      if (typeof window !== 'undefined') {
+        const current = `${window.location.pathname}${window.location.search || ''}${window.location.hash || ''}`;
+        window.location.href = buildAuthHref('/login', current || '/');
+      }
+      return;
+    }
+
     if (done) {
       unmarkCompleted(course, lessonId);
       setDone(false);
@@ -56,12 +72,12 @@ export default function CompleteButton({ lessonId, course = 'html' }) {
         onClick={onClick}
         className={`sl-completeBtn ${done ? 'sl-completeBtnDone' : 'sl-completeBtnPending'}`}
       >
-        {done ? 'Completed \u2713' : 'Mark as Completed'}
+        {isGuest ? 'Complete lesson' : done ? 'Completed \u2713' : 'Mark as Completed'}
       </button>
 
-      {done ? <div className="sl-complete-helper">Click again to undo</div> : null}
+      {!isGuest && done ? <div className="sl-complete-helper">Click again to undo</div> : null}
 
-      {done && nextPath ? (
+      {!isGuest && done && nextPath ? (
         <div className="sl-completeContinueWrap">
           <Link to={nextPath} className="sl-btn-primary">
             Continue
