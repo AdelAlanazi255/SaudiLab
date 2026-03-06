@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useHistory } from '@docusaurus/router';
 import { COURSES } from '@site/src/course/courseMap';
+import { canAccessCourse } from '@site/src/utils/lessonAccess';
 
 function getFirstLessonPath(course) {
   const firstLesson = COURSES[course]?.lessons?.[0];
@@ -12,6 +13,10 @@ export default function RedirectToFirstLesson({ course }) {
 
   useEffect(() => {
     if (!course) return;
+    if (!canAccessCourse(course)) {
+      history.replace('/');
+      return;
+    }
     const target = getFirstLessonPath(course);
     const current = typeof window !== 'undefined' ? window.location.pathname : '';
     if (current !== target) {

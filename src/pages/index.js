@@ -1,9 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import Link from '@docusaurus/Link';
 import Layout from '@theme/Layout';
 import { HOMEPAGE_COURSES } from '@site/src/course/courseCatalog';
 import PageContainer from '@site/src/components/layout/PageContainer';
 import Section from '@site/src/components/layout/Section';
 import SaudiLabRoadmap from '@site/src/components/SaudiLabRoadmap';
+import { useAuth } from '@site/src/utils/authState';
+import { LEARNING_MODE_FREE, normalizeLearningMode } from '@site/src/utils/learningMode';
+import { canAccessCourse } from '@site/src/utils/lessonAccess';
 import './homepage.css';
 
 const COURSE_LOGOS = {
@@ -48,6 +52,8 @@ const COURSE_LEVELS = [
 ];
 
 export default function Home() {
+  const auth = useAuth();
+  const [guidedLockModalOpen, setGuidedLockModalOpen] = useState(false);
   const courseById = React.useMemo(
     () =>
       HOMEPAGE_COURSES.reduce((acc, course) => {
@@ -71,6 +77,20 @@ export default function Home() {
     els.forEach((el) => obs.observe(el));
     return () => obs.disconnect();
   }, []);
+
+  const isFreeMode = normalizeLearningMode(auth?.learningMode) === LEARNING_MODE_FREE;
+  const isGuidedMode = !isFreeMode;
+  const isLoggedIn = Boolean(auth?.isLoggedIn);
+  const ctaLabel = isFreeMode ? 'View' : 'Start';
+
+  useEffect(() => {
+    if (!guidedLockModalOpen || typeof window === 'undefined') return undefined;
+    const onKeyDown = (event) => {
+      if (event.key === 'Escape') setGuidedLockModalOpen(false);
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [guidedLockModalOpen]);
 
   return (
     <Layout>
@@ -96,6 +116,11 @@ export default function Home() {
           <PageContainer>
             <div className="section-head">
               <h2 className="section-title">Courses</h2>
+              {!isLoggedIn ? (
+                <p className="courses-signupPrompt">
+                  New to SaudiLab? <Link to="/signup">Sign up now!</Link>
+                </p>
+              ) : null}
             </div>
             <div className="course-tracks" role="list" aria-label="Courses grouped by level">
               {COURSE_LEVELS.map((level) => {
@@ -123,19 +148,18 @@ export default function Home() {
                     >
                       <div className="track-row">
                         {courses.map((course) => {
-                          const isAvailable = course.available === true;
                           const logoSrc = COURSE_LOGOS[course.courseId] || null;
                           const tooltipId = `course-desc-${course.courseId}`;
+                          const courseHref = course.ctaHref || `/${course.courseId}`;
+                          const isGuidedLockedCourse = isLoggedIn && isGuidedMode && !canAccessCourse(course.courseId);
                           return (
                             <article
                               key={course.title}
-                              className={`course-card ${isAvailable ? 'course-card-active' : 'course-card-unavailable'}`}
-                              aria-disabled={!isAvailable}
+                              className="course-card course-card-active"
                             >
                               <div className="course-head">
                                 <h3>{course.title}</h3>
                                 <div className="course-headMeta">
-                                  {course.notify ? <span className="soon-pill">Soon</span> : null}
                                   <div className="course-descHintWrap">
                                     <button
                                       type="button"
@@ -157,12 +181,29 @@ export default function Home() {
                                 </div>
                               ) : null}
                               <div className="course-actions">
-                                {isAvailable && course.ctaHref ? (
-                                  <a href={course.ctaHref} className="btn btn-primary btn-small">
-                                    Start
-                                  </a>
+                                {!isLoggedIn ? (
+                                  course.courseId === 'html' ? (
+                                    <a href={courseHref} className="btn btn-primary btn-small">
+                                      Preview
+                                    </a>
+                                  ) : (
+                                    <Link to="/login" className="btn btn-primary btn-small">
+                                      Log in
+                                    </Link>
+                                  )
+                                ) : isGuidedLockedCourse ? (
+                                  <button
+                                    type="button"
+                                    className="btn btn-primary btn-small course-ctaLocked"
+                                    onClick={() => setGuidedLockModalOpen(true)}
+                                    aria-haspopup="dialog"
+                                  >
+                                    {ctaLabel}
+                                  </button>
                                 ) : (
-                                  <span className="coming-soon">Coming soon</span>
+                                  <a href={courseHref} className="btn btn-primary btn-small">
+                                    {ctaLabel}
+                                  </a>
                                 )}
                               </div>
                             </article>
@@ -176,6 +217,45 @@ export default function Home() {
             </div>
           </PageContainer>
         </Section>
+
+        {guidedLockModalOpen ? (
+          <div
+            className="sl-modalBackdrop"
+            onMouseDown={(event) => {
+              if (event.target === event.currentTarget) setGuidedLockModalOpen(false);
+            }}
+          >
+            <div
+              className="sl-modal sl-guidedLockModal"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="sl-guided-lock-title"
+            >
+              <div className="sl-modalHead">
+                <div>
+                  <h2 id="sl-guided-lock-title" className="sl-modalTitle">Course locked in Guided mode</h2>
+                  <p className="sl-modalMsg sl-guidedLockMsg">
+                    You are currently in guided mode, if you want to freely view all courses with no progression
+                    tracking switch to Free exploration in dashboard
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  className="sl-modalX"
+                  aria-label="Close"
+                  onClick={() => setGuidedLockModalOpen(false)}
+                >
+                  X
+                </button>
+              </div>
+              <div className="sl-modalActions sl-guidedLockActions">
+                <Link to="/account" className="sl-btn-primary">
+                  Go to Dashboard
+                </Link>
+              </div>
+            </div>
+          </div>
+        ) : null}
 
       </main>
     </Layout>

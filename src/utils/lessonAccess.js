@@ -1,6 +1,26 @@
 import { COURSES, getLesson, getLessonByRoute } from '@site/src/course/courseMap';
+import { getCourseProgress } from '@site/src/utils/progress';
 import { isCompleted, migrateProgressOnce } from '@site/src/utils/progressKeys';
-import { getCurrentLearningMode, isFreeExplorationMode } from '@site/src/utils/learningMode';
+import {
+  getCurrentLearningMode,
+  isAdminRuntime,
+  isAuthenticatedRuntime,
+  isFreeExplorationMode,
+} from '@site/src/utils/learningMode';
+
+export const GUIDED_COURSE_SEQUENCE = Object.freeze([
+  'html',
+  'css',
+  'javascript',
+  'pcs',
+  'cse',
+  'ethics',
+  'crypto',
+  'websecurity',
+  'kalitools',
+  'forensics',
+  'blueteam',
+]);
 
 function toLessonId(lessonNumber) {
   const n = Number(lessonNumber);
@@ -8,9 +28,38 @@ function toLessonId(lessonNumber) {
   return `lesson${n}`;
 }
 
+function isCourseFullyCompleted(course) {
+  const progress = getCourseProgress(course);
+  const total = Number(progress?.total) || 0;
+  const completed = Number(progress?.completedCount) || 0;
+  return total > 0 && completed >= total;
+}
+
+export function canAccessCourse(course) {
+  if (typeof window === 'undefined') return true;
+  if (!course || !COURSES[course]) return false;
+
+  if (isAdminRuntime()) return true;
+  if (isFreeExplorationMode(getCurrentLearningMode())) return true;
+
+  // Keep guests aligned with previous behavior: guided course locking only applies to authenticated users.
+  if (!isAuthenticatedRuntime()) return true;
+
+  migrateProgressOnce();
+  const courseIndex = GUIDED_COURSE_SEQUENCE.indexOf(course);
+  if (courseIndex <= 0) return true;
+
+  const requiredCourse = GUIDED_COURSE_SEQUENCE[courseIndex - 1];
+  if (!requiredCourse) return true;
+  return isCourseFullyCompleted(requiredCourse);
+}
+
 export function canAccessLesson(course, lessonNumber) {
   if (typeof window === 'undefined') return true;
+  if (!course || !COURSES[course]) return false;
+  if (isAdminRuntime()) return true;
   if (isFreeExplorationMode(getCurrentLearningMode())) return true;
+  if (!canAccessCourse(course)) return false;
   migrateProgressOnce();
 
   const routeId = toLessonId(lessonNumber);
@@ -42,6 +91,15 @@ export function getLastUnlockedLessonId(course) {
 }
 
 export function getLastUnlockedLessonPath(course) {
+  if (typeof window !== 'undefined') {
+    const guidedMode = !isFreeExplorationMode(getCurrentLearningMode());
+    if (guidedMode && isAuthenticatedRuntime() && !isAdminRuntime()) {
+      return '/';
+    }
+  }
+
+  if (!canAccessCourse(course)) return '/';
+
   const lessonId = getLastUnlockedLessonId(course);
   const lesson = getLesson(course, lessonId);
   return lesson?.permalink || `/${course}/${lessonId}`;

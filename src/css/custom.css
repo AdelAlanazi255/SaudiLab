@@ -1173,6 +1173,10 @@ code {
   transition: all 0.18s ease;
 }
 
+.sl-completeBtn:disabled {
+  cursor: default;
+}
+
 .sl-completeBtnPending {
   border: 1px solid rgba(255, 255, 255, 0.18);
   background: rgba(12, 18, 24, 0.62);
@@ -1205,6 +1209,46 @@ code {
 
 .sl-completeContinueWrap {
   margin-top: 0.7rem;
+}
+
+.sl-nextLessonLink {
+  transition:
+    background-color 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    color 180ms ease,
+    transform 180ms ease;
+}
+
+.sl-nextLessonLinkLocked {
+  border-color: rgba(145, 162, 182, 0.34) !important;
+  background: rgba(111, 132, 157, 0.12);
+  color: rgba(201, 214, 230, 0.62) !important;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.sl-nextLessonLinkLocked .pagination-nav__sublabel,
+.sl-nextLessonLinkLocked .pagination-nav__label {
+  color: inherit;
+}
+
+.sl-nextLessonLinkReady {
+  border-color: rgba(124, 242, 176, 0.38) !important;
+  background: rgba(124, 242, 176, 0.14);
+  color: #d3ffe7 !important;
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.24);
+}
+
+.sl-nextLessonLinkReady:hover {
+  transform: translateY(-1px);
+  border-color: rgba(124, 242, 176, 0.5) !important;
+  background: rgba(124, 242, 176, 0.18);
+  color: #e7fff2 !important;
+}
+
+.sl-paginatorLinkDisabled {
+  pointer-events: none;
 }
 
 .sl-lessonProgress {

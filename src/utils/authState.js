@@ -6,6 +6,8 @@ import {
   isStoredLearningMode,
   normalizeLearningMode,
   setCurrentLearningMode,
+  setCurrentUserAuthenticated,
+  setCurrentUserRole,
 } from './learningMode';
 
 const AuthCtx = createContext(null);
@@ -149,6 +151,8 @@ export function AuthProvider({ children }) {
         setUser(null);
         setProfile(null);
         setCurrentLearningMode(LEARNING_MODE_GUIDED);
+        setCurrentUserRole('user');
+        setCurrentUserAuthenticated(false);
         return;
       }
 
@@ -164,22 +168,30 @@ export function AuthProvider({ children }) {
           const nextProfile = await fetchOrInitProfile(nextSession.user);
           setProfile(nextProfile);
           setCurrentLearningMode(getProfileLearningMode(nextProfile));
+          setCurrentUserRole(nextProfile?.role || 'user');
+          setCurrentUserAuthenticated(true);
           logAdminDebug(nextSession.user, nextProfile);
         } catch (profileError) {
           // eslint-disable-next-line no-console
           console.error('[auth] profile fetch failed:', profileError);
           setProfile(null);
           setCurrentLearningMode(LEARNING_MODE_GUIDED);
+          setCurrentUserRole('user');
+          setCurrentUserAuthenticated(true);
         }
       } else {
         setProfile(null);
         setCurrentLearningMode(LEARNING_MODE_GUIDED);
+        setCurrentUserRole('user');
+        setCurrentUserAuthenticated(false);
       }
     } catch {
       setSession(null);
       setUser(null);
       setProfile(null);
       setCurrentLearningMode(LEARNING_MODE_GUIDED);
+      setCurrentUserRole('user');
+      setCurrentUserAuthenticated(false);
     } finally {
       setLoading(false);
     }
@@ -214,6 +226,8 @@ export function AuthProvider({ children }) {
           .then((nextProfile) => {
             setProfile(nextProfile);
             setCurrentLearningMode(getProfileLearningMode(nextProfile));
+            setCurrentUserRole(nextProfile?.role || 'user');
+            setCurrentUserAuthenticated(true);
             logAdminDebug(nextSession.user, nextProfile);
           })
           .catch((profileError) => {
@@ -221,11 +235,15 @@ export function AuthProvider({ children }) {
             console.error('[auth] profile fetch failed:', profileError);
             setProfile(null);
             setCurrentLearningMode(LEARNING_MODE_GUIDED);
+            setCurrentUserRole('user');
+            setCurrentUserAuthenticated(true);
           })
           .finally(() => setLoading(false));
       } else {
         setProfile(null);
         setCurrentLearningMode(LEARNING_MODE_GUIDED);
+        setCurrentUserRole('user');
+        setCurrentUserAuthenticated(false);
         setLoading(false);
       }
     });
@@ -269,6 +287,8 @@ export function AuthProvider({ children }) {
         const nextProfile = updated || { ...(profile || {}), learning_mode: normalized };
         setProfile(nextProfile);
         setCurrentLearningMode(normalized);
+        setCurrentUserRole(nextProfile?.role || 'user');
+        setCurrentUserAuthenticated(true);
         return { ok: true, learningMode: normalized };
       },
       signOut: async () => {
@@ -279,6 +299,8 @@ export function AuthProvider({ children }) {
         setUser(null);
         setProfile(null);
         setCurrentLearningMode(LEARNING_MODE_GUIDED);
+        setCurrentUserRole('user');
+        setCurrentUserAuthenticated(false);
         window.location.href = '/';
       },
       logout: async () => {
@@ -289,6 +311,8 @@ export function AuthProvider({ children }) {
         setUser(null);
         setProfile(null);
         setCurrentLearningMode(LEARNING_MODE_GUIDED);
+        setCurrentUserRole('user');
+        setCurrentUserAuthenticated(false);
         window.location.href = '/';
       },
     }),

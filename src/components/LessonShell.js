@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Link from '@docusaurus/Link';
+import { useHistory } from '@docusaurus/router';
 import CompleteButton from '@site/src/components/CompleteButton';
 import useLessonAccess from '@site/src/hooks/useLessonAccess';
-import { getLesson, getTryPath } from '@site/src/course/courseMap';
+import { getTryPath } from '@site/src/course/courseMap';
 import { getLessonMetaSafe } from '@site/src/data/lessons';
 import { useAuth } from '@site/src/utils/authState';
 import { buildAuthHref } from '@site/src/utils/nextPath';
@@ -17,6 +18,7 @@ export default function LessonShell({
   children,
 }) {
   const auth = useAuth();
+  const history = useHistory();
   const access = useLessonAccess({ course, lessonId });
   const generatedTryPath = getTryPath(course, lessonId) || tryPath || null;
   const resolvedTitle = title || getLessonMetaSafe(course, Number(current))?.title || null;
@@ -41,22 +43,15 @@ export default function LessonShell({
     return () => observer.disconnect();
   }, [readyCardPulse]);
 
-  if (!access.allowed) {
-    if (access.requiredLessonId) {
-      const requiredPath = getLesson(course, access.requiredLessonId)?.permalink || `/${course}/${access.requiredLessonId}`;
-      return (
-        <div className="sl-lessonLock sl-card">
-          <h2 className="sl-lessonLockTitle">Lesson Locked</h2>
-          <p className="sl-lessonLockText">Complete the previous lesson first.</p>
-          <Link to={requiredPath} className="sl-btn-primary">
-            Go to required lesson
-          </Link>
-        </div>
-      );
+  useEffect(() => {
+    if (access.allowed || !access.redirectTo) return;
+    const currentPath = typeof window !== 'undefined' ? window.location.pathname : '';
+    if (currentPath !== access.redirectTo) {
+      history.replace(access.redirectTo);
     }
+  }, [access.allowed, access.redirectTo, history]);
 
-    return null;
-  }
+  if (!access.allowed) return null;
 
   return (
     <>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Link from '@docusaurus/Link';
-import { COURSE_EVENT, isCompleted, markCompleted, unmarkCompleted } from '@site/src/utils/progressKeys';
+import { COURSE_EVENT, isCompleted, markCompleted } from '@site/src/utils/progressKeys';
 import { useAuth } from '@site/src/utils/authState';
 import { buildAuthHref, sanitizeNextPath } from '@site/src/utils/nextPath';
 
@@ -53,13 +53,10 @@ export default function CompleteButton({ lessonId, course = 'html' }) {
       return;
     }
 
-    if (done) {
-      unmarkCompleted(course, lessonId);
-      setDone(false);
-    } else {
-      markCompleted(course, lessonId);
-      setDone(true);
-    }
+    if (done) return;
+
+    markCompleted(course, lessonId);
+    setDone(true);
 
     if (typeof window !== 'undefined') {
       window.dispatchEvent(new Event(COURSE_EVENT));
@@ -71,11 +68,12 @@ export default function CompleteButton({ lessonId, course = 'html' }) {
       <button
         onClick={onClick}
         className={`sl-completeBtn ${done ? 'sl-completeBtnDone' : 'sl-completeBtnPending'}`}
+        disabled={!isGuest && done}
       >
         {isGuest ? 'Complete lesson' : done ? 'Completed \u2713' : 'Mark as Completed'}
       </button>
 
-      {!isGuest && done ? <div className="sl-complete-helper">Click again to undo</div> : null}
+      {!isGuest && done ? <div className="sl-complete-helper">Lesson completion is saved.</div> : null}
 
       {!isGuest && done && nextPath ? (
         <div className="sl-completeContinueWrap">

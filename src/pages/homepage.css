@@ -374,6 +374,24 @@
   margin-bottom: 0.24rem;
 }
 
+.courses-signupPrompt {
+  margin: 0.38rem 0 0;
+  font-size: 0.88rem;
+  color: rgba(201, 214, 230, 0.82);
+  font-weight: 600;
+}
+
+.courses-signupPrompt a {
+  color: rgba(124, 242, 176, 0.95);
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.courses-signupPrompt a:hover {
+  color: rgba(144, 247, 188, 1);
+  text-decoration: underline;
+}
+
 .course-tracks {
   display: flex;
   flex-direction: column;
@@ -579,6 +597,20 @@
   flex-wrap: wrap;
 }
 
+.course-ctaLocked,
+.course-ctaLocked:hover {
+  border-color: rgba(145, 162, 182, 0.46);
+  background: rgba(111, 132, 157, 0.2);
+  color: rgba(224, 234, 245, 0.8);
+  box-shadow: none;
+  transform: none;
+}
+
+.course-ctaLocked:focus-visible {
+  outline: 2px solid rgba(145, 162, 182, 0.84);
+  outline-offset: 2px;
+}
+
 .course-card-active {
   border-color: rgba(145, 162, 182, 0.32);
 }
@@ -589,48 +621,20 @@
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3), 0 0 12px rgba(124, 242, 176, 0.1);
 }
 
-.course-card-unavailable {
-  border-color: rgba(226, 238, 251, 0.1);
-  background: linear-gradient(180deg, #0d1219, #0a0f14);
-  filter: saturate(0.72);
-  opacity: 0.75;
+.sl-guidedLockModal {
+  max-width: 540px;
 }
 
-.course-card-unavailable .course-logo {
-  opacity: 0.68;
+.sl-guidedLockMsg {
+  margin: 0;
 }
 
-.coming-soon {
-  display: inline-flex;
-  align-items: center;
-  height: 32px;
-  padding: 0 0.72rem;
-  border-radius: 999px;
-  border: 1px solid rgba(226, 238, 251, 0.18);
-  color: var(--sl-muted);
-  font-size: 0.83rem;
-  font-weight: 700;
+.sl-guidedLockActions {
+  justify-content: center;
 }
 
-.soon-pill {
-  flex-shrink: 0;
-  font-size: 0.6rem;
-  font-weight: 800;
-  padding: 0.16rem 0.4rem;
-  border-radius: 999px;
-  border: 1px solid rgba(226, 238, 251, 0.19);
-  color: rgba(232, 238, 245, 0.8);
-}
-
-.notify-link {
-  color: rgba(124, 242, 176, 0.92);
-  font-size: 0.88rem;
-  font-weight: 700;
-  text-decoration: none;
-}
-
-.notify-link:hover {
-  color: rgba(124, 242, 176, 1);
+.sl-guidedLockActions .sl-btn-primary {
+  min-width: 190px;
 }
 
 .reveal {

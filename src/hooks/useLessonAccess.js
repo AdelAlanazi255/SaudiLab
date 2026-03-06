@@ -2,17 +2,18 @@ import { useEffect, useMemo, useState } from 'react';
 import { COURSE_EVENT } from '@site/src/utils/progress';
 import { isCompleted, migrateProgressOnce } from '@site/src/utils/progressKeys';
 import { COURSES, getLesson, parseDocId } from '@site/src/course/courseMap';
-import { canAccessLesson } from '@site/src/utils/lessonAccess';
-import { LEARNING_MODE_EVENT, getCurrentLearningMode, isFreeExplorationMode } from '@site/src/utils/learningMode';
+import { canAccessCourse, canAccessLesson } from '@site/src/utils/lessonAccess';
+import {
+  LEARNING_MODE_EVENT,
+  USER_AUTH_EVENT,
+  USER_ROLE_EVENT,
+  getCurrentLearningMode,
+  isAdminRuntime,
+  isFreeExplorationMode,
+} from '@site/src/utils/learningMode';
 
 function isBrowser() {
   return typeof window !== 'undefined';
-}
-
-function buildLockedRedirect(needPath) {
-  if (!isBrowser()) return null;
-  const currentPath = `${window.location.pathname}${window.location.search}${window.location.hash}`;
-  return `/locked?need=${encodeURIComponent(needPath)}&next=${encodeURIComponent(currentPath)}`;
 }
 
 function getLessonNumber(lesson) {
@@ -36,6 +37,10 @@ function getAccessState({ course, lessonId, docId }) {
     return { allowed: true, reason: 'unknown', redirectTo: null, requiredLessonId: null };
   }
 
+  if (isAdminRuntime()) {
+    return { allowed: true, reason: 'admin', redirectTo: null, requiredLessonId: null };
+  }
+
   migrateProgressOnce();
 
   const lesson = resolvedLessonId ? getLesson(resolvedCourse, resolvedLessonId) : null;
@@ -48,16 +53,18 @@ function getAccessState({ course, lessonId, docId }) {
     return { allowed: true, reason: 'free_exploration', redirectTo: null, requiredLessonId: null };
   }
 
+  if (!canAccessCourse(resolvedCourse)) {
+    return { allowed: false, reason: 'course_locked', redirectTo: '/', requiredLessonId: null };
+  }
+
   if (kind === 'lesson' && lesson?.requireLessonId) {
     const requiredLessonId = lesson.requireLessonId;
     const lessonNumber = getLessonNumber(lesson);
     if (!canAccessLesson(resolvedCourse, lessonNumber) || !isCompleted(resolvedCourse, requiredLessonId)) {
-      const requiredLesson = getLesson(resolvedCourse, requiredLessonId);
-      const needPath = requiredLesson?.permalink || `/${resolvedCourse}/${requiredLessonId}`;
       return {
         allowed: false,
         reason: 'prerequisite',
-        redirectTo: buildLockedRedirect(needPath),
+        redirectTo: '/',
         requiredLessonId,
       };
     }
@@ -74,11 +81,15 @@ export default function useLessonAccess({ course, lessonId, docId }) {
     const bump = () => setTick((t) => t + 1);
     window.addEventListener(COURSE_EVENT, bump);
     window.addEventListener(LEARNING_MODE_EVENT, bump);
+    window.addEventListener(USER_ROLE_EVENT, bump);
+    window.addEventListener(USER_AUTH_EVENT, bump);
     window.addEventListener('storage', bump);
     window.addEventListener('focus', bump);
     return () => {
       window.removeEventListener(COURSE_EVENT, bump);
       window.removeEventListener(LEARNING_MODE_EVENT, bump);
+      window.removeEventListener(USER_ROLE_EVENT, bump);
+      window.removeEventListener(USER_AUTH_EVENT, bump);
       window.removeEventListener('storage', bump);
       window.removeEventListener('focus', bump);
     };
