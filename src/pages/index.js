@@ -19,26 +19,31 @@ const COURSE_LEVELS = [
     id: 'beginner',
     label: 'BEGINNER',
     courseIds: ['html', 'css', 'javascript'],
+    rowType: 'level',
   },
   {
     id: 'intermediate',
     label: 'INTERMEDIATE',
     courseIds: ['pcs', 'cse', 'ethics'],
+    rowType: 'level',
   },
   {
     id: 'upper-intermediate',
     label: 'UPPER-INTERMEDIATE',
     courseIds: ['crypto', 'websecurity', 'kalitools'],
+    rowType: 'level',
   },
   {
     id: 'advanced',
     label: 'ADVANCED',
     courseIds: ['forensics', 'blueteam'],
+    rowType: 'level',
   },
   {
-    id: 'others',
-    label: 'OTHERS',
+    id: 'resources',
+    label: 'RESOURCES',
     courseIds: ['career'],
+    rowType: 'resources',
   },
 ];
 
@@ -98,18 +103,30 @@ export default function Home() {
                 if (!courses.length) return null;
 
                 return (
-                  <section key={level.id} className="course-track" role="listitem" aria-label={`${level.label} courses`}>
+                  <section
+                    key={level.id}
+                    className="course-track"
+                    role="listitem"
+                    aria-label={level.rowType === 'resources' ? 'Resources' : `${level.label} courses`}
+                  >
                     <aside className="level-panel">
-                      <div className="level-kicker">Level</div>
+                      {level.rowType === 'level' ? <div className="level-kicker">Level</div> : null}
                       <h3 className="level-title">{level.label}</h3>
-                      <div className="level-count">{courses.length} course{courses.length > 1 ? 's' : ''}</div>
+                      {level.rowType === 'level' ? (
+                        <div className="level-count">{courses.length} course{courses.length > 1 ? 's' : ''}</div>
+                      ) : null}
                     </aside>
 
-                    <div className="track-scroll" role="region" aria-label={`${level.label} course row`}>
+                    <div
+                      className="track-scroll"
+                      role="region"
+                      aria-label={level.rowType === 'resources' ? 'Resources row' : `${level.label} course row`}
+                    >
                       <div className="track-row">
                         {courses.map((course) => {
                           const isAvailable = course.available === true;
                           const logoSrc = COURSE_LOGOS[course.courseId] || null;
+                          const tooltipId = `course-desc-${course.courseId}`;
                           return (
                             <article
                               key={course.title}
@@ -118,11 +135,25 @@ export default function Home() {
                             >
                               <div className="course-head">
                                 <h3>{course.title}</h3>
-                                {course.notify ? <span className="soon-pill">Soon</span> : null}
+                                <div className="course-headMeta">
+                                  {course.notify ? <span className="soon-pill">Soon</span> : null}
+                                  <div className="course-descHintWrap">
+                                    <button
+                                      type="button"
+                                      className="course-descHint"
+                                      aria-label={`Course description for ${course.title}`}
+                                      aria-describedby={tooltipId}
+                                    >
+                                      ?
+                                    </button>
+                                    <div id={tooltipId} role="tooltip" className="course-descTooltip">
+                                      {course.description}
+                                    </div>
+                                  </div>
+                                </div>
                               </div>
-                              <p>{course.description}</p>
                               {logoSrc ? (
-                                <div className="course-logo-wrap">
+                                <div className="course-logoRow">
                                   <img className="course-logo" src={logoSrc} alt={`${course.title} logo`} loading="lazy" />
                                 </div>
                               ) : null}
