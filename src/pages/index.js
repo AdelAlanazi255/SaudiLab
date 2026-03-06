@@ -1,13 +1,55 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import Layout from '@theme/Layout';
 import { HOMEPAGE_COURSES } from '@site/src/course/courseCatalog';
 import PageContainer from '@site/src/components/layout/PageContainer';
 import Section from '@site/src/components/layout/Section';
-import CardGrid from '@site/src/components/layout/CardGrid';
 import './homepage.css';
 
+const COURSE_LOGOS = {
+  html: '/img/html-logo.png',
+  css: '/img/css-logo.png',
+  javascript: '/img/javascript-logo.png',
+  cse: '/img/cse-logo.png',
+  crypto: '/img/crypto-logo.png',
+};
+
+const COURSE_LEVELS = [
+  {
+    id: 'beginner',
+    label: 'BEGINNER',
+    courseIds: ['html', 'css', 'javascript'],
+  },
+  {
+    id: 'intermediate',
+    label: 'INTERMEDIATE',
+    courseIds: ['pcs', 'cse', 'ethics'],
+  },
+  {
+    id: 'upper-intermediate',
+    label: 'UPPER-INTERMEDIATE',
+    courseIds: ['crypto', 'websecurity', 'kalitools'],
+  },
+  {
+    id: 'advanced',
+    label: 'ADVANCED',
+    courseIds: ['forensics', 'blueteam'],
+  },
+  {
+    id: 'others',
+    label: 'OTHERS',
+    courseIds: ['career'],
+  },
+];
+
 export default function Home() {
-  const [openFaqIndex, setOpenFaqIndex] = useState(0);
+  const courseById = React.useMemo(
+    () =>
+      HOMEPAGE_COURSES.reduce((acc, course) => {
+        acc[course.courseId] = course;
+        return acc;
+      }, {}),
+    [],
+  );
 
   useEffect(() => {
     const els = document.querySelectorAll('.reveal');
@@ -48,86 +90,62 @@ export default function Home() {
             <div className="section-head">
               <h2 className="section-title">Courses</h2>
             </div>
-            <CardGrid className="courses-grid" columns="four">
-              {HOMEPAGE_COURSES.map((course) => {
-                const isAvailable = course.available === true;
+            <div className="course-tracks" role="list" aria-label="Courses grouped by level">
+              {COURSE_LEVELS.map((level) => {
+                const courses = level.courseIds.map((id) => courseById[id]).filter(Boolean);
+                if (!courses.length) return null;
+
                 return (
-                <article
-                  key={course.title}
-                  className={`course-card ${isAvailable ? 'course-card-active' : 'course-card-unavailable'}`}
-                  aria-disabled={!isAvailable}
-                >
-                  <div className="course-head">
-                    <h3>{course.title}</h3>
-                    {course.notify ? <span className="soon-pill">Soon</span> : null}
-                  </div>
-                  <p>{course.description}</p>
-                  <div className="course-actions">
-                    {isAvailable && course.ctaHref ? (
-                      <a href={course.ctaHref} className="btn btn-primary btn-small">
-                        Start
-                      </a>
-                    ) : (
-                      <span className="coming-soon">Coming soon</span>
-                    )}
-                  </div>
-                </article>
+                  <section key={level.id} className="course-track" role="listitem" aria-label={`${level.label} courses`}>
+                    <aside className="level-panel">
+                      <div className="level-kicker">Level</div>
+                      <h3 className="level-title">{level.label}</h3>
+                      <div className="level-count">{courses.length} course{courses.length > 1 ? 's' : ''}</div>
+                    </aside>
+
+                    <div className="track-scroll" role="region" aria-label={`${level.label} course row`}>
+                      <div className="track-row">
+                        {courses.map((course) => {
+                          const isAvailable = course.available === true;
+                          const logoSrc = COURSE_LOGOS[course.courseId] || null;
+                          return (
+                            <article
+                              key={course.title}
+                              className={`course-card ${isAvailable ? 'course-card-active' : 'course-card-unavailable'}`}
+                              aria-disabled={!isAvailable}
+                            >
+                              <div className="course-head">
+                                <h3>{course.title}</h3>
+                                {course.notify ? <span className="soon-pill">Soon</span> : null}
+                              </div>
+                              <p>{course.description}</p>
+                              {logoSrc ? (
+                                <div className="course-logo-wrap">
+                                  <img className="course-logo" src={logoSrc} alt={`${course.title} logo`} loading="lazy" />
+                                </div>
+                              ) : null}
+                              <div className="course-actions">
+                                {isAvailable && course.ctaHref ? (
+                                  <a href={course.ctaHref} className="btn btn-primary btn-small">
+                                    Start
+                                  </a>
+                                ) : (
+                                  <span className="coming-soon">Coming soon</span>
+                                )}
+                              </div>
+                            </article>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </section>
                 );
               })}
-            </CardGrid>
+            </div>
           </PageContainer>
         </Section>
 
-        <Section className="faq-section reveal">
-          <PageContainer className="sl-page-container--narrow">
-            <div className="section-head">
-              <h2 className="section-title">FAQ</h2>
-            </div>
-            <div className="faq-list">
-              {FAQ_ITEMS.map((item, index) => {
-                const isOpen = openFaqIndex === index;
-                return (
-                  <article key={item.q} className={`faq-card ${isOpen ? 'faq-card-open' : ''}`}>
-                    <h3 className="faq-heading">
-                      <button
-                        type="button"
-                        className="faq-question-button"
-                        aria-expanded={isOpen}
-                        aria-controls={`faq-answer-${index}`}
-                        onClick={() => setOpenFaqIndex(isOpen ? -1 : index)}
-                      >
-                        <span className="faq-question">{item.q}</span>
-                        <span className="faq-icon" aria-hidden="true">
-                          {isOpen ? '-' : '+'}
-                        </span>
-                      </button>
-                    </h3>
-                    <div
-                      id={`faq-answer-${index}`}
-                      role="region"
-                      aria-hidden={!isOpen}
-                      className={`faq-answer-wrap ${isOpen ? 'faq-answer-open' : ''}`}
-                    >
-                      <p className="faq-answer">{item.a}</p>
-                    </div>
-                  </article>
-                );
-              })}
-            </div>
-          </PageContainer>
-        </Section>
       </main>
     </Layout>
   );
 }
-
-const FAQ_ITEMS = [
-  { q: 'Do I need coding experience?', a: 'No. SaudiLab is designed for complete beginners and starts from zero.' },
-  { q: 'What can I access?', a: 'All currently published lessons and Try-It exercises are available to every learner.' },
-  { q: 'Do I need to install anything?', a: 'No. All lessons and Try-It exercises run directly in your browser.' },
-  {
-    q: 'Are cyber security topics included?',
-    a: 'Yes. Security fundamentals and applied cryptography content are planned in the learning path.',
-  },
-  { q: 'Do I need to pay to use SaudiLab?', a: 'No. SaudiLab is fully free to use.' },
-];
