@@ -1015,6 +1015,17 @@ function TryHint({ hint, onDismissed }) {
         ))}
       </ListTag>
       <p>{hint.tip}</p>
+      <div className="sl-hint-demo">
+        <video
+          className="sl-hint-demo-video"
+          src="/demos/Demo.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="metadata"
+        />
+      </div>
     </div>
   );
 
