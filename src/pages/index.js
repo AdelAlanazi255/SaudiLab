@@ -3,6 +3,7 @@ import Layout from '@theme/Layout';
 import { HOMEPAGE_COURSES } from '@site/src/course/courseCatalog';
 import PageContainer from '@site/src/components/layout/PageContainer';
 import Section from '@site/src/components/layout/Section';
+import SaudiLabRoadmap from '@site/src/components/SaudiLabRoadmap';
 import './homepage.css';
 
 const COURSE_LOGOS = {
@@ -76,12 +77,13 @@ export default function Home() {
             <p className="hero-subtitle">
               Build a strong foundation in security, web technologies, and practical skills  Designed for complete beginners.
             </p>
-            <div className="hero-cta-row">
-              <a href="/html/lesson1" className="btn btn-primary">
-                Start Learning
-              </a>
             </div>
-            </div>
+          </PageContainer>
+        </Section>
+
+        <Section className="roadmap-section reveal" id="saudilab-roadmap">
+          <PageContainer>
+            <SaudiLabRoadmap />
           </PageContainer>
         </Section>
 

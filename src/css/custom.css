@@ -46,6 +46,10 @@ html[data-theme='dark'] {
   --ifm-background-color: var(--sl-bg);
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 html,
 body {
   width: 100%;
