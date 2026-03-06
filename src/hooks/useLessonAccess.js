@@ -3,6 +3,7 @@ import { COURSE_EVENT } from '@site/src/utils/progress';
 import { isCompleted, migrateProgressOnce } from '@site/src/utils/progressKeys';
 import { COURSES, getLesson, parseDocId } from '@site/src/course/courseMap';
 import { canAccessLesson } from '@site/src/utils/lessonAccess';
+import { LEARNING_MODE_EVENT, getCurrentLearningMode, isFreeExplorationMode } from '@site/src/utils/learningMode';
 
 function isBrowser() {
   return typeof window !== 'undefined';
@@ -43,6 +44,10 @@ function getAccessState({ course, lessonId, docId }) {
     return { allowed: false, reason: 'invalid_lesson', redirectTo: null, requiredLessonId: null };
   }
 
+  if (isFreeExplorationMode(getCurrentLearningMode())) {
+    return { allowed: true, reason: 'free_exploration', redirectTo: null, requiredLessonId: null };
+  }
+
   if (kind === 'lesson' && lesson?.requireLessonId) {
     const requiredLessonId = lesson.requireLessonId;
     const lessonNumber = getLessonNumber(lesson);
@@ -68,10 +73,12 @@ export default function useLessonAccess({ course, lessonId, docId }) {
     if (!isBrowser()) return;
     const bump = () => setTick((t) => t + 1);
     window.addEventListener(COURSE_EVENT, bump);
+    window.addEventListener(LEARNING_MODE_EVENT, bump);
     window.addEventListener('storage', bump);
     window.addEventListener('focus', bump);
     return () => {
       window.removeEventListener(COURSE_EVENT, bump);
+      window.removeEventListener(LEARNING_MODE_EVENT, bump);
       window.removeEventListener('storage', bump);
       window.removeEventListener('focus', bump);
     };

@@ -8,7 +8,11 @@ const PROVIDERS = [
   { key: 'discord', label: 'Discord', Icon: DiscordIcon },
 ];
 
-export default function OAuthButtons({ disabled = false, onError, nextPath = null }) {
+export default function OAuthButtons({
+  disabled = false,
+  onError,
+  nextPath = null,
+}) {
   const onOAuth = async (provider) => {
     if (typeof window === 'undefined') return;
     if (!supabase) {

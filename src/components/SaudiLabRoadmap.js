@@ -1,6 +1,8 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Link from '@docusaurus/Link';
 import { COURSE_EVENT, getCourseProgress } from '@site/src/utils/progress';
+import { useAuth } from '@site/src/utils/authState';
+import { LEARNING_MODE_FREE, normalizeLearningMode } from '@site/src/utils/learningMode';
 
 const ROADMAP_COURSES = [
   { id: 'html', label: 'HTML', href: '/html' },
@@ -67,8 +69,10 @@ const RoadmapNode = React.memo(function RoadmapNode({
 });
 
 export default function SaudiLabRoadmap() {
+  const auth = useAuth();
   const [progressTick, setProgressTick] = useState(0);
   const viewportRef = useRef(null);
+  const isFreeExplorationMode = normalizeLearningMode(auth?.learningMode) === LEARNING_MODE_FREE;
 
   useEffect(() => {
     if (typeof window === 'undefined') return undefined;
@@ -150,6 +154,7 @@ export default function SaudiLabRoadmap() {
   }, [progressTick]);
 
   useEffect(() => {
+    if (isFreeExplorationMode) return;
     const activeId = roadmap.activeCourseId;
     if (!activeId) return;
     if (typeof window === 'undefined') return;
@@ -169,16 +174,23 @@ export default function SaudiLabRoadmap() {
     window.requestAnimationFrame(() => {
       viewport.scrollTo({ left: clamped, behavior: reduceMotion ? 'auto' : 'smooth' });
     });
-  }, [roadmap.activeCourseId]);
+  }, [roadmap.activeCourseId, isFreeExplorationMode]);
 
   return (
-    <section className="sl-roadmapSurface" aria-label="SaudiLab course roadmap timeline">
+    <section
+      className={`sl-roadmapSurface ${isFreeExplorationMode ? 'sl-roadmapSurfaceLocked' : ''}`}
+      aria-label="SaudiLab course roadmap timeline"
+    >
       <div className="sl-roadmapHead">
         <h2 className="section-title">SaudiLab Roadmap</h2>
         <p className="sl-roadmapSub">Recommended learning journey with live progress states.</p>
       </div>
 
-      <div className="sl-roadmapViewport" ref={viewportRef}>
+      <div
+        className="sl-roadmapViewport"
+        ref={viewportRef}
+        aria-hidden={isFreeExplorationMode ? 'true' : undefined}
+      >
         <div className="sl-roadmapTrack">
           <div className="sl-roadmapLine" aria-hidden="true">
             <span className="sl-roadmapLineFill" style={{ width: `${roadmap.fillPercent}%` }} />
@@ -197,6 +209,18 @@ export default function SaudiLabRoadmap() {
           </ol>
         </div>
       </div>
+
+      {isFreeExplorationMode ? (
+        <div className="sl-roadmapLockOverlay" role="status" aria-live="polite">
+          <p className="sl-roadmapLockText">
+            Roadmap is not available to Free exploration mode, switch to guided mode in the dashboard to view the
+            roadmap
+          </p>
+          <Link to="/account" className="sl-btn-primary sl-roadmapLockBtn">
+            Go to Dashboard
+          </Link>
+        </div>
+      ) : null}
     </section>
   );
 }

@@ -150,6 +150,7 @@
 }
 
 .sl-roadmapSurface {
+  position: relative;
   border: 1px solid rgba(145, 162, 182, 0.24);
   border-radius: 20px;
   background:
@@ -157,6 +158,45 @@
     linear-gradient(180deg, rgba(13, 19, 28, 0.94), rgba(10, 14, 21, 0.96));
   box-shadow: var(--sl-shadow);
   padding: 1rem 1rem 1.05rem;
+}
+
+.sl-roadmapSurfaceLocked .sl-roadmapViewport {
+  filter: blur(3px) saturate(0.8);
+  opacity: 0.55;
+  pointer-events: none;
+  user-select: none;
+}
+
+.sl-roadmapSurfaceLocked .sl-roadmapHead {
+  opacity: 0.7;
+}
+
+.sl-roadmapLockOverlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  padding: 1.2rem;
+  border-radius: inherit;
+  background: linear-gradient(180deg, rgba(8, 12, 18, 0.52), rgba(8, 12, 18, 0.66));
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+
+.sl-roadmapLockText {
+  margin: 0;
+  max-width: 54ch;
+  text-align: center;
+  color: rgba(232, 238, 245, 0.95);
+  line-height: 1.6;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.sl-roadmapLockBtn {
+  margin-top: 0.75rem;
+  min-width: 168px;
 }
 
 .sl-roadmapHead {

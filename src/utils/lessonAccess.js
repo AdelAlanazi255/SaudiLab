@@ -1,5 +1,6 @@
 import { COURSES, getLesson, getLessonByRoute } from '@site/src/course/courseMap';
 import { isCompleted, migrateProgressOnce } from '@site/src/utils/progressKeys';
+import { getCurrentLearningMode, isFreeExplorationMode } from '@site/src/utils/learningMode';
 
 function toLessonId(lessonNumber) {
   const n = Number(lessonNumber);
@@ -9,6 +10,7 @@ function toLessonId(lessonNumber) {
 
 export function canAccessLesson(course, lessonNumber) {
   if (typeof window === 'undefined') return true;
+  if (isFreeExplorationMode(getCurrentLearningMode())) return true;
   migrateProgressOnce();
 
   const routeId = toLessonId(lessonNumber);

@@ -3,6 +3,7 @@ create table if not exists public.profiles (
   username text null,
   email text null,
   role text not null default 'user',
+  learning_mode text null,
   avatar_url text null,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
@@ -10,6 +11,22 @@ create table if not exists public.profiles (
 
 alter table public.profiles
   add column if not exists role text not null default 'user';
+
+alter table public.profiles
+  add column if not exists learning_mode text null;
+
+do $$
+begin
+  if not exists (
+    select 1
+    from pg_constraint
+    where conname = 'profiles_learning_mode_check'
+  ) then
+    alter table public.profiles
+      add constraint profiles_learning_mode_check
+      check (learning_mode is null or learning_mode in ('guided', 'free'));
+  end if;
+end $$;
 
 create or replace function public.set_updated_at()
 returns trigger

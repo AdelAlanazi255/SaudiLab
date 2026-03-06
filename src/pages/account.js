@@ -11,6 +11,11 @@ import { getCourseProgress, COURSE_EVENT } from '@site/src/utils/progress';
 import { getLesson } from '@site/src/course/courseMap';
 import { HOMEPAGE_COURSES } from '@site/src/course/courseCatalog';
 import { getSupabaseConfigStatus, supabase } from '@site/src/utils/supabaseClient';
+import {
+  LEARNING_MODE_FREE,
+  LEARNING_MODE_GUIDED,
+  normalizeLearningMode,
+} from '@site/src/utils/learningMode';
 import styles from './account.module.css';
 
 const FIVE_DAYS_MS = 5 * 24 * 60 * 60 * 1000;
@@ -36,6 +41,7 @@ export default function Account() {
     loading: false,
     username: '',
     email: '',
+    learningMode: LEARNING_MODE_GUIDED,
     profileCreatedAt: null,
     lastUsernameChangeAt: null,
     lastEmailChangeAt: null,
@@ -55,6 +61,7 @@ export default function Account() {
   const [deletingAccount, setDeletingAccount] = useState(false);
   const [accountDeletedToast, setAccountDeletedToast] = useState('');
   const [summaryMsg, setSummaryMsg] = useState({ type: '', text: '' });
+  const [savingLearningMode, setSavingLearningMode] = useState(false);
   const supabaseConfig = getSupabaseConfigStatus();
   const apiBaseUrl = String(siteConfig?.customFields?.API_BASE_URL || '').replace(/\/$/, '');
 
@@ -84,11 +91,23 @@ export default function Account() {
     const loadProfile = async () => {
       if (!supabase || !supabaseConfig.ok || !auth?.user?.id) return;
       setSummaryState((prev) => ({ ...prev, loading: true }));
-      const { data, error } = await supabase
+      let { data, error } = await supabase
         .from('profiles')
-        .select('username, email, created_at, last_username_change_at, last_email_change_at')
+        .select('username, email, learning_mode, created_at, last_username_change_at, last_email_change_at')
         .eq('id', auth.user.id)
         .maybeSingle();
+
+      if (error && hasMissingLearningModeColumn(error)) {
+        const fallback = await supabase
+          .from('profiles')
+          .select('username, email, created_at, last_username_change_at, last_email_change_at')
+          .eq('id', auth.user.id)
+          .maybeSingle();
+        data = fallback.data
+          ? { ...fallback.data, learning_mode: null }
+          : null;
+        error = fallback.error;
+      }
 
       if (!active) return;
       if (error) {
@@ -98,10 +117,12 @@ export default function Account() {
 
       const nextUsername = data?.username || auth.profile?.username || auth.user?.user_metadata?.username || '';
       const nextEmail = data?.email || auth.user?.email || '';
+      const nextLearningMode = normalizeLearningMode(data?.learning_mode || auth.profile?.learning_mode);
       setSummaryState({
         loading: false,
         username: nextUsername,
         email: nextEmail,
+        learningMode: nextLearningMode,
         profileCreatedAt: data?.created_at || null,
         lastUsernameChangeAt: data?.last_username_change_at || null,
         lastEmailChangeAt: data?.last_email_change_at || null,
@@ -112,7 +133,7 @@ export default function Account() {
     return () => {
       active = false;
     };
-  }, [auth?.user?.id, auth?.profile?.username, auth?.user?.email, supabaseConfig.ok]);
+  }, [auth?.user?.id, auth?.profile?.username, auth?.profile?.learning_mode, auth?.user?.email, supabaseConfig.ok]);
 
   const usernameRemainingDays = getRemainingDays(summaryState.lastUsernameChangeAt);
   const emailRemainingDays = getRemainingDays(summaryState.lastEmailChangeAt);
@@ -136,6 +157,7 @@ export default function Account() {
     && nextEmail !== currentEmail.toLowerCase();
   const memberSince = formatMemberSince(summaryState.profileCreatedAt || auth?.user?.created_at || null);
   const canConfirmDelete = deleteConfirmText.trim() === 'DELETE' && !deletingAccount;
+  const currentLearningMode = normalizeLearningMode(summaryState.learningMode || auth?.profile?.learning_mode);
 
   const onResetPassword = async () => {
     if (sendingReset) return;
@@ -160,6 +182,28 @@ export default function Account() {
       return;
     }
     setSummaryMsg({ type: 'success', text: 'Password reset email sent.' });
+  };
+
+  const onSaveLearningMode = async (nextMode) => {
+    const normalized = normalizeLearningMode(nextMode);
+    if (!auth?.user?.id || savingLearningMode || normalized === currentLearningMode) return;
+
+    setSavingLearningMode(true);
+    setSummaryMsg({ type: '', text: '' });
+    const result = await auth.updateLearningMode?.(normalized);
+    setSavingLearningMode(false);
+    if (!result?.ok) {
+      setSummaryMsg({ type: 'error', text: result?.error || 'Could not update learning mode.' });
+      return;
+    }
+
+    const storedMode = normalizeLearningMode(result?.learningMode || normalized);
+    setSummaryState((prev) => ({
+      ...prev,
+      learningMode: storedMode,
+    }));
+    setSummaryMsg({ type: 'success', text: 'Learning mode updated.' });
+    auth.refresh?.();
   };
 
   const onDeleteAccount = async () => {
@@ -417,6 +461,38 @@ export default function Account() {
                   <div className={styles.cooldownText}>You can change your email again in {emailRemainingDays} day(s).</div>
                 ) : null}
               </div>
+
+              <div className={styles.summaryItem}>
+                <div className={styles.label}>Learning mode</div>
+                <div className={styles.modeHint}>Choose how lesson locking works for your account.</div>
+                <div className={styles.modeSwitch} role="radiogroup" aria-label="Learning mode">
+                  <button
+                    type="button"
+                    role="radio"
+                    aria-checked={currentLearningMode === LEARNING_MODE_GUIDED}
+                    className={`${styles.modeChip} ${currentLearningMode === LEARNING_MODE_GUIDED ? styles.modeChipActive : ''}`}
+                    onClick={() => onSaveLearningMode(LEARNING_MODE_GUIDED)}
+                    disabled={savingLearningMode}
+                  >
+                    Guided roadmap
+                  </button>
+                  <button
+                    type="button"
+                    role="radio"
+                    aria-checked={currentLearningMode === LEARNING_MODE_FREE}
+                    className={`${styles.modeChip} ${currentLearningMode === LEARNING_MODE_FREE ? styles.modeChipActive : ''}`}
+                    onClick={() => onSaveLearningMode(LEARNING_MODE_FREE)}
+                    disabled={savingLearningMode}
+                  >
+                    Free exploration
+                  </button>
+                </div>
+                <div className={styles.modeHint}>
+                  {currentLearningMode === LEARNING_MODE_FREE
+                    ? 'All lessons are unlocked. Explore in any order.'
+                    : 'Follow the recommended lesson order with sequential locking.'}
+                </div>
+              </div>
             </div>
 
             <div className={styles.memberSinceRow}>
@@ -596,6 +672,11 @@ function validateEmail(value) {
   if (!value) return '';
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return 'Enter a valid email address.';
   return '';
+}
+
+function hasMissingLearningModeColumn(error) {
+  const message = String(error?.message || '').toLowerCase();
+  return message.includes('learning_mode') && message.includes('column');
 }
 
 function ChangeNameModal({

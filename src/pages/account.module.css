@@ -229,6 +229,43 @@
   flex-wrap: wrap;
 }
 
+.modeHint {
+  margin-top: 0.48rem;
+  font-size: 0.8rem;
+  color: var(--sl-muted);
+  line-height: 1.45;
+}
+
+.modeSwitch {
+  margin-top: 0.6rem;
+  display: flex;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+}
+
+.modeChip {
+  height: 34px;
+  border-radius: 999px;
+  border: 1px solid rgba(226, 238, 251, 0.2);
+  background: rgba(111, 132, 157, 0.08);
+  color: rgba(226, 238, 251, 0.92);
+  padding: 0 0.82rem;
+  font-size: 0.8rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.modeChip:focus-visible {
+  outline: 2px solid rgba(124, 242, 176, 0.72);
+  outline-offset: 2px;
+}
+
+.modeChipActive {
+  border-color: rgba(124, 242, 176, 0.38);
+  background: rgba(124, 242, 176, 0.12);
+  color: #b7f8d2;
+}
+
 .dangerCard {
   margin-top: 1.35rem;
   border: 1px solid rgba(255, 132, 132, 0.25);
