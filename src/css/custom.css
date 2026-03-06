@@ -723,6 +723,7 @@ code {
 .sl-try-page {
   padding: 1.25rem 1rem 1.5rem;
   overflow-x: hidden;
+  position: relative;
 }
 
 .sl-try-title {
@@ -828,6 +829,28 @@ code {
   height: auto;
 }
 
+.sl-hint-demo-slot {
+  width: 100%;
+  min-width: 0;
+}
+
+.sl-try-topRow {
+  margin-top: 0.7rem;
+}
+
+.sl-try-hint-text {
+  min-width: 0;
+  width: 100%;
+}
+
+.sl-try-hint-video {
+  width: 100%;
+}
+
+.sl-hint-demo-slot:not(.is-active) {
+  visibility: hidden;
+}
+
 #hint-overlay {
   position: fixed;
   inset: 0;
@@ -849,17 +872,22 @@ code {
   justify-content: center;
 }
 
+#try-hint-modal-content {
+  width: min(720px, 90%);
+}
+
 #try-hint {
   width: 100%;
   max-width: 720px;
 }
 
-#try-hint-content {
+#try-hint-text,
+#try-hint-videoWrap {
   transform-origin: top left;
 }
 
-#hint-modal #try-hint-content {
-  width: min(720px, 90%);
+#hint-modal #try-hint-text {
+  width: 100%;
   background: rgba(12, 16, 22, 0.96);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
@@ -869,8 +897,28 @@ code {
     0 2px 6px rgba(0, 0, 0, 0.25);
 }
 
-#try-hint > #try-hint-content {
+#hint-modal #try-hint-videoWrap {
+  max-width: 100%;
+}
+
+#try-hint-inline-text > #try-hint-text {
   width: 100%;
+}
+
+#try-hint-inline-video > #try-hint-videoWrap {
+  width: 100%;
+}
+
+@media (min-width: 1200px) {
+  #try-hint-inline-video {
+    display: none;
+  }
+
+  .sl-hint-demo-slot #try-hint-videoWrap {
+    margin: 0;
+    width: 100%;
+    max-width: 100%;
+  }
 }
 
 .sl-try-hintHeader {
@@ -895,14 +943,17 @@ code {
   background: rgba(255, 255, 255, 0.1);
 }
 
-@keyframes runHighlight {
+@keyframes runPulse {
   0% {
+    transform: scale(1);
     box-shadow: 0 0 0 rgba(120, 255, 180, 0);
   }
   50% {
-    box-shadow: 0 0 18px rgba(120, 255, 180, 0.45);
+    transform: scale(1.04);
+    box-shadow: 0 0 18px rgba(100, 255, 180, 0.45);
   }
   100% {
+    transform: scale(1);
     box-shadow: 0 0 0 rgba(120, 255, 180, 0);
   }
 }
@@ -923,11 +974,26 @@ code {
 }
 
 .run-highlight {
-  animation: runHighlight 1.2s ease-out 1;
+  animation: runPulse 1.1s ease-in-out 2;
 }
 
 .editor-pulse {
-  animation: editorPulse 1.8s ease-out 1;
+  animation: editorPulse 0.9s ease-in-out 3;
+}
+
+@keyframes demoReveal {
+  0% {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.sl-demo-reveal {
+  animation: demoReveal 280ms ease-out forwards;
 }
 
 .sl-try-editorFooter {

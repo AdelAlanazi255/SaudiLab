@@ -921,62 +921,124 @@ function getHtmlTryHint(lessonId) {
 function TryHint({ hint, onDismissed }) {
   const inlineSlotRef = useRef(null);
   const overlayRef = useRef(null);
-  const modalWrapRef = useRef(null);
-  const hintRef = useRef(null);
+  const textRef = useRef(null);
+  const videoRef = useRef(null);
+  const demoSlotRef = useRef(null);
+  const [overlayTextNode, setOverlayTextNode] = useState(null);
+  const [overlayVideoNode, setOverlayVideoNode] = useState(null);
+  const [inlineTextNode, setInlineTextNode] = useState(null);
+  const [inlineVideoNode, setInlineVideoNode] = useState(null);
+  const [demoSlotNode, setDemoSlotNode] = useState(null);
   const [inlineNode, setInlineNode] = useState(null);
-  const [modalNode, setModalNode] = useState(null);
   const [overlayVisible, setOverlayVisible] = useState(true);
   const [isClosing, setIsClosing] = useState(false);
-  const [portalTarget, setPortalTarget] = useState('overlay');
+  const [textTarget, setTextTarget] = useState('overlay');
+  const [videoTarget, setVideoTarget] = useState('overlay');
+  const [desktopSplitActive, setDesktopSplitActive] = useState(false);
+  const [videoRevealActive, setVideoRevealActive] = useState(false);
   const ListTag = hint.ordered ? 'ol' : 'ul';
-  const portalContainer = portalTarget === 'overlay' && overlayVisible ? modalNode : inlineNode;
-  const canPortal = Boolean(portalContainer);
-  const setModalRef = useCallback((node) => {
-    modalWrapRef.current = node;
-    setModalNode((prev) => (prev === node ? prev : node));
+  const textPortalContainer = textTarget === 'overlay' && overlayVisible ? overlayTextNode : inlineTextNode;
+  const videoPortalContainer =
+    videoTarget === 'overlay' && overlayVisible
+      ? overlayVideoNode
+      : videoTarget === 'slot'
+        ? demoSlotNode
+        : inlineVideoNode;
+  const canPortalText = Boolean(textPortalContainer);
+  const canPortalVideo = Boolean(videoPortalContainer);
+
+  const setOverlayTextRef = useCallback((node) => {
+    setOverlayTextNode((prev) => (prev === node ? prev : node));
+  }, []);
+  const setOverlayVideoRef = useCallback((node) => {
+    setOverlayVideoNode((prev) => (prev === node ? prev : node));
   }, []);
   const setInlineRef = useCallback((node) => {
     inlineSlotRef.current = node;
     setInlineNode((prev) => (prev === node ? prev : node));
   }, []);
+  const setInlineTextRef = useCallback((node) => {
+    setInlineTextNode((prev) => (prev === node ? prev : node));
+  }, []);
+  const setInlineVideoRef = useCallback((node) => {
+    setInlineVideoNode((prev) => (prev === node ? prev : node));
+  }, []);
+  const setDemoSlotRef = useCallback((node) => {
+    demoSlotRef.current = node;
+    setDemoSlotNode((prev) => (prev === node ? prev : node));
+  }, []);
 
   useEffect(() => {
     setOverlayVisible(true);
     setIsClosing(false);
-    setPortalTarget('overlay');
+    setTextTarget('overlay');
+    setVideoTarget('overlay');
+    setDesktopSplitActive(false);
+    setVideoRevealActive(false);
   }, [hint]);
 
   const onClose = () => {
-    if (!hintRef.current || !inlineNode || !overlayRef.current) {
+    if (!textRef.current || !videoRef.current || !inlineNode || !overlayRef.current) {
       setOverlayVisible(false);
       return;
     }
 
-    const hintEl = hintRef.current;
-    const first = hintEl.getBoundingClientRect();
+    const textEl = textRef.current;
+    const textStart = textEl.getBoundingClientRect();
+    const videoStart = videoRef.current.getBoundingClientRect();
     const overlay = overlayRef.current;
     const inlineSlot = inlineNode;
-    inlineSlot.style.minHeight = `${first.height}px`;
+    const shouldSplitDesktop =
+      typeof window !== 'undefined'
+      && window.matchMedia('(min-width: 1200px)').matches
+      && Boolean(demoSlotNode);
+
+    inlineSlot.style.minHeight = `${textStart.height + (shouldSplitDesktop ? 0 : videoStart.height)}px`;
+    if (shouldSplitDesktop && demoSlotNode) {
+      demoSlotNode.style.minHeight = `${videoStart.height}px`;
+      demoSlotNode.classList.add('is-active');
+      setDesktopSplitActive(true);
+    }
+
     overlay.classList.add('hint-closing');
     setIsClosing(true);
-    setPortalTarget('inline');
+    setTextTarget('inline');
+    setVideoTarget(shouldSplitDesktop ? 'slot' : 'inline');
+    setVideoRevealActive(false);
+
+    if (shouldSplitDesktop && demoSlotNode) {
+      const triggerVideoReveal = () => {
+        if (!videoRef.current || videoRef.current.parentElement !== demoSlotNode) {
+          window.requestAnimationFrame(triggerVideoReveal);
+          return;
+        }
+        void videoRef.current.getBoundingClientRect();
+        void demoSlotNode.getBoundingClientRect();
+        window.requestAnimationFrame(() => {
+          setVideoRevealActive(true);
+        });
+      };
+      window.requestAnimationFrame(triggerVideoReveal);
+    }
 
     window.requestAnimationFrame(() => {
       window.requestAnimationFrame(() => {
-        if (!hintRef.current) {
+        if (!textRef.current || !videoRef.current) {
           setOverlayVisible(false);
           setIsClosing(false);
           return;
         }
-        const movedHintEl = hintRef.current;
-        const last = movedHintEl.getBoundingClientRect();
-        const dx = first.left - last.left;
-        const dy = first.top - last.top;
-        const sx = last.width > 0 ? first.width / last.width : 1;
-        const sy = last.height > 0 ? first.height / last.height : 1;
-        const anim = movedHintEl.animate(
+
+        const movedTextEl = textRef.current;
+        const textEnd = movedTextEl.getBoundingClientRect();
+        const textDx = textStart.left - textEnd.left;
+        const textDy = textStart.top - textEnd.top;
+        const textSx = textEnd.width > 0 ? textStart.width / textEnd.width : 1;
+        const textSy = textEnd.height > 0 ? textStart.height / textEnd.height : 1;
+
+        const textAnim = movedTextEl.animate(
           [
-            { transform: `translate(${dx}px, ${dy}px) scale(${sx}, ${sy})` },
+            { transform: `translate(${textDx}px, ${textDy}px) scale(${textSx}, ${textSy})` },
             { transform: 'translate(0, 0) scale(1, 1)' },
           ],
           {
@@ -985,21 +1047,34 @@ function TryHint({ hint, onDismissed }) {
             fill: 'both',
           },
         );
-        anim.onfinish = () => {
+
+        let doneCount = 0;
+        const finish = () => {
+          doneCount += 1;
+          if (doneCount < 2) return;
           inlineSlot.style.minHeight = '';
+          if (demoSlotNode) {
+            demoSlotNode.style.minHeight = '';
+          }
           overlay.classList.remove('hint-closing');
           setIsClosing(false);
           setOverlayVisible(false);
+          if (!shouldSplitDesktop) {
+            setDesktopSplitActive(false);
+          }
           if (typeof onDismissed === 'function') {
             onDismissed();
           }
         };
+        textAnim.onfinish = finish;
+
+        finish();
       });
     });
   };
 
-  const hintContent = (
-    <div id="try-hint-content" ref={hintRef} className="sl-try-hint">
+  const textContent = (
+    <div id="try-hint-text" ref={textRef} className="sl-try-hint">
       <div className="sl-try-hintHeader">
         <div className="sl-try-hintTitle">{hint.title}</div>
         {overlayVisible ? (
@@ -1015,17 +1090,20 @@ function TryHint({ hint, onDismissed }) {
         ))}
       </ListTag>
       <p>{hint.tip}</p>
-      <div className="sl-hint-demo">
-        <video
-          className="sl-hint-demo-video"
-          src="/demos/Demo.mp4"
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="metadata"
-        />
-      </div>
+    </div>
+  );
+
+  const videoContent = (
+    <div id="try-hint-videoWrap" ref={videoRef} className={`sl-hint-demo${videoRevealActive ? ' sl-demo-reveal' : ''}`}>
+      <video
+        className="sl-hint-demo-video"
+        src="/demos/Demo.mp4"
+        autoPlay
+        loop
+        muted
+        playsInline
+        preload="metadata"
+      />
     </div>
   );
 
@@ -1033,11 +1111,28 @@ function TryHint({ hint, onDismissed }) {
     <>
       {overlayVisible ? (
         <div id="hint-overlay" ref={overlayRef} className={isClosing ? 'hint-closing' : ''} aria-hidden="true">
-          <div id="hint-modal" ref={setModalRef} />
+          <div id="hint-modal">
+            <div id="try-hint-modal-content">
+              <div id="try-hint-modal-text" ref={setOverlayTextRef} />
+              <div id="try-hint-modal-video" ref={setOverlayVideoRef} />
+            </div>
+          </div>
         </div>
       ) : null}
-      <div id="try-hint" ref={setInlineRef} style={overlayVisible && !isClosing ? { visibility: 'hidden' } : undefined} />
-      {canPortal ? createPortal(hintContent, portalContainer) : null}
+      <div className="sl-try-layout sl-try-topRow">
+        <div id="try-hint" className="sl-try-col sl-try-hint-text" ref={setInlineRef} style={overlayVisible && !isClosing ? { visibility: 'hidden' } : undefined}>
+          <div id="try-hint-inline-text" ref={setInlineTextRef} />
+          <div id="try-hint-inline-video" ref={setInlineVideoRef} />
+        </div>
+        <div
+          id="try-hint-demo-slot"
+          className={`sl-hint-demo-slot sl-try-col sl-try-hint-video${desktopSplitActive ? ' is-active' : ''}`}
+          aria-hidden="true"
+          ref={setDemoSlotRef}
+        />
+      </div>
+      {canPortalText ? createPortal(textContent, textPortalContainer) : null}
+      {canPortalVideo ? createPortal(videoContent, videoPortalContainer) : null}
     </>
   );
 }
@@ -1045,6 +1140,7 @@ function TryHint({ hint, onDismissed }) {
 export default function TryPage({ course = 'html', lessonId = 'lesson1' }) {
   const runButtonRef = useRef(null);
   const editorContainerRef = useRef(null);
+  const runStartTimeoutRef = useRef(null);
   const runGuideTimeoutRef = useRef(null);
   const editorGuideTimeoutRef = useRef(null);
   const lessonNumber = getLessonNumber(lessonId);
@@ -1112,6 +1208,9 @@ export default function TryPage({ course = 'html', lessonId = 'lesson1' }) {
       if (editorGuideTimeoutRef.current) {
         window.clearTimeout(editorGuideTimeoutRef.current);
       }
+      if (runStartTimeoutRef.current) {
+        window.clearTimeout(runStartTimeoutRef.current);
+      }
     },
     [],
   );
@@ -1119,18 +1218,6 @@ export default function TryPage({ course = 'html', lessonId = 'lesson1' }) {
   const triggerHintGuidance = useCallback(() => {
     const runBtn = runButtonRef.current;
     const editor = editorContainerRef.current;
-
-    if (runBtn) {
-      runBtn.classList.remove('run-highlight');
-      void runBtn.offsetWidth;
-      runBtn.classList.add('run-highlight');
-      if (runGuideTimeoutRef.current) {
-        window.clearTimeout(runGuideTimeoutRef.current);
-      }
-      runGuideTimeoutRef.current = window.setTimeout(() => {
-        runBtn.classList.remove('run-highlight');
-      }, 1300);
-    }
 
     if (editor) {
       editor.classList.remove('editor-pulse');
@@ -1141,8 +1228,25 @@ export default function TryPage({ course = 'html', lessonId = 'lesson1' }) {
       }
       editorGuideTimeoutRef.current = window.setTimeout(() => {
         editor.classList.remove('editor-pulse');
-      }, 1700);
+      }, 2800);
     }
+
+    if (runStartTimeoutRef.current) {
+      window.clearTimeout(runStartTimeoutRef.current);
+    }
+    runStartTimeoutRef.current = window.setTimeout(() => {
+      const latestRunBtn = runButtonRef.current;
+      if (!latestRunBtn) return;
+      latestRunBtn.classList.remove('run-highlight');
+      void latestRunBtn.offsetWidth;
+      latestRunBtn.classList.add('run-highlight');
+      if (runGuideTimeoutRef.current) {
+        window.clearTimeout(runGuideTimeoutRef.current);
+      }
+      runGuideTimeoutRef.current = window.setTimeout(() => {
+        latestRunBtn.classList.remove('run-highlight');
+      }, 2300);
+    }, 2800);
   }, []);
 
   const cseChoicesChangedAfterSubmit = useMemo(() => {
