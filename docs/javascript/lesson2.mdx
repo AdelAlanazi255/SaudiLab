@@ -1,4 +1,4 @@
-﻿---
+---
 id: lesson2
 title: "Lesson 2: Variables and Data Types"
 ---
@@ -15,33 +15,75 @@ import LessonShell from '@site/src/components/LessonShell';
   tryPath="/javascript/lesson2/try"
 >
 
-What You'll Learn
-- Declare variables with let and const
-- Work with strings, numbers, and booleans
-- Inspect values with console.log
+## 1. Introduction
+
+A variable is a named place to store a value.
+
+You can think of it like a labeled box:
+- the label is the variable name
+- the value is what is inside the box
 
 ---
 
-Core Concept
+## 2. Why Variables Matter
 
-Variables store data you want to reuse. Use const for values that should not be reassigned, and let when values can change.
+Variables help you store information and use it again later.
+
+This makes your code easier to read and update.
 
 ---
 
-Example
+## 3. Creating a Variable with `let`
+
+Use `let` to create a variable:
 
 ~~~javascript
-const studentName = "Ahmad";
-let score = 10;
-score = score + 5;
-console.log(studentName, score);
+let name = "Adel";
 ~~~
+
+Here, `name` stores text.
 
 ---
 
-Practice
+## 4. Simple Data Types
 
-Create two variables and log a sentence that combines both values.
+In this lesson, we use 3 basic data types:
+
+- **string** = text  
+Example: `"Adel"`
+
+- **number** = numeric value  
+Example: `21`
+
+- **boolean** = `true` or `false`  
+Example: `true`
+
+---
+
+## 5. Showing Variable Values
+
+Use `console.log()` to print variable values in the Console Output panel.
+
+~~~javascript
+let name = "Adel";
+let age = 21;
+let isStudent = true;
+
+console.log(name);
+console.log(age);
+console.log(isStudent);
+~~~
+
+Press **RUN** to see the output.
+
+---
+
+## 6. Quick Recap
+
+- A variable stores a value.
+- `let` creates a variable.
+- Strings are text, numbers are numbers, and booleans are true/false.
+- `console.log()` prints values to the Console Output panel.
 
 </LessonShell>
 

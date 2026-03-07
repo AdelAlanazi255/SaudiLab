@@ -1,4 +1,4 @@
-﻿---
+---
 id: lesson10
 title: "Lesson 10: Events and Interaction"
 ---
@@ -15,34 +15,78 @@ import LessonShell from '@site/src/components/LessonShell';
   tryPath="/javascript/lesson10/try"
 >
 
-What You'll Learn
-- Listen for user events
-- Run logic when events fire
-- Update UI based on interactions
+## 1. What Events Are
+
+Websites often respond to user actions.
+
+Examples:
+- clicking a button
+- typing in a field
+- moving the mouse
+
+These actions are called **events**.
+
+JavaScript can detect events and run code.
 
 ---
 
-Core Concept
+## 2. The Click Event
 
-Events let your app respond to user actions like clicks and typing.
+One common event is a **click**.
+
+When a user clicks a button, JavaScript can run a function.
 
 ---
 
-Example
+## 3. Adding an Event Listener
 
 ~~~javascript
-document.body.innerHTML = "<button id=\"btn\">Click me</button>";
-const button = document.getElementById("btn");
-button.addEventListener("click", () => {
-  console.log("Button clicked");
+element.addEventListener("click", function() {
+  // code runs when the button is clicked
 });
 ~~~
 
+Simple meaning:
+- we select an element
+- we tell JavaScript to listen for a click
+- when the click happens, the code runs
+
 ---
 
-Practice
+## 4. Simple Example
 
-Add another event listener that responds to keyboard input.
+~~~javascript
+let button = document.querySelector("button");
+
+button.addEventListener("click", function() {
+  console.log("Button clicked!");
+});
+~~~
+
+Each time the user clicks the button, the code runs.
+
+---
+
+## 5. Changing the Page on Click
+
+~~~javascript
+let button = document.querySelector("button");
+let message = document.querySelector("p");
+
+button.addEventListener("click", function() {
+  message.textContent = "You clicked the button!";
+});
+~~~
+
+JavaScript listens for the click and updates the page.
+
+---
+
+## 6. Quick Recap
+
+- Events happen when users interact with the page.
+- JavaScript can listen for events.
+- Code runs when the event happens.
 
 </LessonShell>
 

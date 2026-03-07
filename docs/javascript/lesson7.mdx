@@ -1,4 +1,4 @@
-﻿---
+---
 id: lesson7
 title: "Lesson 7: Arrays"
 ---
@@ -15,32 +15,78 @@ import LessonShell from '@site/src/components/LessonShell';
   tryPath="/javascript/lesson7/try"
 >
 
-What You'll Learn
-- Create and read arrays
-- Access items by index
-- Loop through array values
+## 1. What an Array Is
 
----
+Sometimes we want to store multiple values in one place.
 
-Core Concept
-
-Arrays store ordered collections of values. Each item has an index starting at 0.
-
----
-
-Example
+Instead of:
 
 ~~~javascript
-const topics = ["HTML", "CSS", "JavaScript"];
-console.log(topics[0]);
-console.log(topics.length);
+let student1 = "Ali";
+let student2 = "Sara";
+let student3 = "Omar";
+~~~
+
+We can use one array:
+
+~~~javascript
+let students = ["Ali", "Sara", "Omar"];
+~~~
+
+Arrays store a list of values.
+
+---
+
+## 2. Array Index
+
+Each item in an array has a position called an index.
+
+Important rule:
+Arrays start counting from **0**, not 1.
+
+~~~javascript
+let students = ["Ali", "Sara", "Omar"];
+
+// students[0] is "Ali"
+// students[1] is "Sara"
+// students[2] is "Omar"
 ~~~
 
 ---
 
-Practice
+## 3. Accessing Array Values
 
-Add a new item to the array and print all items with a loop.
+Use square brackets `[ ]` to access items.
+
+~~~javascript
+let fruits = ["Apple", "Banana", "Orange"];
+
+console.log(fruits[0]);
+console.log(fruits[1]);
+console.log(fruits[2]);
+~~~
+
+---
+
+## 4. Changing an Array Value
+
+You can update a value by using its index.
+
+~~~javascript
+let fruits = ["Apple", "Banana", "Orange"];
+
+fruits[1] = "Mango";
+
+console.log(fruits);
+~~~
+
+---
+
+## 5. Quick Recap
+
+- Arrays store multiple values.
+- We access items using indexes.
+- Arrays start counting from 0.
 
 </LessonShell>
 

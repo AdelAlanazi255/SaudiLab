@@ -1,4 +1,4 @@
-﻿---
+---
 id: lesson4
 title: "Lesson 4: Conditionals"
 ---
@@ -15,36 +15,81 @@ import LessonShell from '@site/src/components/LessonShell';
   tryPath="/javascript/lesson4/try"
 >
 
-What You'll Learn
-- Write if and else statements
-- Check multiple conditions with else if
-- Run code only when a condition is true
+## 1. Introduction
+
+Programs often need to make decisions.
+
+A conditional lets JavaScript choose what to do based on whether something is true or false.
 
 ---
 
-Core Concept
+## 2. Using `if`
 
-Conditionals control program flow. They allow your code to choose different paths based on data.
+`if` checks a condition.
 
----
-
-Example
+If the condition is true, that block runs.
 
 ~~~javascript
-const temperature = 32;
+let age = 20;
 
-if (temperature > 30) {
-  console.log("It is hot today.");
-} else {
-  console.log("Weather is mild.");
+if (age >= 18) {
+  console.log("Adult");
 }
 ~~~
 
 ---
 
-Practice
+## 3. Using `else`
 
-Add an else if branch for a cold temperature range.
+`else` runs when the `if` condition is false.
+
+~~~javascript
+let age = 16;
+
+if (age >= 18) {
+  console.log("Adult");
+} else {
+  console.log("Minor");
+}
+~~~
+
+---
+
+## 4. Using `else if`
+
+`else if` gives one extra choice in the middle.
+
+~~~javascript
+let score = 75;
+
+if (score >= 90) {
+  console.log("Excellent");
+} else if (score >= 60) {
+  console.log("Good job");
+} else {
+  console.log("Keep practicing");
+}
+~~~
+
+---
+
+## 5. Simple Real-World Example
+
+Imagine checking test results:
+- high score = "Excellent"
+- middle score = "Good job"
+- lower score = "Keep practicing"
+
+Conditionals help JavaScript choose the correct message.
+
+---
+
+## 6. Quick Recap
+
+- Conditionals help JavaScript make decisions.
+- `if` checks a condition.
+- `else` runs when the condition is false.
+- `else if` adds another possible branch.
 
 </LessonShell>
 

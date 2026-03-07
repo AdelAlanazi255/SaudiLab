@@ -5,6 +5,7 @@ import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
 import LandscapeTip from '@site/src/components/LandscapeTip';
 import ColorPaletteTool from '@site/src/components/ColorPaletteTool';
+import JavascriptTryWorkspace from '@site/src/components/JavascriptTryWorkspace';
 import { getTryStarter } from '@site/src/pages/_tryData';
 import { canAccessLesson, getLastUnlockedLessonPath } from '@site/src/utils/lessonAccess';
 import { getLessonMeta } from '@site/src/data/lessons';
@@ -50,6 +51,19 @@ const editorFooterStyle = {
   gap: '0.6rem',
   justifyContent: 'flex-start',
   background: 'rgba(226, 238, 251, 0.02)',
+};
+
+const jsRunBlockStyle = {
+  height: '56px',
+  padding: '0 0.75rem',
+  display: 'flex',
+  alignItems: 'center',
+  gap: '0.6rem',
+  justifyContent: 'flex-start',
+  border: '1px solid var(--sl-border)',
+  borderRadius: '16px',
+  background: 'linear-gradient(180deg, var(--sl-surface), var(--sl-surface-2))',
+  boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.02)',
 };
 
 const editorInputWrapStyle = {
@@ -138,78 +152,7 @@ function withPreviewTheme(doc) {
   return `<!DOCTYPE html><html><head>${previewThemeStyle}</head><body>${source}</body></html>`;
 }
 
-function makeJavascriptRunnerDoc(source) {
-  const code = JSON.stringify(String(source || '')).replace(/<\//g, '<\\/');
-  return `<!DOCTYPE html>
-<html>
-  <head>
-    ${previewThemeStyle}
-    <style>
-      #console-root {
-        white-space: pre-wrap;
-        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-        font-size: 14px;
-        line-height: 1.55;
-      }
-      .log { color: #e5e7eb; }
-      .error { color: #fca5a5; }
-    </style>
-  </head>
-  <body>
-    <div id="console-root"></div>
-    <script>
-      (function () {
-        var output = document.getElementById('console-root');
-
-        function stringify(value) {
-          if (typeof value === 'string') return value;
-          try {
-            return JSON.stringify(value);
-          } catch (e) {
-            return String(value);
-          }
-        }
-
-        function writeLine(kind, text) {
-          var line = document.createElement('div');
-          line.className = kind;
-          line.textContent = text;
-          output.appendChild(line);
-        }
-
-        var originalConsoleLog = console.log.bind(console);
-        console.log = function () {
-          var message = Array.prototype.map.call(arguments, stringify).join(' ');
-          writeLine('log', message);
-          originalConsoleLog.apply(console, arguments);
-        };
-
-        window.onerror = function (message, source, lineno, colno) {
-          writeLine('error', 'Runtime Error: ' + message + ' (' + lineno + ':' + colno + ')');
-          return true;
-        };
-
-        window.onunhandledrejection = function (event) {
-          var reason = event && event.reason ? stringify(event.reason) : 'Unknown promise rejection';
-          writeLine('error', 'Unhandled Rejection: ' + reason);
-        };
-
-        try {
-          var fn = new Function(${code});
-          fn();
-        } catch (error) {
-          writeLine('error', 'Runtime Error: ' + (error && error.message ? error.message : String(error)));
-        }
-      })();
-    </script>
-  </body>
-</html>`;
-}
-
 function buildOutputDoc(course, source) {
-  if (course === 'javascript') {
-    return makeJavascriptRunnerDoc(source);
-  }
   return withPreviewTheme(source);
 }
 
@@ -1071,6 +1014,234 @@ function getCssTryHint(lessonId) {
   return null;
 }
 
+function getJavascriptTryMode(lessonNumber) {
+  if (lessonNumber === 9) return 'console+preview';
+  if (lessonNumber === 10) return 'preview';
+  return 'console';
+}
+
+function getJavascriptTryHint(lessonId) {
+  const lessonNumber = getLessonNumber(lessonId);
+  const mode = getJavascriptTryMode(lessonNumber);
+
+  if (lessonNumber === 1) {
+    return {
+      title: 'Hint',
+      intro: 'Start by running the code to see your first JavaScript output.',
+      ordered: false,
+      items: [
+        <>Press RUN and look at the Console Output panel.</>,
+        <>Change the text inside the quotes.</>,
+        <>Press RUN again to see the new output.</>,
+      ],
+      tip: <>Tip: <code>console.log()</code> prints messages to the console.</>,
+    };
+  }
+
+  if (lessonNumber === 2) {
+    return {
+      title: 'Hint',
+      intro: 'Start by changing one variable value, then press RUN.',
+      ordered: false,
+      items: [
+        <>Edit the text stored in the <code>name</code> variable.</>,
+        <>Change the number in the <code>age</code> variable.</>,
+        <>Try changing the boolean value from <code>true</code> to <code>false</code>.</>,
+        <>Press RUN and observe the Console Output.</>,
+      ],
+      tip: <>Tip: A variable stores a value that JavaScript can use later.</>,
+    };
+  }
+
+  if (lessonNumber === 3) {
+    return {
+      title: 'Hint',
+      intro: 'Start by changing the numbers, then press RUN.',
+      ordered: false,
+      items: [
+        <>Change the numbers in the addition example.</>,
+        <>Try using different operators like <code>+</code> or <code>*</code>.</>,
+        <>Modify the comparison to see when it returns <code>true</code> or <code>false</code>.</>,
+        <>Press RUN and observe the Console Output.</>,
+      ],
+      tip: <>Tip: Operators allow JavaScript to calculate values and compare them.</>,
+    };
+  }
+
+  if (lessonNumber === 4) {
+    return {
+      title: 'Hint',
+      intro: 'Start by changing the value being checked, then press RUN.',
+      ordered: false,
+      items: [
+        <>Edit the value in the variable.</>,
+        <>Press RUN and see which message appears.</>,
+        <>Try a different value so the <code>else</code> block runs.</>,
+        <>If there is an <code>else if</code>, test that too.</>,
+      ],
+      tip: <>Tip: Conditionals help JavaScript choose between different results.</>,
+    };
+  }
+
+  if (lessonNumber === 5) {
+    return {
+      title: 'Hint',
+      intro: 'Start by changing the loop values, then press RUN.',
+      ordered: false,
+      items: [
+        <>Change the number where the loop starts.</>,
+        <>Change the number where the loop stops.</>,
+        <>Try printing a different message inside the loop.</>,
+        <>Press RUN and observe the Console Output.</>,
+      ],
+      tip: <>Tip: Loops repeat the same code multiple times.</>,
+    };
+  }
+
+  if (lessonNumber === 6) {
+    return {
+      title: 'Hint',
+      intro: 'Start by running the function, then experiment with it.',
+      ordered: false,
+      items: [
+        <>Change the name inside the function call.</>,
+        <>Call the function multiple times.</>,
+        <>Try editing the message inside the function.</>,
+        <>Press RUN and observe the Console Output.</>,
+      ],
+      tip: <>Tip: Functions let you reuse the same code many times.</>,
+    };
+  }
+
+  if (lessonNumber === 7) {
+    return {
+      title: 'Hint',
+      intro: 'Start by exploring the array values.',
+      ordered: false,
+      items: [
+        <>Change the items inside the array.</>,
+        <>Try accessing a different index like <code>[1]</code> or <code>[2]</code>.</>,
+        <>Modify one of the array values.</>,
+        <>Press RUN and observe the Console Output.</>,
+      ],
+      tip: <>Tip: Arrays store multiple values inside one variable.</>,
+    };
+  }
+
+  if (lessonNumber === 8) {
+    return {
+      title: 'Hint',
+      intro: 'Start by exploring the object values.',
+      ordered: false,
+      items: [
+        <>Change one of the object properties.</>,
+        <>Try printing a different property using <code>console.log()</code>.</>,
+        <>Modify the age or job value.</>,
+        <>Press RUN and observe the Console Output.</>,
+      ],
+      tip: <>Tip: Objects help organize related information together.</>,
+    };
+  }
+
+  if (lessonNumber === 9) {
+    return {
+      title: 'Hint',
+      intro: 'Start by running the code.',
+      ordered: false,
+      items: [
+        <>Press RUN and watch the page preview change.</>,
+        <>Change the text inside the quotes.</>,
+        <>Press RUN again to update the page.</>,
+        <>Check the Console Output to see messages from the script.</>,
+      ],
+      tip: <>Tip: JavaScript can change webpage content using the DOM.</>,
+    };
+  }
+
+  if (lessonNumber === 10) {
+    return {
+      title: 'Hint',
+      intro: 'Start by clicking the button in the preview.',
+      ordered: false,
+      items: [
+        <>Press RUN to load the page.</>,
+        <>Click the button in the preview.</>,
+        <>Watch how the text changes.</>,
+        <>Try editing the message inside the code.</>,
+        <>Press RUN again and test it.</>,
+      ],
+      tip: <>Tip: JavaScript can react to user actions using events.</>,
+    };
+  }
+
+  if (mode === 'console') {
+    return {
+      title: 'Hint',
+      intro: 'Use RUN to execute your JavaScript and read the result in Console Output.',
+      ordered: false,
+      items: [
+        <>Write one small change in the editor, then press RUN.</>,
+        <>Use <code>console.log()</code> to print values and follow your program flow.</>,
+        <>If your code fails, read the error line in Console Output and fix one issue at a time.</>,
+      ],
+      tip: <>Tip: Use clear logs like <code>console.log("score:", score)</code> while learning logic.</>,
+    };
+  }
+
+  if (mode === 'console+preview') {
+    return {
+      title: 'Hint',
+      intro: 'This lesson is a transition: check logic in Console Output and DOM changes in Preview.',
+      ordered: false,
+      items: [
+        <>Use <code>console.log()</code> to confirm values and steps.</>,
+        <>Use DOM methods like <code>document.getElementById()</code> to select and update elements.</>,
+        <>Press RUN after each small edit and compare Console Output with Preview changes.</>,
+      ],
+      tip: <>Tip: Keep one log line near each DOM change while you debug.</>,
+    };
+  }
+
+  return {
+    title: 'Hint',
+    intro: 'Focus on page interaction in Preview for this lesson.',
+    ordered: false,
+    items: [
+      <>Attach event handlers like <code>addEventListener("click", ...)</code>.</>,
+      <>Update text, classes, or styles after user actions.</>,
+      <>Press RUN to reload your script, then test the interaction in Preview.</>,
+    ],
+    tip: <>Tip: Build one interaction at a time and test immediately after each change.</>,
+  };
+}
+
+function TryHintTextOnly({ hint, onDismissed }) {
+  const ListTag = hint.ordered ? 'ol' : 'ul';
+
+  useEffect(() => {
+    if (typeof onDismissed === 'function') {
+      onDismissed();
+    }
+  }, [hint, onDismissed]);
+
+  return (
+    <div id="try-hint" className="sl-try-hint-text">
+      <div id="try-hint-text" className="sl-try-hint">
+        <div className="sl-try-hintHeader">
+          <div className="sl-try-hintTitle">{hint.title}</div>
+        </div>
+        <p>{hint.intro}</p>
+        <ListTag>
+          {hint.items.map((item, index) => (
+            <li key={`${hint.title}-${index + 1}`}>{item}</li>
+          ))}
+        </ListTag>
+        <p>{hint.tip}</p>
+      </div>
+    </div>
+  );
+}
+
 function TryHint({ hint, onDismissed }) {
   const inlineSlotRef = useRef(null);
   const overlayRef = useRef(null);
@@ -1298,9 +1469,15 @@ export default function TryPage({ course = 'html', lessonId = 'lesson1' }) {
   const editorGuideTimeoutRef = useRef(null);
   const lessonNumber = getLessonNumber(lessonId);
   const isCse = course === 'cse';
+  const isJavascript = course === 'javascript';
+  const javascriptMode = useMemo(
+    () => (isJavascript ? getJavascriptTryMode(lessonNumber) : null),
+    [isJavascript, lessonNumber],
+  );
   const tryHint = useMemo(() => {
     if (course === 'html') return getHtmlTryHint(lessonId);
     if (course === 'css') return getCssTryHint(lessonId);
+    if (course === 'javascript') return getJavascriptTryHint(lessonId);
     return null;
   }, [course, lessonId]);
   const cseScenario = useMemo(() => getCseScenario(lessonId), [lessonId]);
@@ -1309,13 +1486,45 @@ export default function TryPage({ course = 'html', lessonId = 'lesson1' }) {
   const initialCode = useMemo(() => getTryStarter(course, lessonId), [course, lessonId]);
   const [code, setCode] = useState(initialCode);
   const [output, setOutput] = useState(initialCode);
+  const [runToken, setRunToken] = useState(0);
+  const [hasRun, setHasRun] = useState(false);
   const [runHover, setRunHover] = useState(false);
   const [backHover, setBackHover] = useState(false);
   const [cseStep, setCseStep] = useState(1);
   const [cseChoices, setCseChoices] = useState(() => buildCseChoices(cseStepConfig));
   const [cseSubmittedChoices, setCseSubmittedChoices] = useState(null);
   const [cseSubmittedOutcome, setCseSubmittedOutcome] = useState(null);
-  const outputDoc = useMemo(() => buildOutputDoc(course, output), [course, output]);
+  const outputDoc = useMemo(
+    () => (isJavascript ? '' : buildOutputDoc(course, output)),
+    [isJavascript, course, output],
+  );
+  const editorInputWrapResolvedStyle = useMemo(() => {
+    if (!isJavascript) return editorInputWrapStyle;
+    return {
+      ...editorInputWrapStyle,
+      minHeight: 0,
+      maxHeight: '100%',
+      height: '100%',
+      flex: '1 1 auto',
+      overflow: 'hidden',
+    };
+  }, [isJavascript]);
+  const editorBodyResolvedStyle = useMemo(() => {
+    if (!isJavascript) return editorBodyStyle;
+    return {
+      ...editorBodyStyle,
+      height: 'calc(100% - 34px)',
+      maxHeight: 'calc(100% - 34px)',
+    };
+  }, [isJavascript]);
+  const editorPanelResolvedStyle = useMemo(() => {
+    if (!isJavascript) return editorShellStyle;
+    return {
+      ...editorShellStyle,
+      height: 'clamp(340px, 50vh, 430px)',
+      minHeight: '340px',
+    };
+  }, [isJavascript]);
   const label = courseLabel(course);
   const lessonMeta = useMemo(() => getLessonMeta(course, lessonNumber), [course, lessonNumber]);
   const lessonTitle = lessonMeta.title;
@@ -1332,13 +1541,20 @@ export default function TryPage({ course = 'html', lessonId = 'lesson1' }) {
       indentUnit: 2,
       tabSize: 2,
       autofocus: false,
-      viewportMargin: Infinity,
+      viewportMargin: isJavascript ? 20 : Infinity,
       extraKeys: {
         Tab: (cm) => cm.replaceSelection('  ', 'end'),
       },
     }),
-    [codeMirrorMode],
+    [codeMirrorMode, isJavascript],
   );
+
+  useEffect(() => {
+    setCode(initialCode);
+    setOutput(initialCode);
+    setRunToken(0);
+    setHasRun(false);
+  }, [initialCode]);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -1437,231 +1653,290 @@ export default function TryPage({ course = 'html', lessonId = 'lesson1' }) {
       <div className="sl-try-page">
         <h1 className="sl-try-title">{`${label} Lesson ${lessonNumber}: ${lessonTitle} - Try It Yourself`}</h1>
         <LandscapeTip />
-        {tryHint ? <TryHint hint={tryHint} onDismissed={triggerHintGuidance} /> : null}
+        {tryHint ? (
+          isJavascript
+            ? <TryHintTextOnly hint={tryHint} onDismissed={triggerHintGuidance} />
+            : <TryHint hint={tryHint} onDismissed={triggerHintGuidance} />
+        ) : null}
 
-        <div className="sl-try-layout">
-          <div className="sl-try-col">
-            <div ref={editorContainerRef} style={editorShellStyle} className="sl-try-panel sl-try-editor-panel editor-container">
-              <div style={panelHeaderStyle}>{isCse ? 'Scenario' : 'Editor'}</div>
-              <div style={editorBodyStyle} className="sl-try-editorBody">
-                {isCse ? (
-                  <div
-                    style={{
-                      ...editorInputWrapStyle,
-                      padding: '1rem',
-                      color: 'var(--sl-text)',
-                      background: '#0a0f14',
-                      overflow: 'auto',
-                    }}
-                  >
-                    <p style={{ marginTop: 0, marginBottom: '0.4rem', fontWeight: 700 }}>
-                      {`Step ${cseStep} of ${totalCseSteps} - ${activeStep?.title || ''}`}
-                    </p>
-                    <p style={{ marginTop: 0, marginBottom: '0.9rem' }}>{activeStep?.question}</p>
+        <div
+          className="sl-try-layout"
+          style={isJavascript ? { display: 'grid', gridTemplateColumns: '1fr', gap: '0.85rem' } : undefined}
+        >
+          <div className="sl-try-col" style={isJavascript ? { display: 'flex', flexDirection: 'column', gap: '10px' } : undefined}>
+            <div
+              ref={editorContainerRef}
+              style={editorPanelResolvedStyle}
+              className={`sl-try-panel${isJavascript ? '' : ' sl-try-editor-panel'} editor-container`}
+            >
+              <div
+                className={isJavascript ? 'sl-js-editor-shell' : undefined}
+                style={isJavascript ? { display: 'flex', flexDirection: 'column', minHeight: 0, flex: 1 } : undefined}
+              >
+                <div style={panelHeaderStyle}>{isCse ? 'Scenario' : 'Editor'}</div>
+                <div style={editorBodyResolvedStyle} className="sl-try-editorBody">
+                  {isCse ? (
+                    <div
+                      style={{
+                        ...editorInputWrapStyle,
+                        padding: '1rem',
+                        color: 'var(--sl-text)',
+                        background: '#0a0f14',
+                        overflow: 'auto',
+                      }}
+                    >
+                      <p style={{ marginTop: 0, marginBottom: '0.4rem', fontWeight: 700 }}>
+                        {`Step ${cseStep} of ${totalCseSteps} - ${activeStep?.title || ''}`}
+                      </p>
+                      <p style={{ marginTop: 0, marginBottom: '0.9rem' }}>{activeStep?.question}</p>
 
-                    <div style={{ display: 'grid', gap: '0.55rem' }}>
-                      {activeStep?.options.map((option) => {
-                        const selected = currentChoice === option.label;
-                        return (
-                          <button
-                            key={option.label}
-                            onClick={() => setScenarioChoice(option.label)}
-                            style={{
-                              textAlign: 'left',
-                              padding: '0.65rem 0.75rem',
-                              borderRadius: '14px',
-                              border: selected ? '1px solid var(--sl-accent)' : '1px solid var(--sl-border)',
-                              background: selected ? 'rgba(124,242,176,0.12)' : '#111827',
-                              color: 'var(--sl-text)',
-                              cursor: 'pointer',
-                              fontWeight: 600,
-                            }}
-                          >
-                            {option.label}
-                          </button>
-                        );
-                      })}
-                    </div>
+                      <div style={{ display: 'grid', gap: '0.55rem' }}>
+                        {activeStep?.options.map((option) => {
+                          const selected = currentChoice === option.label;
+                          return (
+                            <button
+                              key={option.label}
+                              onClick={() => setScenarioChoice(option.label)}
+                              style={{
+                                textAlign: 'left',
+                                padding: '0.65rem 0.75rem',
+                                borderRadius: '14px',
+                                border: selected ? '1px solid var(--sl-accent)' : '1px solid var(--sl-border)',
+                                background: selected ? 'rgba(124,242,176,0.12)' : '#111827',
+                                color: 'var(--sl-text)',
+                                cursor: 'pointer',
+                                fontWeight: 600,
+                              }}
+                            >
+                              {option.label}
+                            </button>
+                          );
+                        })}
+                      </div>
 
-                    <div style={{ display: 'flex', gap: '0.55rem', marginTop: '1rem', flexWrap: 'wrap' }}>
-                      <button
-                        onClick={() => setCseStep((s) => Math.max(1, s - 1))}
-                        disabled={cseStep === 1}
-                        style={{
-                          ...buttonBase,
-                          height: '36px',
-                          opacity: cseStep === 1 ? 0.5 : 1,
-                          cursor: cseStep === 1 ? 'default' : 'pointer',
-                          background: '#111827',
-                          color: 'var(--sl-text)',
-                        }}
-                      >
-                        Back
-                      </button>
-                      <button
-                        onClick={() => setCseStep((s) => Math.min(totalCseSteps, s + 1))}
-                        disabled={cseStep === totalCseSteps || !currentChoice}
-                        style={{
-                          ...buttonBase,
-                          height: '36px',
-                          opacity: cseStep === totalCseSteps || !currentChoice ? 0.5 : 1,
-                          cursor: cseStep === totalCseSteps || !currentChoice ? 'default' : 'pointer',
-                          background: '#111827',
-                          color: 'var(--sl-text)',
-                        }}
-                      >
-                        Next
-                      </button>
-                      {cseStep === totalCseSteps ? (
+                      <div style={{ display: 'flex', gap: '0.55rem', marginTop: '1rem', flexWrap: 'wrap' }}>
                         <button
-                          onClick={onSubmitCse}
-                          disabled={!allStepsAnswered}
+                          onClick={() => setCseStep((s) => Math.max(1, s - 1))}
+                          disabled={cseStep === 1}
                           style={{
                             ...buttonBase,
-                            ...primaryButtonStyle,
                             height: '36px',
-                            opacity: allStepsAnswered ? 1 : 0.5,
-                            cursor: allStepsAnswered ? 'pointer' : 'default',
+                            opacity: cseStep === 1 ? 0.5 : 1,
+                            cursor: cseStep === 1 ? 'default' : 'pointer',
+                            background: '#111827',
+                            color: 'var(--sl-text)',
                           }}
                         >
-                          Submit
+                          Back
                         </button>
-                      ) : null}
+                        <button
+                          onClick={() => setCseStep((s) => Math.min(totalCseSteps, s + 1))}
+                          disabled={cseStep === totalCseSteps || !currentChoice}
+                          style={{
+                            ...buttonBase,
+                            height: '36px',
+                            opacity: cseStep === totalCseSteps || !currentChoice ? 0.5 : 1,
+                            cursor: cseStep === totalCseSteps || !currentChoice ? 'default' : 'pointer',
+                            background: '#111827',
+                            color: 'var(--sl-text)',
+                          }}
+                        >
+                          Next
+                        </button>
+                        {cseStep === totalCseSteps ? (
+                          <button
+                            onClick={onSubmitCse}
+                            disabled={!allStepsAnswered}
+                            style={{
+                              ...buttonBase,
+                              ...primaryButtonStyle,
+                              height: '36px',
+                              opacity: allStepsAnswered ? 1 : 0.5,
+                              cursor: allStepsAnswered ? 'pointer' : 'default',
+                            }}
+                          >
+                            Submit
+                          </button>
+                        ) : null}
+                      </div>
                     </div>
-                  </div>
-                ) : (
-                  <>
-                    <div style={editorInputWrapStyle} className="sl-try-editorRoot sl-try-editorInputWrap">
-                      <TryCodeEditor
-                        value={code}
-                        options={codeMirrorOptions}
-                        onBeforeChange={(_editor, _data, value) => {
-                          setCode(value);
-                        }}
-                      />
-                    </div>
-                  </>
-                )}
+                  ) : (
+                    <>
+                      <div style={editorInputWrapResolvedStyle} className="sl-try-editorRoot sl-try-editorInputWrap">
+                        <TryCodeEditor
+                          value={code}
+                          options={codeMirrorOptions}
+                          onBeforeChange={(_editor, _data, value) => {
+                            setCode(value);
+                          }}
+                        />
+                      </div>
+                    </>
+                  )}
+                </div>
               </div>
-              <div
-                style={editorFooterStyle}
-                className={`sl-try-actions sl-try-editorFooter${!isCse && course === 'css' ? ' sl-try-actions-css' : ''}`}
-              >
-                {isCse ? (
-                  <button
-                    onClick={onResetCse}
+              {!isJavascript ? (
+                <div
+                  style={editorFooterStyle}
+                  className={`sl-try-actions sl-try-editorFooter${!isCse && course === 'css' ? ' sl-try-actions-css' : ''}`}
+                >
+                  {isCse ? (
+                    <button
+                      onClick={onResetCse}
+                      className="sl-try-action-btn"
+                      style={{
+                        ...buttonBase,
+                        ...primaryButtonStyle,
+                      }}
+                    >
+                      Reset
+                    </button>
+                  ) : (
+                    <button
+                      ref={runButtonRef}
+                      onClick={() => {
+                        setOutput(code);
+                        if (isJavascript) {
+                          setHasRun(true);
+                          setRunToken((prev) => prev + 1);
+                        }
+                      }}
+                      onMouseEnter={() => setRunHover(true)}
+                      onMouseLeave={() => setRunHover(false)}
+                      className="sl-try-action-btn sl-try-action-primary run-button"
+                      style={{
+                        ...buttonBase,
+                        ...primaryButtonStyle,
+                        backgroundColor: runHover ? '#93f6c1' : 'var(--sl-accent)',
+                      }}
+                    >
+                      RUN
+                    </button>
+                  )}
+                  {!isCse && course === 'css' ? <ColorPaletteTool /> : null}
+                  <Link
+                    to={backPath}
+                    onMouseEnter={() => setBackHover(true)}
+                    onMouseLeave={() => setBackHover(false)}
                     className="sl-try-action-btn"
-                    style={{
-                      ...buttonBase,
-                      ...primaryButtonStyle,
-                    }}
-                  >
-                    Reset
-                  </button>
-                ) : (
-                  <button
-                    ref={runButtonRef}
-                    onClick={() => setOutput(code)}
-                    onMouseEnter={() => setRunHover(true)}
-                    onMouseLeave={() => setRunHover(false)}
-                    className="sl-try-action-btn sl-try-action-primary run-button"
-                    style={{
-                      ...buttonBase,
-                      ...primaryButtonStyle,
-                      backgroundColor: runHover ? '#93f6c1' : 'var(--sl-accent)',
-                    }}
-                  >
-                    RUN
-                  </button>
-                )}
-                {!isCse && course === 'css' ? <ColorPaletteTool /> : null}
-                <Link
-                  to={backPath}
-                  onMouseEnter={() => setBackHover(true)}
-                  onMouseLeave={() => setBackHover(false)}
-                  className="sl-try-action-btn"
-                    style={{
-                      ...buttonBase,
-                      ...ghostButtonStyle,
-                      backgroundColor: backHover ? 'rgba(226, 238, 251, 0.08)' : 'transparent',
-                    }}
-                  >
-                  {`Back to Lesson ${lessonNumber}`}
-                </Link>
-              </div>
+                      style={{
+                        ...buttonBase,
+                        ...ghostButtonStyle,
+                        backgroundColor: backHover ? 'rgba(226, 238, 251, 0.08)' : 'transparent',
+                      }}
+                    >
+                    {`Back to Lesson ${lessonNumber}`}
+                  </Link>
+                </div>
+              ) : null}
             </div>
+            {!isCse && isJavascript ? (
+              <div style={jsRunBlockStyle} className="sl-try-actions">
+                <button
+                  ref={runButtonRef}
+                  onClick={() => {
+                    setOutput(code);
+                    setHasRun(true);
+                    setRunToken((prev) => prev + 1);
+                  }}
+                  onMouseEnter={() => setRunHover(true)}
+                  onMouseLeave={() => setRunHover(false)}
+                  className="sl-try-action-btn sl-try-action-primary run-button"
+                  style={{
+                    ...buttonBase,
+                    ...primaryButtonStyle,
+                    backgroundColor: runHover ? '#93f6c1' : 'var(--sl-accent)',
+                  }}
+                >
+                  RUN
+                </button>
+              </div>
+            ) : null}
           </div>
 
           <div className="sl-try-col">
-            <div style={{ ...outputPanelStyle, display: 'flex', flexDirection: 'column' }} className="sl-try-panel sl-try-preview-panel">
-              <div style={panelHeaderStyle}>{isCse ? 'Outcome' : course === 'javascript' ? 'Results' : 'Preview'}</div>
-              <div style={outputBodyStyle}>
-                {isCse ? (
-                  <div
-                    style={{
-                      ...editorInputWrapStyle,
-                      padding: '1rem',
-                      color: 'var(--sl-text)',
-                      background: '#0a0f14',
-                      overflow: 'auto',
-                    }}
-                  >
-                    {cseSubmittedOutcome ? (
-                      <>
-                        <p style={{ marginTop: 0, marginBottom: '0.6rem', fontWeight: 700 }}>
-                          Risk Level:{' '}
-                          <span
-                            style={{
-                              color: getRiskColor(cseSubmittedOutcome.riskLevel),
-                              fontWeight: 800,
-                            }}
-                          >
-                            {cseSubmittedOutcome.riskLevel}
-                          </span>
-                        </p>
-                        <p style={{ marginTop: 0, marginBottom: '0.8rem', opacity: 0.95 }}>
-                          {getRiskMessage(cseSubmittedOutcome.riskLevel)}
-                        </p>
-                        <ul style={{ marginTop: 0, marginBottom: '0.8rem', paddingLeft: '1.1rem' }}>
-                          {(cseSubmittedOutcome.bullets || []).slice(0, 6).map((item) => (
-                            <li key={item} style={{ marginBottom: '0.35rem' }}>
-                              {item}
-                            </li>
-                          ))}
-                        </ul>
-                        <p style={{ marginTop: 0, marginBottom: '0.8rem' }}>
-                          <strong>What happened:</strong> {cseSubmittedOutcome.whatHappened}
-                        </p>
-                        <p style={{ margin: 0 }}>
-                          <strong>Next Improvement:</strong> {cseSubmittedOutcome.nextImprovement}
-                        </p>
-                        {cseChoicesChangedAfterSubmit ? (
-                          <p style={{ marginTop: '0.8rem', marginBottom: 0, color: '#facc15' }}>
-                            Your answers changed. Click Submit again to update the result.
+            {isJavascript ? (
+              <JavascriptTryWorkspace
+                mode={javascriptMode}
+                source={output}
+                runToken={runToken}
+                hasRun={hasRun}
+                lessonNumber={lessonNumber}
+                outputPanelStyle={outputPanelStyle}
+                panelHeaderStyle={panelHeaderStyle}
+                outputBodyStyle={outputBodyStyle}
+                frameStyle={frameStyle}
+              />
+            ) : (
+              <div style={{ ...outputPanelStyle, display: 'flex', flexDirection: 'column' }} className="sl-try-panel sl-try-preview-panel">
+                <div style={panelHeaderStyle}>{isCse ? 'Outcome' : 'Preview'}</div>
+                <div style={outputBodyStyle}>
+                  {isCse ? (
+                    <div
+                      style={{
+                        ...editorInputWrapStyle,
+                        padding: '1rem',
+                        color: 'var(--sl-text)',
+                        background: '#0a0f14',
+                        overflow: 'auto',
+                      }}
+                    >
+                      {cseSubmittedOutcome ? (
+                        <>
+                          <p style={{ marginTop: 0, marginBottom: '0.6rem', fontWeight: 700 }}>
+                            Risk Level:{' '}
+                            <span
+                              style={{
+                                color: getRiskColor(cseSubmittedOutcome.riskLevel),
+                                fontWeight: 800,
+                              }}
+                            >
+                              {cseSubmittedOutcome.riskLevel}
+                            </span>
                           </p>
-                        ) : null}
-                      </>
-                    ) : (
-                      <>
-                        <p style={{ marginTop: 0, marginBottom: '0.6rem' }}>
-                          Complete all {totalCseSteps} steps, then click Submit to see your risk level and summary.
-                        </p>
-                        <p style={{ margin: 0, opacity: 0.9 }}>
-                          Progress: Step {cseStep} of {totalCseSteps}
-                        </p>
-                      </>
-                    )}
-                  </div>
-                ) : (
-                  <iframe
-                    title="output"
-                    style={frameStyle}
-                    srcDoc={outputDoc}
-                    sandbox={course === 'javascript' || course === 'cse' ? 'allow-scripts' : undefined}
-                  />
-                )}
+                          <p style={{ marginTop: 0, marginBottom: '0.8rem', opacity: 0.95 }}>
+                            {getRiskMessage(cseSubmittedOutcome.riskLevel)}
+                          </p>
+                          <ul style={{ marginTop: 0, marginBottom: '0.8rem', paddingLeft: '1.1rem' }}>
+                            {(cseSubmittedOutcome.bullets || []).slice(0, 6).map((item) => (
+                              <li key={item} style={{ marginBottom: '0.35rem' }}>
+                                {item}
+                              </li>
+                            ))}
+                          </ul>
+                          <p style={{ marginTop: 0, marginBottom: '0.8rem' }}>
+                            <strong>What happened:</strong> {cseSubmittedOutcome.whatHappened}
+                          </p>
+                          <p style={{ margin: 0 }}>
+                            <strong>Next Improvement:</strong> {cseSubmittedOutcome.nextImprovement}
+                          </p>
+                          {cseChoicesChangedAfterSubmit ? (
+                            <p style={{ marginTop: '0.8rem', marginBottom: 0, color: '#facc15' }}>
+                              Your answers changed. Click Submit again to update the result.
+                            </p>
+                          ) : null}
+                        </>
+                      ) : (
+                        <>
+                          <p style={{ marginTop: 0, marginBottom: '0.6rem' }}>
+                            Complete all {totalCseSteps} steps, then click Submit to see your risk level and summary.
+                          </p>
+                          <p style={{ margin: 0, opacity: 0.9 }}>
+                            Progress: Step {cseStep} of {totalCseSteps}
+                          </p>
+                        </>
+                      )}
+                    </div>
+                  ) : (
+                    <iframe
+                      title="output"
+                      style={frameStyle}
+                      srcDoc={outputDoc}
+                    />
+                  )}
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
 

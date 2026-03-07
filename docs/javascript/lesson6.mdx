@@ -1,4 +1,4 @@
-﻿---
+---
 id: lesson6
 title: "Lesson 6: Functions Basics"
 ---
@@ -15,34 +15,77 @@ import LessonShell from '@site/src/components/LessonShell';
   tryPath="/javascript/lesson6/try"
 >
 
-What You'll Learn
-- Define reusable functions
-- Pass parameters to functions
-- Return values from functions
+## 1. What a Function Is
+
+A function is a reusable block of code.
+
+Instead of writing the same code many times, we can place it inside a function and run it whenever we need.
 
 ---
 
-Core Concept
+## 2. Creating a Function
 
-Functions group logic into reusable blocks. They improve readability and reduce repeated code.
-
----
-
-Example
+Basic syntax:
 
 ~~~javascript
-function greet(name) {
-  return `Welcome, ${name}!`;
+function greet() {
+  console.log("Hello!");
+}
+~~~
+
+Simple meaning:
+- `function` starts a function
+- `greet` is the function name
+- code inside `{ }` runs when we call the function
+
+---
+
+## 3. Calling a Function
+
+Functions do nothing until we call them.
+
+~~~javascript
+function greet() {
+  console.log("Hello!");
 }
 
-console.log(greet("Student"));
+greet();
 ~~~
 
 ---
 
-Practice
+## 4. Functions with Simple Parameters
 
-Write a function that takes two numbers and returns their product.
+~~~javascript
+function greet(name) {
+  console.log("Hello " + name);
+}
+
+greet("Adel");
+greet("Student");
+~~~
+
+The value inside the parentheses becomes the variable inside the function.
+
+---
+
+## 5. Simple Real-World Example
+
+~~~javascript
+function showScore(score) {
+  console.log("Your score is " + score);
+}
+
+showScore(85);
+~~~
+
+---
+
+## 6. Quick Recap
+
+- Functions store reusable code.
+- You create them with `function`.
+- You run them by calling their name.
 
 </LessonShell>
 

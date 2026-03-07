@@ -720,53 +720,84 @@
     </div>
   </body>
 </html>`,
-  'javascript:lesson1': `console.log("Hello from JavaScript!");
-console.log(2 + 2);`,
-  'javascript:lesson2': `const studentName = "Ahmad";
-let score = 10;
+  'javascript:lesson1': `console.log("Hello SaudiLab!");`,
+  'javascript:lesson2': `let name = "Adel";
+let age = 21;
+let isStudent = true;
 
-score = score + 5;
-console.log(studentName, score);`,
-  'javascript:lesson3': `const a = 8;
-const b = 3;
+console.log(name);
+console.log(age);
+console.log(isStudent);`,
+  'javascript:lesson3': `let a = 5;
+let b = 3;
 
-console.log(a + b);
-console.log(a - b);
-console.log(a > b);`,
-  'javascript:lesson4': `const temperature = 32;
+let sum = a + b;
+console.log("Sum:", sum);
 
-if (temperature > 30) {
-  console.log("It is hot today.");
+let product = a * b;
+console.log("Product:", product);
+
+let age = 20;
+
+console.log("Is age greater than 18?", age > 18);
+console.log("Is age exactly 20?", age === 20);`,
+  'javascript:lesson4': `let score = 75;
+
+if (score >= 90) {
+  console.log("Excellent");
+} else if (score >= 60) {
+  console.log("Good job");
 } else {
-  console.log("Weather is mild.");
+  console.log("Keep practicing");
 }`,
-  'javascript:lesson5': `for (let i = 1; i <= 5; i += 1) {
-  console.log("Step", i);
-}`,
-  'javascript:lesson6': `function greet(name) {
-  return \`Welcome, \${name}!\`;
+  'javascript:lesson5': `for (let i = 1; i <= 5; i++) {
+  console.log("Number:", i);
 }
 
-console.log(greet("Student"));`,
-  'javascript:lesson7': `const topics = ["HTML", "CSS", "JavaScript"];
+for (let i = 1; i <= 3; i++) {
+  console.log("Keep practicing JavaScript!");
+}`,
+  'javascript:lesson6': `function greet() {
+  console.log("Welcome to JavaScript!");
+}
 
-console.log(topics[0]);
-console.log(topics.length);`,
-  'javascript:lesson8': `const user = {
-  name: "Sara",
-  level: "Beginner",
+greet();
+
+function greetUser(name) {
+  console.log("Hello " + name);
+}
+
+greetUser("Adel");
+greetUser("Student");`,
+  'javascript:lesson7': `let fruits = ["Apple", "Banana", "Orange"];
+
+console.log("First fruit:", fruits[0]);
+console.log("Second fruit:", fruits[1]);
+
+fruits[1] = "Mango";
+
+console.log("Updated fruits:", fruits);`,
+  'javascript:lesson8': `let person = {
+  name: "Ali",
+  age: 22,
+  job: "Student"
 };
 
-console.log(user.name);`,
-  'javascript:lesson9': `document.body.innerHTML = "<h1 id=\\"title\\">Hello</h1>";
-const title = document.getElementById("title");
+console.log("Name:", person.name);
+console.log("Age:", person.age);
 
-title.textContent = "Hello from DOM";`,
-  'javascript:lesson10': `document.body.innerHTML = "<button id=\\"btn\\">Click me</button>";
-const button = document.getElementById("btn");
+person.age = 23;
 
-button.addEventListener("click", () => {
-  console.log("Button clicked");
+console.log("Updated person:", person);`,
+  'javascript:lesson9': `console.log("Updating the page...");
+
+document.querySelector("h1").textContent = "Hello from JavaScript!";
+document.querySelector("p").textContent = "You just modified the DOM.";`,
+  'javascript:lesson10': `let button = document.querySelector("button");
+let message = document.querySelector("p");
+
+button.addEventListener("click", function() {
+  message.textContent = "You clicked the button!";
 });`,
   'cse:cse_lesson1': `<!DOCTYPE html>
 <html>

@@ -1,4 +1,4 @@
-﻿---
+---
 id: lesson8
 title: "Lesson 8: Objects"
 ---
@@ -15,35 +15,82 @@ import LessonShell from '@site/src/components/LessonShell';
   tryPath="/javascript/lesson8/try"
 >
 
-What You'll Learn
-- Create objects with key-value pairs
-- Read and update properties
-- Use objects to model real data
+## 1. What an Object Is
 
----
+An object stores multiple related values together.
 
-Core Concept
+Example idea:
+A person has a name, age, and job.
 
-Objects group related data using named properties. They are useful for representing entities like users or products.
-
----
-
-Example
+Instead of separate variables:
 
 ~~~javascript
-const user = {
-  name: "Sara",
-  level: "Beginner"
-};
+let name = "Ali";
+let age = 22;
+let job = "Student";
+~~~
 
-console.log(user.name);
+We can use one object:
+
+~~~javascript
+let person = {
+  name: "Ali",
+  age: 22,
+  job: "Student"
+};
+~~~
+
+Objects store information using **key: value pairs**.
+
+---
+
+## 2. Object Properties
+
+Each piece of data inside an object is called a property.
+
+Example properties:
+
+~~~javascript
+person.name
+person.age
 ~~~
 
 ---
 
-Practice
+## 3. Accessing Object Values
 
-Add a new property to the object and log the updated object.
+Use a dot `.` to access properties.
+
+~~~javascript
+let person = {
+  name: "Ali",
+  age: 22,
+  job: "Student"
+};
+
+console.log(person.name);
+console.log(person.age);
+~~~
+
+---
+
+## 4. Updating Object Values
+
+You can change values inside an object.
+
+~~~javascript
+person.age = 23;
+
+console.log(person);
+~~~
+
+---
+
+## 5. Quick Recap
+
+- Objects group related data.
+- They use key:value pairs.
+- We access properties using dot notation.
 
 </LessonShell>
 

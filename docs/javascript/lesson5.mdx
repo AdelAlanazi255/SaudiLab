@@ -1,4 +1,4 @@
-﻿---
+---
 id: lesson5
 title: "Lesson 5: Loops"
 ---
@@ -15,32 +15,69 @@ import LessonShell from '@site/src/components/LessonShell';
   tryPath="/javascript/lesson5/try"
 >
 
-What You'll Learn
-- Repeat code with for loops
-- Use while loops for condition-based repetition
-- Avoid infinite loops by updating counters
+## 1. Why Loops Exist
 
----
+Sometimes we want to repeat the same action many times.
 
-Core Concept
+For example, printing numbers from 1 to 5.
 
-Loops run a block of code multiple times. They help when processing lists or repeating tasks.
-
----
-
-Example
+Without a loop:
 
 ~~~javascript
-for (let i = 1; i <= 3; i += 1) {
-  console.log("Step", i);
+console.log(1);
+console.log(2);
+console.log(3);
+console.log(4);
+console.log(5);
+~~~
+
+Loops help us avoid repeating code.
+
+---
+
+## 2. The `for` Loop
+
+Basic structure:
+
+~~~javascript
+for (let i = 1; i <= 5; i++) {
+  console.log(i);
+}
+~~~
+
+Simple meaning:
+- `let i = 1` = start at 1
+- `i <= 5` = keep running while this is true
+- `i++` = increase by 1 each time
+
+---
+
+## 3. Example: Counting Numbers
+
+~~~javascript
+for (let i = 1; i <= 10; i++) {
+  console.log(i);
+}
+~~~
+
+This loop runs 10 times.
+
+---
+
+## 4. Example: Repeating a Message
+
+~~~javascript
+for (let i = 1; i <= 3; i++) {
+  console.log("Practice makes progress!");
 }
 ~~~
 
 ---
 
-Practice
+## 5. Quick Recap
 
-Create a loop that prints even numbers from 2 to 10.
+- Loops repeat actions.
+- `for` loops are useful for counting and repeating tasks.
 
 </LessonShell>
 

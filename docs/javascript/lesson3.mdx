@@ -1,4 +1,4 @@
-﻿---
+---
 id: lesson3
 title: "Lesson 3: Operators and Expressions"
 ---
@@ -15,33 +15,76 @@ import LessonShell from '@site/src/components/LessonShell';
   tryPath="/javascript/lesson3/try"
 >
 
-What You'll Learn
-- Use arithmetic operators
-- Compare values with comparison operators
-- Build expressions that return true or false
+## 1. What an Operator Is
 
----
+An operator is a symbol that performs an action on values.
 
-Core Concept
-
-Operators let you calculate and compare values. Expressions combine values and operators to produce a new result.
-
----
-
-Example
+Example:
 
 ~~~javascript
-const a = 8;
-const b = 3;
-console.log(a + b);
-console.log(a > b);
+5 + 3
+~~~
+
+Here, `+` is the operator.
+
+---
+
+## 2. Arithmetic Operators
+
+In this lesson, we use:
+- `+` add
+- `-` subtract
+- `*` multiply
+- `/` divide
+
+Simple example:
+
+~~~javascript
+let result = 5 + 3;
+console.log(result);
 ~~~
 
 ---
 
-Practice
+## 3. Expressions
 
-Try changing the values and test +, -, *, /, and comparison operators.
+When we combine values and operators, we create an expression.
+
+Example:
+
+~~~javascript
+let total = 10 + 5;
+~~~
+
+`10 + 5` is an expression.
+
+---
+
+## 4. Comparison Operators (Simple)
+
+We also use operators to compare values:
+- `>`
+- `<`
+- `===`
+
+Example:
+
+~~~javascript
+let age = 20;
+
+console.log(age > 18);
+console.log(age === 20);
+~~~
+
+These comparisons return `true` or `false`.
+
+---
+
+## 5. Beginner Recap
+
+- Operators perform actions.
+- Arithmetic operators do basic math.
+- Comparison operators check values and return `true` or `false`.
 
 </LessonShell>
 

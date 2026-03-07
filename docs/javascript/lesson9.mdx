@@ -1,4 +1,4 @@
-﻿---
+---
 id: lesson9
 title: "Lesson 9: DOM Basics"
 ---
@@ -15,32 +15,65 @@ import LessonShell from '@site/src/components/LessonShell';
   tryPath="/javascript/lesson9/try"
 >
 
-What You'll Learn
-- Select elements from the page
-- Update text content
-- Change styles with JavaScript
+## 1. What the DOM Is
+
+DOM means **Document Object Model**.
+
+It is the structure of the webpage that JavaScript can interact with.
+
+Simple idea:
+- HTML builds the page
+- CSS styles the page
+- JavaScript can change the page
+
+JavaScript can:
+- change text
+- update elements
+- react to user actions
 
 ---
 
-Core Concept
+## 2. Selecting an Element
 
-The DOM represents your page as objects. JavaScript can read and modify those objects to update the UI.
-
----
-
-Example
+Use:
 
 ~~~javascript
-document.body.innerHTML = "<h1 id=\"title\">Hello</h1>";
-const title = document.getElementById("title");
-title.textContent = "Hello from DOM";
+document.querySelector("h1")
 ~~~
+
+This tells JavaScript to find the first `<h1>` element on the page.
 
 ---
 
-Practice
+## 3. Changing Text Content
 
-Create an element, set its text, and append it to the page.
+~~~javascript
+document.querySelector("h1").textContent = "Hello JavaScript!";
+~~~
+
+JavaScript finds the element and replaces its text.
+
+---
+
+## 4. Console + DOM Example
+
+~~~javascript
+console.log("Updating the page...");
+
+document.querySelector("h1").textContent = "Welcome to SaudiLab!";
+~~~
+
+In this lesson:
+- Console Output shows script messages
+- Preview shows webpage changes
+
+---
+
+## 5. Quick Recap
+
+- The DOM represents the webpage.
+- JavaScript can change HTML content.
+- `querySelector()` helps us find elements.
 
 </LessonShell>
 
