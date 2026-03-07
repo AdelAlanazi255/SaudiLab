@@ -14,31 +14,92 @@ import LessonShell from '@site/src/components/LessonShell';
   lessonId="lesson1"
 >
 
-What You'll Learn
-- Core CSS concept for lesson 1
-- How this pattern is used in real pages
-- How to practice it in the try editor
+## What You Will Learn
+- What CSS is
+- How CSS works with HTML
+- The basic shape of a CSS rule
+- How to change color, font size, and background color
 
----
+## What Is CSS?
+CSS means **Cascading Style Sheets**.
 
-Lesson Overview
+HTML builds the structure of a page (headings, paragraphs, buttons, images).
+CSS controls how those elements **look**.
 
-This lesson focuses on practical CSS you can apply immediately.
+Simple way to remember:
+- **HTML = structure**
+- **CSS = style**
 
----
+## What CSS Does
+With CSS, you can change things like:
+- text color
+- text size
+- background colors
+- spacing and borders (you will learn these soon)
 
-Example
+When you edit CSS and press **RUN**, you can instantly see visual changes.
 
-~~~css
-body {
-  font-family: Arial, sans-serif;
-  background: #f8fafc;
+## How CSS Connects to HTML
+CSS targets HTML elements by using a **selector**.
+
+Then you add a **property** and a **value**.
+
+Basic pattern:
+
+```css
+selector {
+  property: value;
 }
+```
 
+Example:
+
+```css
 h1 {
   color: #2563eb;
 }
-~~~
+```
+
+This means:
+- `h1` is the selector (which element to style)
+- `color` is the property (what to change)
+- `#2563eb` is the value (the new style)
+
+## First CSS Rules (Beginner Example)
+```css
+body {
+  background-color: #f5f7fb;
+}
+
+h1 {
+  color: #1d4ed8;
+  font-size: 34px;
+}
+
+p {
+  color: #334155;
+  font-size: 18px;
+}
+```
+
+What this does:
+- gives the page a light background
+- makes the heading blue and larger
+- makes paragraph text clear and easy to read
+
+## What Happens When You Edit CSS?
+Try changing one small value at a time:
+- change `h1` color
+- increase or decrease `font-size`
+- switch the page `background-color`
+
+You will see that CSS does not change the page structure, only the **appearance**.
+
+## Recap
+- CSS styles your HTML
+- A CSS rule uses: `selector { property: value; }`
+- Small edits in CSS create visible visual changes
+- You are now ready to practice in the try page
 
 </LessonShell>
 

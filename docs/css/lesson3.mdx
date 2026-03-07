@@ -1,11 +1,11 @@
 ---
 id: lesson3
-title: "CSS Lesson 3: Box Model"
+title: "CSS Lesson 3: Colors and Backgrounds"
 ---
 
 import LessonShell from '@site/src/components/LessonShell';
 
-# CSS Lesson 3: Box Model
+# CSS Lesson 3: Colors and Backgrounds
 
 <LessonShell
   course="css"
@@ -14,29 +14,101 @@ import LessonShell from '@site/src/components/LessonShell';
   lessonId="lesson3"
 >
 
-What You'll Learn
-- Core CSS concept for lesson 3
-- How this pattern is used in real pages
-- How to practice it in the try editor
+## What You Will Learn
+- How to change text color with `color`
+- How to change background color with `background-color`
+- The difference between text color and background color
+- How color choices affect readability
 
----
+## Introduction
+Colors can completely change how a page feels.
 
-Lesson Overview
+In this lesson, you will make small CSS edits and see big visual results.
 
-This lesson focuses on practical CSS you can apply immediately.
+## What `color` Does
+`color` changes the color of text.
 
----
+Example:
 
-Example
-
-~~~css
-.card {
-  width: 320px;
-  padding: 20px;
-  border: 2px solid #111827;
-  margin: 30px auto;
+```css
+h1 {
+  color: #2563eb;
 }
-~~~
+```
+
+This makes the heading text blue.
+
+## What `background-color` Does
+`background-color` changes the color behind an element.
+
+Example:
+
+```css
+body {
+  background-color: #111827;
+}
+```
+
+This changes the page background to a dark color.
+
+## `color` vs `background-color`
+- `color` = text color
+- `background-color` = background behind the element
+
+Both are important because they work together.
+
+## Styling a Heading
+You can style heading text with a simple rule:
+
+```css
+h1 {
+  color: #facc15;
+}
+```
+
+Now the heading text becomes yellow.
+
+## Styling the Page Background
+You can style the whole page background by targeting `body`:
+
+```css
+body {
+  background-color: #111827;
+}
+```
+
+## Readability Tip
+Always make sure text is easy to read on its background.
+
+For example:
+- dark background + light text works well
+- very similar text and background colors are hard to read
+
+## Simple Combined Example
+```css
+body {
+  background-color: #111827;
+}
+
+h1 {
+  color: #2563eb;
+}
+
+p {
+  color: #ffffff;
+}
+```
+
+This creates:
+- a dark page background
+- a blue heading
+- white paragraph text for clear contrast
+
+## Quick Recap
+- `color` changes text
+- `background-color` changes the area behind an element
+- Small color edits can change the whole look of a page
+- Good contrast improves readability
 
 </LessonShell>
 

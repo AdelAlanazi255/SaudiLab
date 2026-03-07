@@ -14,31 +14,96 @@ import LessonShell from '@site/src/components/LessonShell';
   lessonId="lesson2"
 >
 
-What You'll Learn
-- Core CSS concept for lesson 2
-- How this pattern is used in real pages
-- How to practice it in the try editor
+## What You Will Learn
+- What a CSS selector is
+- How selectors target HTML elements
+- How to style text with simple CSS properties
 
----
+## Introduction
+In Lesson 1, you changed simple CSS values.
+Now you will learn **how CSS knows what to style**.
 
-Lesson Overview
+That is the job of a **selector**.
 
-This lesson focuses on practical CSS you can apply immediately.
+## What Is a Selector?
+A selector tells CSS which HTML elements should receive a style.
 
----
+Example:
 
-Example
+```css
+h1 {
+  color: blue;
+}
+```
 
-~~~css
-h2 {
-  font-size: 32px;
-  text-transform: uppercase;
+This means:
+- select all `<h1>` elements
+- make their text blue
+
+## Selecting Headings
+You can style headings directly with element selectors.
+
+```css
+h1 {
+  color: #2563eb;
+  text-align: center;
+}
+```
+
+This changes heading color and alignment.
+
+## Selecting Paragraphs
+You can target paragraph text with the `p` selector.
+
+```css
+p {
+  font-size: 18px;
+  line-height: 1.7;
+}
+```
+
+This makes paragraphs easier to read.
+
+## Styling Text (Beginner Set)
+For this lesson, focus on these properties:
+- `color` -> changes text color
+- `font-size` -> changes text size
+- `text-align` -> changes text position (left/center/right)
+- `line-height` -> controls space between lines
+
+## Simple Example
+```css
+h1 {
+  color: #1d4ed8;
+  text-align: center;
 }
 
 p {
+  color: #334155;
+  font-size: 17px;
   line-height: 1.7;
 }
-~~~
+```
+
+Notice:
+- `h1` styles headings
+- `p` styles paragraphs
+- different selectors control different parts of the page
+
+## What Happens When You Edit CSS?
+Try this process:
+1. Change the `h1` color
+2. Change paragraph `font-size`
+3. Try `text-align: center` on the heading
+
+Press **RUN** after each small edit.
+You will quickly see which selector controls which element.
+
+## Quick Recap
+- A selector tells CSS what to style
+- `h1` targets headings, `p` targets paragraphs
+- Text styling starts with `color`, `font-size`, `text-align`, and `line-height`
+- Small edits + RUN is the best way to learn
 
 </LessonShell>
 

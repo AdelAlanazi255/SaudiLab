@@ -1,11 +1,11 @@
 ---
 id: lesson5
-title: "CSS Lesson 5: Flexbox Basics"
+title: "CSS Lesson 5: Box Model"
 ---
 
 import LessonShell from '@site/src/components/LessonShell';
 
-# CSS Lesson 5: Flexbox Basics
+# CSS Lesson 5: Box Model
 
 <LessonShell
   course="css"
@@ -14,31 +14,69 @@ import LessonShell from '@site/src/components/LessonShell';
   lessonId="lesson5"
 >
 
-What You'll Learn
-- Core CSS concept for lesson 5
-- How this pattern is used in real pages
-- How to practice it in the try editor
+## What You Will Learn
+- Why every element can be seen as a box
+- The 4 box model parts: content, padding, border, and margin
+- How spacing changes the look of a page
 
----
+## Introduction
+In CSS, every element behaves like a box.
 
-Lesson Overview
+When you style that box, your page becomes cleaner and easier to read.
 
-This lesson focuses on practical CSS you can apply immediately.
+## Every Element Is a Box
+Think of a card or note on a page.
 
----
+That card has:
+- text inside it
+- space around the text
+- a visible edge
+- space around the outside
 
-Example
+These are the box model parts.
 
-~~~css
-.container {
-  display: flex;
-  gap: 12px;
+## Content
+Content is the actual text or element inside the box.
+
+Example: a heading and paragraph inside a card.
+
+## Padding
+Padding is space **inside** the box, around the content.
+
+Padding gives the content room to breathe.
+
+## Border
+Border is the visible edge around the box.
+
+Border draws a line around the box.
+
+## Margin
+Margin is space **outside** the box.
+
+Margin creates space around the box so it does not touch nearby elements.
+
+## Simple Example
+```css
+.card {
+  padding: 16px;
+  border: 2px solid #2563eb;
+  margin: 16px;
 }
+```
 
-.box {
-  flex: 1;
-}
-~~~
+## What Changes When You Edit Values?
+- Increase `padding` -> more space inside the box
+- Increase `border` thickness -> stronger box edge
+- Increase `margin` -> more space outside the box
+
+Small edits make a big visual difference.
+
+## Quick Recap
+- Every element can be treated like a box
+- Box model parts: content, padding, border, margin
+- Padding = inside space
+- Border = visible edge
+- Margin = outside space
 
 </LessonShell>
 

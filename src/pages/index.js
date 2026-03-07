@@ -183,11 +183,11 @@ export default function Home() {
                               <div className="course-actions">
                                 {!isLoggedIn ? (
                                   course.courseId === 'html' ? (
-                                    <a href={courseHref} className="btn btn-primary btn-small">
+                                    <a href={courseHref} className="btn btn-primary btn-small course-ctaPreview">
                                       Preview
                                     </a>
                                   ) : (
-                                    <Link to="/login" className="btn btn-primary btn-small">
+                                    <Link to="/login" className="btn btn-primary btn-small course-ctaLogin">
                                       Log in
                                     </Link>
                                   )

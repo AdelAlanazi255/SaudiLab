@@ -1,11 +1,11 @@
 ---
 id: lesson4
-title: "CSS Lesson 4: Backgrounds and Borders"
+title: "CSS Lesson 4: Classes and IDs"
 ---
 
 import LessonShell from '@site/src/components/LessonShell';
 
-# CSS Lesson 4: Backgrounds and Borders
+# CSS Lesson 4: Classes and IDs
 
 <LessonShell
   course="css"
@@ -14,29 +14,80 @@ import LessonShell from '@site/src/components/LessonShell';
   lessonId="lesson4"
 >
 
-What You'll Learn
-- Core CSS concept for lesson 4
-- How this pattern is used in real pages
-- How to practice it in the try editor
+## What You Will Learn
+- Why element selectors are sometimes not enough
+- What a class is
+- What an ID is
+- How to write `.class-name` and `#id-name` selectors
+- When to use a class vs an ID in simple terms
 
----
+## Introduction
+In earlier lessons, you used selectors like `h1` and `p`.
 
-Lesson Overview
+That works well, but sometimes you want more control.
 
-This lesson focuses on practical CSS you can apply immediately.
+## Why We Need More Control
+If you style all `p` elements, every paragraph gets the same style.
 
----
+Sometimes you only want to style:
+- a few selected elements
+- one special element
 
-Example
+That is where **classes** and **IDs** help.
 
-~~~css
-.hero {
-  border: 2px dashed #1d4ed8;
-  border-radius: 12px;
-  background: linear-gradient(90deg, #dbeafe, #bfdbfe);
-  padding: 20px;
+## What Is a Class?
+A class is a reusable label you add to elements in HTML.
+
+You write class selectors in CSS with a dot `.`.
+
+```css
+.highlight {
+  color: #2563eb;
 }
-~~~
+```
+
+If multiple elements use `class="highlight"`, they all get this style.
+
+## What Is an ID?
+An ID is usually for one specific element.
+
+You write ID selectors in CSS with a hash `#`.
+
+```css
+#special-note {
+  background-color: #facc15;
+  color: #111827;
+}
+```
+
+This targets the element with `id="special-note"`.
+
+## HTML + CSS Example
+```html
+<p class="highlight">This text uses a class.</p>
+<p id="special-note">This text uses an ID.</p>
+```
+
+```css
+.highlight {
+  color: #2563eb;
+}
+
+#special-note {
+  background-color: #facc15;
+  color: #111827;
+}
+```
+
+## Class vs ID (Simple Rule)
+- Use a **class** when you want to reuse the same style on multiple elements.
+- Use an **ID** when you want to style one special element.
+
+## Quick Recap
+- `.class-name` targets elements by class
+- `#id-name` targets one specific element by id
+- Classes are reusable
+- IDs are usually unique
 
 </LessonShell>
 

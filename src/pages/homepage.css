@@ -611,6 +611,35 @@
   outline-offset: 2px;
 }
 
+.course-ctaLogin,
+.course-ctaLogin:hover {
+  border-color: rgba(145, 162, 182, 0.42);
+  background: rgba(111, 132, 157, 0.18);
+  color: rgba(226, 236, 246, 0.9);
+  box-shadow: none;
+}
+
+.course-ctaLogin:hover {
+  border-color: rgba(145, 162, 182, 0.54);
+  background: rgba(111, 132, 157, 0.24);
+  color: rgba(236, 243, 251, 0.94);
+}
+
+.course-ctaPreview,
+.course-ctaPreview:hover {
+  border-color: rgba(124, 242, 176, 0.3);
+  background: #63c690;
+  color: #08110b;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.22);
+}
+
+.course-ctaPreview:hover {
+  border-color: rgba(124, 242, 176, 0.36);
+  background: #6ed19a;
+  color: #08110b;
+  box-shadow: 0 9px 18px rgba(0, 0, 0, 0.24), 0 0 12px rgba(124, 242, 176, 0.12);
+}
+
 .course-card-active {
   border-color: rgba(145, 162, 182, 0.32);
 }

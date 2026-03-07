@@ -334,110 +334,150 @@
         font-family: Arial, sans-serif;
         background: #f5f7fb;
         color: #1f2937;
+        padding: 24px;
+      }
+
+      .lesson-box {
+        background-color: #ffffff;
+        border: 1px solid #dbe4ee;
+        border-radius: 12px;
+        padding: 18px;
       }
 
       h1 {
-        color: #2563eb;
+        color: #1d4ed8;
+        font-size: 34px;
+        margin: 0 0 10px;
       }
 
       p {
-        color: #374151;
+        color: #334155;
+        font-size: 18px;
+        margin: 0;
       }
     </style>
   </head>
   <body>
-    <h1>CSS Colors</h1>
-    <p>Change my color values and press RUN.</p>
+    <div class="lesson-box">
+      <h1>Welcome to CSS</h1>
+      <p>Edit color, font-size, and background-color, then press RUN.</p>
+    </div>
   </body>
 </html>`,
   'css:lesson2': `<!DOCTYPE html>
 <html>
   <head>
     <style>
-      body {
-        font-family: Georgia, serif;
-      }
-
       h1 {
-        font-size: 40px;
-        text-transform: uppercase;
-        letter-spacing: 2px;
+        color: #2563eb;
+        text-align: left;
       }
 
       p {
-        font-size: 18px;
+        font-size: 16px;
+        color: #334155;
         line-height: 1.7;
       }
     </style>
   </head>
   <body>
-    <h1>Typography</h1>
-    <p>Edit font-size, line-height, and letter-spacing.</p>
+    <h1>Selectors and Text</h1>
+    <p>This is the first paragraph. Try changing my font size.</p>
+    <p>This is the second paragraph. Try changing my color too.</p>
   </body>
 </html>`,
   'css:lesson3': `<!DOCTYPE html>
 <html>
   <head>
     <style>
-      .card {
-        width: 320px;
-        padding: 20px;
-        border: 2px solid #111827;
-        margin: 30px auto;
-        background: #ffffff;
+      body {
+        background-color: #111827;
+        color: #ffffff;
+        font-family: Arial, sans-serif;
+        padding: 24px;
+      }
+
+      h1 {
+        color: #2563eb;
+        margin-top: 0;
+      }
+
+      p {
+        color: #ffffff;
       }
     </style>
   </head>
-  <body style="background:#f3f4f6;">
-    <div class="card">
-      <h2>Box Model</h2>
-      <p>Try changing width, padding, border, and margin.</p>
-    </div>
+  <body>
+    <h1>Colors and Backgrounds</h1>
+    <p>Change my text color with the color property.</p>
+    <p>Change the page background-color and test readability.</p>
   </body>
 </html>`,
   'css:lesson4': `<!DOCTYPE html>
 <html>
   <head>
     <style>
-      .banner {
+      body {
+        background-color: #f8fafc;
+        color: #111827;
+        font-family: Arial, sans-serif;
         padding: 24px;
-        border-radius: 14px;
-        border: 2px dashed #1d4ed8;
-        background: linear-gradient(90deg, #dbeafe, #bfdbfe);
+      }
+
+      .highlight {
+        color: #2563eb;
+        font-weight: bold;
+      }
+
+      #special-note {
+        background-color: #facc15;
+        color: #111827;
+        padding: 10px;
+        border-radius: 8px;
       }
     </style>
   </head>
   <body>
-    <div class="banner">
-      <h2>Background and Borders</h2>
-      <p>Adjust border style, radius, and gradient colors.</p>
-    </div>
+    <h1>Classes and IDs</h1>
+    <p class="highlight">This paragraph uses the highlight class.</p>
+    <p>This paragraph has no class or ID.</p>
+    <p id="special-note">This paragraph uses the special-note ID.</p>
   </body>
 </html>`,
   'css:lesson5': `<!DOCTYPE html>
 <html>
   <head>
     <style>
-      .container {
-        display: flex;
-        gap: 12px;
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #eef2ff;
+        color: #111827;
+        padding: 24px;
       }
 
-      .box {
-        flex: 1;
-        padding: 20px;
-        background: #111827;
-        color: #fff;
+      .card {
+        max-width: 360px;
+        margin: 16px;
+        padding: 16px;
+        border: 2px solid #2563eb;
         border-radius: 10px;
-        text-align: center;
+        background: #ffffff;
+      }
+
+      h1 {
+        margin: 0 0 10px;
+      }
+
+      p {
+        margin: 0;
       }
     </style>
   </head>
   <body>
-    <div class="container">
-      <div class="box">One</div>
-      <div class="box">Two</div>
-      <div class="box">Three</div>
+    <h1>Box Model</h1>
+    <div class="card">
+      <h3>Card Box</h3>
+      <p>Try changing padding, border, and margin values.</p>
     </div>
   </body>
 </html>`,
@@ -445,24 +485,42 @@
 <html>
   <head>
     <style>
-      .profile {
-        max-width: 360px;
-        margin: 40px auto;
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #eef2ff;
+        color: #111827;
         padding: 24px;
-        border-radius: 16px;
-        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
-        background: #ffffff;
       }
 
-      .profile h2 {
+      .card {
+        width: 300px;
+        height: 160px;
+        margin: 24px;
+        padding: 20px;
+        border: 2px solid #2563eb;
+        border-radius: 10px;
+        background-color: #1f2937;
+        color: #ffffff;
+      }
+
+      h1 {
+        margin: 0 0 10px;
+      }
+
+      .card h2 {
         margin: 0 0 8px;
+      }
+
+      .card p {
+        margin: 0;
       }
     </style>
   </head>
-  <body style="background:#eef2ff;">
-    <div class="profile">
+  <body>
+    <h1>Spacing and Sizing</h1>
+    <div class="card">
       <h2>Spacing and Sizing</h2>
-      <p>Adjust width, margin, padding, and shadow.</p>
+      <p>Edit width, padding, and margin values to see the layout change.</p>
     </div>
   </body>
 </html>`,
@@ -470,83 +528,125 @@
 <html>
   <head>
     <style>
-      button {
-        background: #2563eb;
-        color: white;
-        border: none;
-        border-radius: 8px;
-        padding: 12px 18px;
-        font-size: 16px;
-        cursor: pointer;
+      body {
+        font-family: Arial, sans-serif;
+        background: #eef2ff;
+        color: #111827;
+        padding: 24px;
       }
 
-      button:hover {
-        background: #1d4ed8;
+      h1 {
+        margin: 0 0 10px;
+      }
+
+      .container {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        border: 2px solid #2563eb;
+        background: #ffffff;
+        padding: 14px;
+      }
+
+      .box {
+        padding: 16px;
+        background: #2563eb;
+        color: #fff;
+        border-radius: 8px;
+        margin: 8px;
+        text-align: center;
       }
     </style>
   </head>
   <body>
-    <button>Hover Me</button>
+    <h1>Flexbox Basics</h1>
+    <div class="container">
+      <div class="box">Box 1</div>
+      <div class="box">Box 2</div>
+      <div class="box">Box 3</div>
+    </div>
   </body>
 </html>`,
   'css:lesson8': `<!DOCTYPE html>
 <html>
   <head>
     <style>
-      form {
-        max-width: 420px;
-        margin: 40px auto;
-        display: grid;
-        gap: 10px;
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #eef2ff;
+        color: #111827;
+        padding: 24px;
       }
 
-      input,
-      textarea {
-        padding: 10px;
-        border: 1px solid #d1d5db;
+      h1 {
+        margin: 0 0 8px;
+      }
+
+      p {
+        margin: 0 0 14px;
+      }
+
+      button {
+        background-color: #2563eb;
+        color: white;
+        padding: 12px 20px;
+        border: none;
         border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
       }
 
-      input:focus,
-      textarea:focus {
-        outline: 2px solid #60a5fa;
+      button:hover {
+        background-color: #1d4ed8;
       }
     </style>
   </head>
   <body>
-    <form>
-      <input type="text" placeholder="Your name" />
-      <textarea rows="4" placeholder="Your message"></textarea>
-    </form>
+    <h1>Buttons and Hover</h1>
+    <p>Edit the button style, then hover over it in preview.</p>
+    <button>Start Learning</button>
   </body>
 </html>`,
   'css:lesson9': `<!DOCTYPE html>
 <html>
   <head>
     <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #eef2ff;
+        color: #111827;
+        padding: 24px;
+      }
+
+      h1 {
+        margin: 0 0 10px;
+      }
+
       .grid {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: 1fr 1fr;
         gap: 12px;
       }
 
       .item {
-        background: #dbeafe;
-        border: 1px solid #93c5fd;
+        background: #2563eb;
+        border: 1px solid #1d4ed8;
         padding: 18px;
         text-align: center;
         border-radius: 10px;
+        color: #ffffff;
+        font-weight: 700;
       }
     </style>
   </head>
   <body>
+    <h1>Grid Basics</h1>
     <div class="grid">
       <div class="item">1</div>
       <div class="item">2</div>
       <div class="item">3</div>
       <div class="item">4</div>
-      <div class="item">5</div>
-      <div class="item">6</div>
     </div>
   </body>
 </html>`,
@@ -555,37 +655,69 @@
   <head>
     <style>
       body {
-        margin: 0;
         font-family: Arial, sans-serif;
-      }
-
-      header,
-      footer {
-        background: #111827;
-        color: #fff;
-        padding: 16px;
-      }
-
-      main {
+        background-color: #eef2ff;
+        color: #111827;
         padding: 24px;
       }
 
-      .hero {
-        padding: 24px;
+      .layout {
+        max-width: 520px;
+        margin: 0 auto;
+        background-color: #ffffff;
+        border: 2px solid #2563eb;
         border-radius: 12px;
-        background: #e0e7ff;
+        padding: 18px;
+      }
+
+      h1 {
+        margin: 0 0 8px;
+      }
+
+      p {
+        margin: 0 0 12px;
+        color: #334155;
+      }
+
+      .info-card {
+        background-color: #f8fafc;
+        border: 1px solid #cbd5e1;
+        border-radius: 10px;
+        padding: 14px;
+        margin-bottom: 14px;
+      }
+
+      #role-note {
+        color: #1d4ed8;
+        font-weight: bold;
+      }
+
+      button {
+        background-color: #2563eb;
+        color: #ffffff;
+        border: none;
+        border-radius: 8px;
+        padding: 10px 16px;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: #1d4ed8;
       }
     </style>
   </head>
   <body>
-    <header>My CSS Layout</header>
-    <main>
-      <section class="hero">
-        <h1>Final Practice</h1>
-        <p>Edit this layout and make it your own.</p>
-      </section>
-    </main>
-    <footer>Footer</footer>
+    <div class="layout">
+      <h1>My Mini Page Layout</h1>
+      <p>This small page combines the CSS skills you learned.</p>
+
+      <div class="info-card">
+        <p id="role-note">Beginner Web Learner</p>
+        <p>Practice changing colors, spacing, and button styles.</p>
+      </div>
+
+      <button>Continue Practice</button>
+    </div>
   </body>
 </html>`,
   'javascript:lesson1': `console.log("Hello from JavaScript!");

@@ -14,28 +14,68 @@ import LessonShell from '@site/src/components/LessonShell';
   lessonId="lesson9"
 >
 
-What You'll Learn
-- Core CSS concept for lesson 9
-- How this pattern is used in real pages
-- How to practice it in the try editor
+## What You Will Learn
+- What CSS Grid is in simple terms
+- How to turn a container into a grid
+- How to make simple columns
+- How to add spacing between items with `gap`
 
----
+## Introduction
+Grid is a layout tool that helps organize items into rows and columns.
 
-Lesson Overview
+It is useful when you want a clean, neat layout.
 
-This lesson focuses on practical CSS you can apply immediately.
+## What Grid Is
+A grid container organizes items into a structured layout.
 
----
+When you use `display: grid`, the items inside follow grid rules.
 
-Example
-
-~~~css
-.grid {
+## Turn a Container Into a Grid
+```css
+.container {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+}
+```
+
+## Make Two Columns
+Use `grid-template-columns` to set the number of columns.
+
+```css
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+```
+
+`1fr` means one equal part of the available space.
+
+So `1fr 1fr` gives two equal columns.
+
+## Add Space with Gap
+Use `gap` to add space between grid items.
+
+```css
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 12px;
 }
-~~~
+```
+
+## Simple Example
+```css
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+```
+
+## Quick Recap
+- `display: grid` turns a container into a grid
+- `grid-template-columns` controls how many columns you have
+- `gap` adds spacing between grid items
+- Grid helps arrange items into clean rows and columns
 
 </LessonShell>
 

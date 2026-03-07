@@ -14,29 +14,90 @@ import LessonShell from '@site/src/components/LessonShell';
   lessonId="lesson6"
 >
 
-What You'll Learn
-- Core CSS concept for lesson 6
-- How this pattern is used in real pages
-- How to practice it in the try editor
+## What You Will Learn
+- How to control element width
+- How to control element height
+- How to use margin and padding for spacing
+- How size and spacing work together
 
----
+## Introduction
+Now that you know the box model, you can control box size and spacing more clearly.
 
-Lesson Overview
+This helps your page look cleaner and easier to read.
 
-This lesson focuses on practical CSS you can apply immediately.
+## Controlling Width
+`width` controls how wide an element is.
 
----
-
-Example
-
-~~~css
-.panel {
-  max-width: 360px;
-  margin: 40px auto;
-  padding: 24px;
-  border-radius: 16px;
+```css
+.card {
+  width: 300px;
 }
-~~~
+```
+
+If you increase width, the box becomes wider.
+
+## Controlling Height
+`height` controls how tall an element is.
+
+```css
+.card {
+  height: 160px;
+}
+```
+
+If you increase height, the box becomes taller.
+
+## Spacing with Margin
+`margin` creates space around an element.
+
+It pushes the box away from nearby elements.
+
+```css
+.card {
+  margin: 20px;
+}
+```
+
+## Spacing with Padding
+`padding` creates space inside an element.
+
+It gives content more room to breathe.
+
+```css
+.card {
+  padding: 20px;
+}
+```
+
+## Combining Size and Spacing
+Width and height control size.  
+Padding and margin control spacing.
+
+```css
+.card {
+  width: 300px;
+  height: 160px;
+  padding: 20px;
+  margin: 20px;
+}
+```
+
+## Simple Example
+```css
+.card {
+  width: 300px;
+  padding: 20px;
+  margin: 20px;
+  border: 2px solid #2563eb;
+}
+```
+
+## Quick Recap
+- `width` controls how wide an element is
+- `height` controls how tall an element is
+- `padding` adds space inside
+- `margin` adds space around the outside
+- Small changes make layout feel better quickly
 
 </LessonShell>
 

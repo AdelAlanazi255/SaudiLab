@@ -14,12 +14,12 @@
 const cssTitles = [
   'Introduction to CSS',
   'Selectors and Text',
+  'Colors and Backgrounds',
+  'Classes and IDs',
   'Box Model',
-  'Backgrounds and Borders',
-  'Flexbox Basics',
   'Spacing and Sizing',
+  'Flexbox Basics',
   'Buttons and Hover',
-  'Form Styling',
   'Grid Basics',
   'Mini Page Layout',
 ];

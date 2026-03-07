@@ -4,6 +4,7 @@ import BrowserOnly from '@docusaurus/BrowserOnly';
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
 import LandscapeTip from '@site/src/components/LandscapeTip';
+import ColorPaletteTool from '@site/src/components/ColorPaletteTool';
 import { getTryStarter } from '@site/src/pages/_tryData';
 import { canAccessLesson, getLastUnlockedLessonPath } from '@site/src/utils/lessonAccess';
 import { getLessonMeta } from '@site/src/data/lessons';
@@ -918,6 +919,158 @@ function getHtmlTryHint(lessonId) {
   return null;
 }
 
+function getCssTryHint(lessonId) {
+  if (lessonId === 'lesson1') {
+    return {
+      title: 'Hint',
+      intro: 'Change one simple CSS rule, then press RUN and watch the page update.',
+      ordered: false,
+      items: [
+        <>Edit the <code>h1</code> color first and run.</>,
+        <>Change one <code>font-size</code> value (heading or paragraph), then run again.</>,
+        <>Change the page <code>background-color</code> as your final small edit.</>,
+      ],
+      tip: <>Tip: Keep edits small. One line change at a time helps you learn faster.</>,
+    };
+  }
+
+  if (lessonId === 'lesson2') {
+    return {
+      title: 'Hint',
+      intro: 'Start by changing the color of the heading.',
+      ordered: false,
+      items: [
+        <>Edit the <code>h1</code> selector and press RUN.</>,
+        <>Change the paragraph <code>font-size</code> in the <code>p</code> selector.</>,
+        <>Try <code>text-align</code> on the heading and observe the difference.</>,
+      ],
+      tip: <>Tip: Selectors control which HTML elements receive each style.</>,
+    };
+  }
+
+  if (lessonId === 'lesson3') {
+    return {
+      title: 'Hint',
+      intro: 'Start by changing the heading color, then try a new page background color.',
+      ordered: false,
+      items: [
+        <>Edit the heading <code>color</code> value and press RUN.</>,
+        <>Change the page <code>background-color</code> in the <code>body</code> rule.</>,
+        <>Make sure paragraph text is still easy to read.</>,
+        <>Try one more small color change and compare the result.</>,
+      ],
+      tip: <>Tip: <code>color</code> changes text. <code>background-color</code> changes the area behind an element.</>,
+    };
+  }
+
+  if (lessonId === 'lesson4') {
+    return {
+      title: 'Hint',
+      intro: 'Start by changing the class style, then edit the ID style and compare the result.',
+      ordered: false,
+      items: [
+        <>Edit the <code>.highlight</code> rule and press RUN.</>,
+        <>Change one property in the <code>#special-note</code> rule.</>,
+        <>Observe which element uses the class and which uses the ID.</>,
+        <>Try one more small change and compare the page.</>,
+      ],
+      tip: <>Tip: A class can be reused. An ID usually styles one special element.</>,
+    };
+  }
+
+  if (lessonId === 'lesson5') {
+    return {
+      title: 'Hint',
+      intro: 'Start by increasing the padding, then try changing the border and margin.',
+      ordered: false,
+      items: [
+        <>Edit the <code>padding</code> value and press RUN.</>,
+        <>Change the <code>border</code> to make the box stand out more.</>,
+        <>Increase or decrease the <code>margin</code>.</>,
+        <>Observe how the box changes inside and outside.</>,
+      ],
+      tip: <>Tip: Padding adds space inside the box. Margin adds space outside it.</>,
+    };
+  }
+
+  if (lessonId === 'lesson6') {
+    return {
+      title: 'Hint',
+      intro: 'Start by changing the width of the box, then adjust the spacing around it.',
+      ordered: false,
+      items: [
+        <>Edit the <code>width</code> value and press RUN.</>,
+        <>Increase the <code>padding</code> to give the content more space.</>,
+        <>Change the <code>margin</code> to move the box away from other elements.</>,
+        <>Observe how the layout changes.</>,
+      ],
+      tip: <>Tip: Width controls size. Margin and padding control spacing.</>,
+    };
+  }
+
+  if (lessonId === 'lesson7') {
+    return {
+      title: 'Hint',
+      intro: 'Start by turning the container into a flex container.',
+      ordered: false,
+      items: [
+        <>Add or edit <code>display: flex</code> and press RUN.</>,
+        <>Change <code>flex-direction</code> between <code>row</code> and <code>column</code>.</>,
+        <>Try <code>justify-content: center</code>.</>,
+        <>Observe how the layout changes.</>,
+      ],
+      tip: <>Tip: Flexbox arranges elements inside a container.</>,
+    };
+  }
+
+  if (lessonId === 'lesson8') {
+    return {
+      title: 'Hint',
+      intro: 'Start by changing the button color, then test the hover style.',
+      ordered: false,
+      items: [
+        <>Edit the button <code>background-color</code> and press RUN.</>,
+        <>Change the text <code>color</code> if you want better contrast.</>,
+        <>Adjust the <code>padding</code> or <code>border-radius</code>.</>,
+        <>Edit the <code>:hover</code> background color and move your mouse over the button.</>,
+      ],
+      tip: <>Tip: <code>:hover</code> changes the style when the mouse is over the button.</>,
+    };
+  }
+
+  if (lessonId === 'lesson9') {
+    return {
+      title: 'Hint',
+      intro: 'Start by turning the container into a grid, then change the column layout.',
+      ordered: false,
+      items: [
+        <>Add or edit <code>display: grid</code> and press RUN.</>,
+        <>Change <code>grid-template-columns</code> to see how many columns appear.</>,
+        <>Adjust the <code>gap</code> value to change the spacing.</>,
+        <>Observe how the boxes move into a neat layout.</>,
+      ],
+      tip: <>Tip: Grid helps arrange items into rows and columns.</>,
+    };
+  }
+
+  if (lessonId === 'lesson10') {
+    return {
+      title: 'Hint',
+      intro: 'This lesson is about combining what you already know.',
+      ordered: false,
+      items: [
+        <>Change the background color or text color.</>,
+        <>Adjust the spacing inside the card.</>,
+        <>Edit the button style or hover color.</>,
+        <>Try changing one part of the layout and observe the result.</>,
+      ],
+      tip: <>Tip: Small CSS changes can make the whole page feel different.</>,
+    };
+  }
+
+  return null;
+}
+
 function TryHint({ hint, onDismissed }) {
   const inlineSlotRef = useRef(null);
   const overlayRef = useRef(null);
@@ -1145,7 +1298,11 @@ export default function TryPage({ course = 'html', lessonId = 'lesson1' }) {
   const editorGuideTimeoutRef = useRef(null);
   const lessonNumber = getLessonNumber(lessonId);
   const isCse = course === 'cse';
-  const htmlTryHint = useMemo(() => (course === 'html' ? getHtmlTryHint(lessonId) : null), [course, lessonId]);
+  const tryHint = useMemo(() => {
+    if (course === 'html') return getHtmlTryHint(lessonId);
+    if (course === 'css') return getCssTryHint(lessonId);
+    return null;
+  }, [course, lessonId]);
   const cseScenario = useMemo(() => getCseScenario(lessonId), [lessonId]);
   const cseStepConfig = useMemo(() => (isCse ? cseScenario.steps : []), [isCse, cseScenario]);
   const totalCseSteps = cseStepConfig.length;
@@ -1280,7 +1437,7 @@ export default function TryPage({ course = 'html', lessonId = 'lesson1' }) {
       <div className="sl-try-page">
         <h1 className="sl-try-title">{`${label} Lesson ${lessonNumber}: ${lessonTitle} - Try It Yourself`}</h1>
         <LandscapeTip />
-        {htmlTryHint ? <TryHint hint={htmlTryHint} onDismissed={triggerHintGuidance} /> : null}
+        {tryHint ? <TryHint hint={tryHint} onDismissed={triggerHintGuidance} /> : null}
 
         <div className="sl-try-layout">
           <div className="sl-try-col">
@@ -1386,7 +1543,10 @@ export default function TryPage({ course = 'html', lessonId = 'lesson1' }) {
                   </>
                 )}
               </div>
-              <div style={editorFooterStyle} className="sl-try-actions sl-try-editorFooter">
+              <div
+                style={editorFooterStyle}
+                className={`sl-try-actions sl-try-editorFooter${!isCse && course === 'css' ? ' sl-try-actions-css' : ''}`}
+              >
                 {isCse ? (
                   <button
                     onClick={onResetCse}
@@ -1414,6 +1574,7 @@ export default function TryPage({ course = 'html', lessonId = 'lesson1' }) {
                     RUN
                   </button>
                 )}
+                {!isCse && course === 'css' ? <ColorPaletteTool /> : null}
                 <Link
                   to={backPath}
                   onMouseEnter={() => setBackHover(true)}

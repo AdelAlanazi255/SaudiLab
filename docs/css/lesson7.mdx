@@ -1,11 +1,11 @@
 ---
 id: lesson7
-title: "CSS Lesson 7: Buttons and Hover"
+title: "CSS Lesson 7: Flexbox Basics"
 ---
 
 import LessonShell from '@site/src/components/LessonShell';
 
-# CSS Lesson 7: Buttons and Hover
+# CSS Lesson 7: Flexbox Basics
 
 <LessonShell
   course="css"
@@ -14,34 +14,72 @@ import LessonShell from '@site/src/components/LessonShell';
   lessonId="lesson7"
 >
 
-What You'll Learn
-- Core CSS concept for lesson 7
-- How this pattern is used in real pages
-- How to practice it in the try editor
+## What You Will Learn
+- What Flexbox is
+- What a flex container is
+- How to switch direction with `flex-direction`
+- How to align items with `justify-content` and `align-items`
 
----
+## Introduction to Layout
+Sometimes you want boxes to line up in a clean row or column.
 
-Lesson Overview
+Flexbox is a simple layout tool that helps with this.
 
-This lesson focuses on practical CSS you can apply immediately.
+## What Is Flexbox?
+Flexbox arranges elements inside a container.
 
----
+When a container uses `display: flex`, its child elements become flexible items that can be arranged easily.
 
-Example
-
-~~~css
-button {
-  background: #2563eb;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 12px 18px;
+## Flex Container
+```css
+.container {
+  display: flex;
 }
+```
 
-button:hover {
-  background: #1d4ed8;
+After this, items inside the container sit next to each other in a row.
+
+## Flex Direction
+`flex-direction` controls item direction.
+
+```css
+.container {
+  display: flex;
+  flex-direction: row;
 }
-~~~
+```
+
+- `row` = horizontal
+- `column` = vertical
+
+## Simple Alignment
+`justify-content` controls horizontal placement.
+
+`align-items` controls vertical alignment.
+
+```css
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+```
+
+## Example Layout
+```css
+.container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+```
+
+## Quick Recap
+- Flexbox arranges items inside a container
+- `display: flex` turns a container into a flex container
+- `flex-direction` changes row or column direction
+- `justify-content` and `align-items` help with simple alignment
 
 </LessonShell>
 

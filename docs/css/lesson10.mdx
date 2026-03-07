@@ -14,33 +14,91 @@ import LessonShell from '@site/src/components/LessonShell';
   lessonId="lesson10"
 >
 
-What You'll Learn
-- Core CSS concept for lesson 10
-- How this pattern is used in real pages
-- How to practice it in the try editor
+## What You Will Learn
+- How to combine your CSS skills in one small layout
+- How to style a simple heading, content card, and button
+- How colors and spacing work together
 
----
+## Introduction
+This lesson brings together the CSS skills you have already learned.
 
-Lesson Overview
+You do not need advanced CSS to build something clean and useful.
 
-This lesson focuses on practical CSS you can apply immediately.
+## Build a Small Page Section
+Think of a simple mini page with:
+- a title
+- a short paragraph
+- a small info card
+- a button
 
----
+## Style the Main Container
+Start by styling the page background and a main container.
 
-Example
+```css
+body {
+  background-color: #eef2ff;
+  font-family: Arial, sans-serif;
+}
 
-~~~css
-header,
-footer {
-  background: #111827;
-  color: #fff;
+.layout {
+  max-width: 520px;
+  margin: 24px auto;
+  padding: 20px;
+}
+```
+
+## Style the Text
+Use simple text styling to make the heading and paragraph clear.
+
+```css
+h1 {
+  color: #111827;
+}
+
+p {
+  color: #334155;
+}
+```
+
+## Style a Content Card
+Use box model skills for a clean content section.
+
+```css
+.card {
+  background-color: #ffffff;
+  border: 2px solid #2563eb;
+  border-radius: 10px;
   padding: 16px;
+  margin-top: 12px;
+}
+```
+
+## Style a Button
+Add a simple button and hover style.
+
+```css
+button {
+  background-color: #2563eb;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 16px;
 }
 
-main {
-  padding: 24px;
+button:hover {
+  background-color: #1d4ed8;
 }
-~~~
+```
+
+## Keep Spacing Consistent
+Use margin and padding values that feel balanced.
+
+Small spacing changes can make your layout look much better.
+
+## Quick Recap
+- You combined selectors, colors, spacing, and buttons
+- You built a mini layout with simple CSS rules
+- This is a strong beginner project using skills you already know
 
 </LessonShell>
 

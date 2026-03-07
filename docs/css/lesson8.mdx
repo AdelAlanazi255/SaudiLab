@@ -1,11 +1,11 @@
 ---
 id: lesson8
-title: "CSS Lesson 8: Form Styling"
+title: "CSS Lesson 8: Buttons and Hover"
 ---
 
 import LessonShell from '@site/src/components/LessonShell';
 
-# CSS Lesson 8: Form Styling
+# CSS Lesson 8: Buttons and Hover
 
 <LessonShell
   course="css"
@@ -14,34 +14,60 @@ import LessonShell from '@site/src/components/LessonShell';
   lessonId="lesson8"
 >
 
-What You'll Learn
-- Core CSS concept for lesson 8
-- How this pattern is used in real pages
-- How to practice it in the try editor
+## What You Will Learn
+- How to style a simple button
+- How button colors and spacing improve readability
+- What `:hover` means
+- How to add a basic hover color change
 
----
+## Introduction
+Buttons are one of the most common parts of a webpage.
 
-Lesson Overview
+Good button styling makes actions clear and easy to use.
 
-This lesson focuses on practical CSS you can apply immediately.
+## Styling a Button
+A button can be styled like any other HTML element.
 
----
-
-Example
-
-~~~css
-input,
-textarea {
-  border: 1px solid #d1d5db;
+```css
+button {
+  background-color: #2563eb;
+  color: white;
+  padding: 12px 20px;
+  border: none;
   border-radius: 8px;
-  padding: 10px;
 }
+```
 
-input:focus,
-textarea:focus {
-  outline: 2px solid #60a5fa;
+## Text Color and Background Color
+- `background-color` changes the button background
+- `color` changes the button text color
+
+Use colors with good contrast so text stays readable.
+
+## Spacing and Rounded Corners
+- `padding` gives space inside the button
+- `border-radius` rounds the corners
+
+These small changes make buttons look cleaner.
+
+## What `:hover` Means
+`:hover` applies styles when the mouse is over an element.
+
+This helps show that a button is interactive.
+
+## Simple Hover Example
+```css
+button:hover {
+  background-color: #1d4ed8;
 }
-~~~
+```
+
+When the mouse moves over the button, the background color changes.
+
+## Quick Recap
+- Style buttons with `background-color`, `color`, `padding`, `border`, and `border-radius`
+- Use `:hover` for a simple visual state change
+- Hover makes it clear the button can be clicked
 
 </LessonShell>
 
