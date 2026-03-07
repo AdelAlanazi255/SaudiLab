@@ -3,7 +3,7 @@ import Link from '@docusaurus/Link';
 import { useHistory } from '@docusaurus/router';
 import CompleteButton from '@site/src/components/CompleteButton';
 import useLessonAccess from '@site/src/hooks/useLessonAccess';
-import { getTryPath } from '@site/src/course/courseMap';
+import { courseHasTryPages, getTryPath } from '@site/src/course/courseMap';
 import { getLessonMetaSafe } from '@site/src/data/lessons';
 import { useAuth } from '@site/src/utils/authState';
 import { buildAuthHref } from '@site/src/utils/nextPath';
@@ -20,7 +20,8 @@ export default function LessonShell({
   const auth = useAuth();
   const history = useHistory();
   const access = useLessonAccess({ course, lessonId });
-  const generatedTryPath = getTryPath(course, lessonId) || tryPath || null;
+  const supportsTryPages = courseHasTryPages(course);
+  const generatedTryPath = supportsTryPages ? (getTryPath(course, lessonId) || tryPath || null) : null;
   const resolvedTitle = title || getLessonMetaSafe(course, Number(current))?.title || null;
   const readyCardRef = useRef(null);
   const [readyCardPulse, setReadyCardPulse] = useState(false);

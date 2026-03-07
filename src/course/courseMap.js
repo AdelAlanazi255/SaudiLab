@@ -14,7 +14,7 @@
   careerLessons,
 } from '@site/src/data/lessons';
 
-function mapToCourseLessons(items, course, routeBase = course) {
+function mapToCourseLessons(items, course, routeBase = course, hasTryPages = true) {
   return items.map((item, i) => {
     const routeId = item.routeId || item.lessonId;
     const prev = i > 0 ? items[i - 1] : null;
@@ -24,7 +24,7 @@ function mapToCourseLessons(items, course, routeBase = course) {
       title: item.title,
       docId: `${course}/${routeId}`,
       permalink: `/${routeBase}/${routeId}`,
-      tryPath: `/${routeBase}/${routeId}/try`,
+      tryPath: hasTryPages ? `/${routeBase}/${routeId}/try` : null,
       requireLessonId: prev ? prev.lessonId : null,
       paid: course === 'html' ? item.n >= 4 : true,
     };
@@ -65,12 +65,13 @@ export const COURSES = {
   cse: {
     id: 'cse',
     title: 'Cyber Security Essentials',
+    hasTryPages: false,
     totalLessons: 10,
     access: {
       freeMode: true,
       paidFromLesson: 1,
     },
-    lessons: mapToCourseLessons(cseLessons, 'cse'),
+    lessons: mapToCourseLessons(cseLessons, 'cse', 'cse', false),
   },
   crypto: {
     id: 'crypto',
@@ -85,12 +86,13 @@ export const COURSES = {
   websecurity: {
     id: 'websecurity',
     title: 'Web Security',
+    hasTryPages: false,
     totalLessons: 10,
     access: {
       freeMode: true,
       paidFromLesson: 1,
     },
-    lessons: mapToCourseLessons(webSecurityLessons, 'websecurity', 'web-security'),
+    lessons: mapToCourseLessons(webSecurityLessons, 'websecurity', 'web-security', false),
   },
   networkbasics: {
     id: 'networkbasics',
@@ -105,52 +107,57 @@ export const COURSES = {
   ethics: {
     id: 'ethics',
     title: 'Security Ethics',
+    hasTryPages: false,
     totalLessons: 10,
     access: {
       freeMode: true,
       paidFromLesson: 1,
     },
-    lessons: mapToCourseLessons(ethicsLessons, 'ethics', 'ethics'),
+    lessons: mapToCourseLessons(ethicsLessons, 'ethics', 'ethics', false),
   },
   pcs: {
     id: 'pcs',
     title: 'Personal Cyber Safety',
-    totalLessons: 12,
+    hasTryPages: false,
+    totalLessons: 6,
     access: {
       freeMode: true,
       paidFromLesson: 1,
     },
-    lessons: mapToCourseLessons(pcsLessons, 'pcs', 'pcs'),
+    lessons: mapToCourseLessons(pcsLessons, 'pcs', 'pcs', false),
   },
   kalitools: {
     id: 'kalitools',
     title: 'Intro to Security Tools (Kali Linux)',
+    hasTryPages: false,
     totalLessons: 10,
     access: {
       freeMode: true,
       paidFromLesson: 1,
     },
-    lessons: mapToCourseLessons(kaliToolsLessons, 'kalitools', 'kali'),
+    lessons: mapToCourseLessons(kaliToolsLessons, 'kalitools', 'kali', false),
   },
   forensics: {
     id: 'forensics',
     title: 'Digital Forensics',
+    hasTryPages: false,
     totalLessons: 10,
     access: {
       freeMode: true,
       paidFromLesson: 1,
     },
-    lessons: mapToCourseLessons(forensicsLessons, 'forensics', 'forensics'),
+    lessons: mapToCourseLessons(forensicsLessons, 'forensics', 'forensics', false),
   },
   blueteam: {
     id: 'blueteam',
     title: 'Blue Team Fundamentals',
+    hasTryPages: false,
     totalLessons: 10,
     access: {
       freeMode: true,
       paidFromLesson: 1,
     },
-    lessons: mapToCourseLessons(blueteamLessons, 'blueteam', 'blueteam'),
+    lessons: mapToCourseLessons(blueteamLessons, 'blueteam', 'blueteam', false),
   },
   career: {
     id: 'career',
@@ -163,6 +170,14 @@ export const COURSES = {
     lessons: mapToCourseLessons(careerLessons, 'career', 'career'),
   },
 };
+
+const DEFAULT_HAS_TRY_PAGES = true;
+
+export function courseHasTryPages(course) {
+  const courseConfig = COURSES[course];
+  if (!courseConfig) return false;
+  return courseConfig.hasTryPages ?? DEFAULT_HAS_TRY_PAGES;
+}
 
 export function getLesson(course, lessonId) {
   const c = COURSES[course];
@@ -187,6 +202,7 @@ export function getPrevLesson(course, lessonId) {
 }
 
 export function getTryPath(course, lessonId) {
+  if (!courseHasTryPages(course)) return null;
   return getLesson(course, lessonId)?.tryPath || null;
 }
 

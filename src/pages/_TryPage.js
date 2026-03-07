@@ -9,7 +9,7 @@ import JavascriptTryWorkspace from '@site/src/components/JavascriptTryWorkspace'
 import { getTryStarter } from '@site/src/pages/_tryData';
 import { canAccessLesson, getLastUnlockedLessonPath } from '@site/src/utils/lessonAccess';
 import { getLessonMeta } from '@site/src/data/lessons';
-import { getLesson } from '@site/src/course/courseMap';
+import { courseHasTryPages, getLesson } from '@site/src/course/courseMap';
 
 const editorShellStyle = {
   display: 'flex',
@@ -1529,6 +1529,7 @@ export default function TryPage({ course = 'html', lessonId = 'lesson1' }) {
   const lessonMeta = useMemo(() => getLessonMeta(course, lessonNumber), [course, lessonNumber]);
   const lessonTitle = lessonMeta.title;
   const lesson = useMemo(() => getLesson(course, lessonId), [course, lessonId]);
+  const supportsTryPages = useMemo(() => courseHasTryPages(course), [course]);
   const backPath = lesson?.permalink || `/${course}/lesson${lessonNumber}`;
   const codeMirrorMode = useMemo(() => codeMirrorModeForCourse(course), [course]);
   const codeMirrorOptions = useMemo(
@@ -1558,12 +1559,19 @@ export default function TryPage({ course = 'html', lessonId = 'lesson1' }) {
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
+    if (supportsTryPages) return;
+    window.location.replace(backPath);
+  }, [supportsTryPages, backPath]);
+
+  useEffect(() => {
+    if (!supportsTryPages) return;
+    if (typeof window === 'undefined') return;
     if (canAccessLesson(course, lessonNumber)) return;
 
     const fallbackPath = backPath;
     const redirectPath = getLastUnlockedLessonPath(course) || fallbackPath;
     window.location.replace(redirectPath);
-  }, [course, lessonNumber, backPath]);
+  }, [supportsTryPages, course, lessonNumber, backPath]);
 
   useEffect(() => {
     if (!isCse) return;
@@ -1647,6 +1655,8 @@ export default function TryPage({ course = 'html', lessonId = 'lesson1' }) {
     setCseSubmittedChoices(snapshot);
     setCseSubmittedOutcome(computeCseOutcome(snapshot, cseStepConfig));
   };
+
+  if (!supportsTryPages) return null;
 
   return (
     <Layout title={`${label} Lesson ${lessonNumber}: ${lessonTitle} - Try It Yourself`}>

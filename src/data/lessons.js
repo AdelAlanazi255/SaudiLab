@@ -105,17 +105,11 @@ const ethicsTitles = [
 
 const pcsTitles = [
   'Account Security Basics',
-  'Passwords & Password Managers',
-  'Multi-Factor Authentication',
-  'Spotting Phishing (Email/SMS)',
-  'Social Engineering Basics',
-  'Safe Downloads & Extensions',
-  'Mobile Security Basics',
-  'Public Wi-Fi & VPN Concepts',
-  'Privacy Settings Checklist',
-  'Backups & Recovery Mindset',
-  'Safe Browsing Habits',
-  'Personal Security Routine (Daily/Weekly)',
+  'Passwords and Password Managers',
+  'Phishing and Scam Awareness',
+  'Safe Browsing and Downloads',
+  'Public WiFi and Device Security',
+  'Social Media Safety',
 ];
 
 const kaliToolsTitles = [
