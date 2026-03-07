@@ -782,6 +782,62 @@ code {
   font-weight: 700;
 }
 
+.sl-docSidebarLinkLocked {
+  color: #5a5a5a !important;
+  cursor: not-allowed !important;
+  pointer-events: none;
+  opacity: 1;
+}
+
+.sl-docSidebarLinkProgress {
+  position: relative;
+  padding-left: 2rem !important;
+  background-image: linear-gradient(180deg, rgba(122, 132, 146, 0.24), rgba(122, 132, 146, 0.24));
+  background-repeat: no-repeat;
+  background-size: 1px 100%;
+  background-position: 0.72rem 0;
+}
+
+.sl-docSidebarLinkProgress::before {
+  content: '';
+  position: absolute;
+  left: 0.45rem;
+  top: 50%;
+  width: 0.56rem;
+  height: 0.56rem;
+  border-radius: 999px;
+  transform: translateY(-50%);
+  border: 1px solid rgba(133, 145, 160, 0.55);
+  background: rgba(61, 70, 82, 0.9);
+}
+
+.sl-docSidebarStateCompleted::before {
+  background: #6dd9a0;
+  border-color: rgba(136, 252, 195, 0.85);
+  box-shadow: 0 0 0 2px rgba(109, 217, 160, 0.18);
+}
+
+.sl-docSidebarStateCurrent::before {
+  width: 0.62rem;
+  height: 0.62rem;
+  background: #7cf2b0;
+  border-color: rgba(124, 242, 176, 0.96);
+  box-shadow: 0 0 0 2px rgba(124, 242, 176, 0.2);
+}
+
+.sl-docSidebarStateLocked::before {
+  border-color: rgba(101, 101, 101, 0.72);
+  background:
+    linear-gradient(
+      180deg,
+      transparent 42%,
+      rgba(140, 140, 140, 0.82) 42%,
+      rgba(140, 140, 140, 0.82) 58%,
+      transparent 58%
+    ),
+    rgba(46, 46, 46, 0.95);
+}
+
 @media (max-width: 768px) {
   .sl-lesson-actions-row {
     flex-direction: column;
