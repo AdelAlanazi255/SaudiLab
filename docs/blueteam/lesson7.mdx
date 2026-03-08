@@ -14,21 +14,71 @@ import LessonShell from '@site/src/components/LessonShell';
   lessonId="lesson7"
 >
 
-This lesson introduces **Backups & Recovery** in a beginner-safe, defensive context.
-The focus is understanding protections, detection signals, and response decisions.
+## Introduction
 
-## Objectives
-- Understand this blue team concept at a practical level
-- Connect controls and observations to defensive outcomes
-- Practice safe reasoning without offensive activity
+Even with strong defenses, security incidents can still happen.
 
-## Key Terms
-- Defense
-- Detection
-- Response
-- Documentation
+Systems may be damaged by cyber attacks, hardware failures, or human mistakes.
 
-## Safe Disclaimer
-This course does not teach hacking, exploitation, brute forcing, or unauthorized system access.
+Because of this, organizations must prepare for recovery.
+
+Backups are one of the most important protections against data loss.
+
+## What Backups Are
+
+A backup is a copy of important data stored in a separate location.
+
+If the original data is lost, damaged, or encrypted by attackers, the backup can be used to restore it.
+
+Backups allow organizations to recover systems without losing critical information.
+
+## Why Backups Are Important
+
+Backups protect organizations from situations such as:
+- ransomware attacks
+- accidental file deletion
+- system failures
+- hardware damage
+- software corruption
+
+Without backups, organizations may permanently lose important data.
+
+## Backup Locations
+
+Backups should not be stored in only one place.
+
+Organizations often store backups in different locations such as:
+- secure local storage
+- external storage systems
+- cloud backup services
+
+Storing backups in multiple locations improves resilience.
+
+## Testing Backups
+
+Backups must be tested.
+
+Sometimes organizations create backups but never verify whether they actually work.
+
+Blue Teams must ensure backups can be restored successfully.
+
+Testing backups helps confirm that recovery is possible when needed.
+
+## Recovery After an Incident
+
+After a security incident, the organization may need to:
+- isolate compromised systems
+- remove malicious software
+- restore clean systems from backups
+- verify systems are functioning correctly
+
+Backups help organizations recover more quickly from attacks.
+
+## Key Takeaways
+
+- Backups protect important data from loss or damage.
+- They are essential for recovering from cyber incidents.
+- Backups should be stored securely and in multiple locations.
+- Organizations must test backups to ensure recovery is possible.
 
 </LessonShell>

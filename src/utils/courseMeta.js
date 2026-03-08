@@ -40,7 +40,12 @@ const COURSE_META = {
     landingRoute: '/forensics',
     finalQuizRoute: '/digital-forensics/final-quiz',
   },
-  blueteam: { label: 'Blue Team Fundamentals', routeBasePath: '/blueteam', landingRoute: '/blueteam' },
+  blueteam: {
+    label: 'Blue Team Fundamentals',
+    routeBasePath: '/blueteam',
+    landingRoute: '/blueteam',
+    finalQuizRoute: '/blue-team-fundamentals/final-quiz',
+  },
   career: { label: 'Cyber Security Career Paths', routeBasePath: '/career', landingRoute: '/career' },
 };
 

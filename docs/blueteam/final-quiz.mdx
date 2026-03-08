@@ -1,0 +1,42 @@
+---
+id: final-quiz
+title: "Final Quiz"
+---
+
+import Link from '@docusaurus/Link';
+import QuizAccessGate from '@site/src/components/Quiz/QuizAccessGate';
+
+# Final Quiz
+
+<QuizAccessGate
+  course="blueteam"
+  requiredLessonId="lesson7"
+  redirectTo="/blueteam"
+  fallback={<p>Checking final quiz access...</p>}
+>
+
+You have completed all lessons in the Blue Team Fundamentals course.  
+Before completing the course, test your understanding of the defensive security concepts you learned.
+
+**Course Recap**
+
+- what Blue Teams do
+- defense-in-depth
+- logs and monitoring
+- alerts and false positives
+- incident response basics
+- system hardening
+- backups and recovery
+
+<div className="sl-lesson-actions-card">
+  <div className="sl-lesson-actions-row">
+    <Link to="/blue-team-fundamentals/quiz" className="sl-btn-primary sl-lesson-actions-primary">
+      Attempt Quiz
+    </Link>
+    <Link to="/blueteam/lesson7" className="sl-btn-ghost">
+      Back to Lesson 7
+    </Link>
+  </div>
+</div>
+
+</QuizAccessGate>

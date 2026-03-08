@@ -83,6 +83,15 @@ export default function CourseCompleteModal({
       ctaLabel: 'Start Blue Team Fundamentals',
       ctaTo: '/blueteam',
     },
+    '/blueteam': {
+      heading: 'Blue Team Fundamentals Course Completed',
+      message: "You've built a practical foundation in defensive security operations.",
+      prompt: 'Ready for the next course?',
+      nextTitle: 'Cryptography',
+      nextSubtext: 'Learn how data is protected through encryption and hashing concepts.',
+      ctaLabel: 'Start Cryptography',
+      ctaTo: '/cryptography',
+    },
   };
 
   const richContent = richContentByCourse[lessonsHref] || null;

@@ -8,6 +8,7 @@ const ADMIN_ONLY_ROUTE_PREFIXES = [
   '/digital-forensics',
   '/blueteam',
   '/blue-team',
+  '/blue-team-fundamentals',
   '/career',
   '/network-basics',
 ];

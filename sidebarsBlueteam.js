@@ -11,6 +11,7 @@
         'lesson5',
         'lesson6',
         'lesson7',
+        'final-quiz',
       ],
     },
   ],
