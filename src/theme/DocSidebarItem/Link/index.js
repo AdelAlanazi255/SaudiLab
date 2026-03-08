@@ -14,8 +14,10 @@ import {
 export default function DocSidebarItemLink(props) {
   const { item } = props;
   const docId = item?.docId || '';
+  const href = item?.href || '';
   const courseFromHref = getCourseKeyFromPathname(item?.href || '');
   const parsed = parseDocId(docId, courseFromHref);
+  const isPcsFinalQuizItem = courseFromHref === 'pcs' && /\/final-quiz\/?$/i.test(href);
 
   const access = useLessonAccess({
     course: parsed?.course || courseFromHref || null,
@@ -29,9 +31,16 @@ export default function DocSidebarItemLink(props) {
     && isAuthenticatedRuntime()
     && !isAdminRuntime(),
   );
+  const isGuidedTrackedFinalQuiz = Boolean(
+    isPcsFinalQuizItem
+    && isGuidedMode
+    && isAuthenticatedRuntime()
+    && !isAdminRuntime(),
+  );
+  const finalQuizUnlocked = isGuidedTrackedFinalQuiz ? isCompleted('pcs', 'lesson6') : true;
   const shouldLockSidebarLesson = Boolean(
-    isGuidedTrackedLesson
-    && !access.allowed,
+    (isGuidedTrackedLesson && !access.allowed)
+    || (isGuidedTrackedFinalQuiz && !finalQuizUnlocked),
   );
   const lessonDone = Boolean(isGuidedTrackedLesson && parsed?.course && parsed?.lessonId && isCompleted(parsed.course, parsed.lessonId));
   const itemClassName = String(item?.className || '');
@@ -46,6 +55,8 @@ export default function DocSidebarItemLink(props) {
         : '';
 
   const progressClassName = isGuidedTrackedLesson
+    ? `sl-docSidebarLinkProgress ${stateClass}`.trim()
+    : isGuidedTrackedFinalQuiz
     ? `sl-docSidebarLinkProgress ${stateClass}`.trim()
     : '';
 

@@ -7,7 +7,12 @@ const COURSE_META = {
   websecurity: { label: 'Web Security', routeBasePath: '/web-security', landingRoute: '/web-security' },
   networkbasics: { label: 'Network Basics', routeBasePath: '/network-basics', landingRoute: '/network-basics' },
   ethics: { label: 'Security Ethics', routeBasePath: '/ethics', landingRoute: '/ethics' },
-  pcs: { label: 'Personal Cyber Safety', routeBasePath: '/pcs', landingRoute: '/pcs' },
+  pcs: {
+    label: 'Personal Cyber Safety',
+    routeBasePath: '/pcs',
+    landingRoute: '/pcs',
+    finalQuizRoute: '/personal-cyber-safety/quiz',
+  },
   kalitools: { label: 'Intro to Security Tools (Kali Linux)', routeBasePath: '/kali', landingRoute: '/kali' },
   forensics: { label: 'Digital Forensics', routeBasePath: '/forensics', landingRoute: '/forensics' },
   blueteam: { label: 'Blue Team Fundamentals', routeBasePath: '/blueteam', landingRoute: '/blueteam' },
@@ -43,6 +48,10 @@ export function getCourseLabel(courseKey, fallback = 'Course') {
 
 export function getCourseLessonsRoute(courseKey, firstLessonRoute = '/') {
   return getCourseMeta(courseKey)?.landingRoute || firstLessonRoute || '/';
+}
+
+export function getCourseFinalQuizRoute(courseKey) {
+  return getCourseMeta(courseKey)?.finalQuizRoute || null;
 }
 
 export function getCourseKeyFromPathname(pathname = '') {

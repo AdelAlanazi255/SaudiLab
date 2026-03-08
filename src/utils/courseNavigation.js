@@ -1,6 +1,7 @@
 import {
   getCourseKeyFromPathname,
   getCourseLabel,
+  getCourseFinalQuizRoute,
   getCourseLessonsRoute,
   getCourseMeta,
   normalizeCoursePath,
@@ -72,11 +73,13 @@ export function getCourseNavigationContext({ pathname = '/', sidebarItems = [] }
   const sidebarLabel = firstSidebarCategoryLabel(sidebarItems);
   const courseName = getCourseLabel(courseKey, sidebarLabel || 'Course');
   const lessonsRoute = getCourseLessonsRoute(courseKey, firstLessonRoute || '/');
+  const finalQuizRoute = getCourseFinalQuizRoute(courseKey);
 
   return {
     courseKey,
     courseName,
     lessonsRoute,
+    finalQuizRoute,
     firstLessonRoute,
     lastLessonRoute,
     isOnLastLesson,

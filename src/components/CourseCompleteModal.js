@@ -9,28 +9,39 @@ export default function CourseCompleteModal({
 }) {
   const primaryActionRef = useRef(null);
   const lastFocusedElementRef = useRef(null);
-  const isHtmlCourse = lessonsHref === '/html';
-  const isCssCourse = lessonsHref === '/css';
-  const useRichLayout = isHtmlCourse || isCssCourse;
-  const richContent = isHtmlCourse
-    ? {
+
+  const richContentByCourse = {
+    '/html': {
       heading: 'HTML Course Completed',
-      message: 'You’ve just built your first web pages using HTML.',
+      message: "You've just built your first web pages using HTML.",
       prompt: 'Ready to make them look better?',
       nextTitle: 'CSS',
-      nextSubtext: 'Style and layout your websites',
+      nextSubtext: 'Style and layout your websites.',
       ctaLabel: 'Start CSS Course',
       ctaTo: '/css',
-    }
-    : {
+    },
+    '/css': {
       heading: 'CSS Course Completed',
-      message: 'You’ve styled your first web pages using CSS.',
+      message: "You've styled your first web pages using CSS.",
       prompt: 'Ready to make your pages interactive?',
       nextTitle: 'JavaScript',
       nextSubtext: 'Make your websites interactive.',
       ctaLabel: 'Start JavaScript Course',
       ctaTo: '/javascript',
-    };
+    },
+    '/pcs': {
+      heading: 'Personal Cyber Safety Course Completed',
+      message: "You've completed the core skills to protect your daily digital life.",
+      prompt: 'Ready for the next cybersecurity step?',
+      nextTitle: 'Cyber Security Essentials',
+      nextSubtext: 'Learn practical security fundamentals used in real scenarios.',
+      ctaLabel: 'Start Cyber Security Essentials',
+      ctaTo: '/cse',
+    },
+  };
+
+  const richContent = richContentByCourse[lessonsHref] || null;
+  const useRichLayout = Boolean(richContent);
 
   useEffect(() => {
     if (!open) return undefined;

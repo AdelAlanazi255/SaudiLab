@@ -10,6 +10,7 @@ module.exports = {
         'lesson4',
         'lesson5',
         'lesson6',
+        'final-quiz',
       ],
     },
   ],

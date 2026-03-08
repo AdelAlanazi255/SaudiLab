@@ -1888,6 +1888,100 @@ code {
   justify-content: center;
 }
 
+.sl-quiz-page {
+  min-height: calc(100vh - var(--ifm-navbar-height) - 120px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.sl-quiz-card {
+  width: min(760px, 100%);
+  border-radius: var(--sl-radius-card);
+  border: 1px solid var(--sl-border);
+  background: linear-gradient(180deg, var(--sl-surface), var(--sl-surface-2));
+  box-shadow: var(--sl-shadow);
+  padding: 1.2rem;
+}
+
+.sl-quiz-title {
+  margin: 0;
+  font-size: clamp(1.45rem, 2.3vw, 1.95rem);
+  line-height: 1.25;
+}
+
+.sl-quiz-subtitle,
+.sl-quiz-progress {
+  margin-top: 0.75rem;
+  margin-bottom: 0;
+  color: var(--sl-muted);
+  font-weight: 700;
+}
+
+.sl-quiz-question {
+  margin-top: 0.85rem;
+  margin-bottom: 0;
+  font-size: clamp(1.08rem, 1.8vw, 1.35rem);
+  line-height: 1.4;
+}
+
+.sl-quiz-options {
+  margin-top: 1rem;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.sl-quiz-option {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid rgba(145, 162, 182, 0.35);
+  background: rgba(111, 132, 157, 0.08);
+  color: var(--sl-text);
+  text-align: left;
+  padding: 0.8rem 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: border-color 160ms ease, background-color 160ms ease, transform 160ms ease;
+}
+
+.sl-quiz-option:hover {
+  border-color: rgba(124, 242, 176, 0.42);
+  background: rgba(124, 242, 176, 0.12);
+  transform: translateY(-1px);
+}
+
+.sl-quiz-option.is-selected {
+  border-color: rgba(124, 242, 176, 0.62);
+  background: rgba(124, 242, 176, 0.16);
+}
+
+.sl-quiz-actions {
+  margin-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.sl-quiz-resultTitle {
+  margin-top: 0.9rem;
+  margin-bottom: 0;
+}
+
+.sl-quiz-score {
+  margin-top: 0.55rem;
+  margin-bottom: 0;
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
+.sl-quiz-resultMessage {
+  margin-top: 0.55rem;
+  margin-bottom: 0;
+  color: var(--sl-muted);
+  line-height: 1.6;
+}
+
 @media (max-width: 996px) {
   .sl-nav-linkBtn,
   .sl-nav-signupBtn,

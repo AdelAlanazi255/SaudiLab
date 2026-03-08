@@ -1,0 +1,44 @@
+---
+id: final-quiz
+title: "Final Quiz"
+---
+
+import Link from '@docusaurus/Link';
+import QuizAccessGate from '@site/src/components/Quiz/QuizAccessGate';
+
+# Final Quiz
+
+<QuizAccessGate
+  course="pcs"
+  requiredLessonId="lesson6"
+  redirectTo="/pcs"
+  fallback={<p>Checking final quiz access...</p>}
+>
+
+You finished all Personal Cyber Safety lessons.  
+You are now ready to test your understanding.
+
+## Course Recap
+
+You covered:
+- account security basics
+- passwords and password managers
+- phishing and scam awareness
+- safe browsing and downloads
+- public WiFi and device security
+- social media safety
+
+Take the final quiz when you are ready.
+
+<div className="sl-lesson-actions-card">
+  <div className="sl-lesson-actions-row">
+    <Link to="/personal-cyber-safety/quiz" className="sl-btn-primary sl-lesson-actions-primary">
+      Attempt Quiz
+    </Link>
+    <Link to="/pcs/lesson6" className="sl-btn-ghost">
+      Back to Lesson 6
+    </Link>
+  </div>
+</div>
+
+</QuizAccessGate>

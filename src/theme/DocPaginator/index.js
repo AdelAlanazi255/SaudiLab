@@ -48,8 +48,18 @@ export default function DocPaginator(props) {
     [metadata, nav.courseKey],
   );
 
-  const shouldInterceptNext = Boolean(nav.courseKey && nav.isOnLastLesson && nav.lastLessonRoute);
-  const nextLink = shouldInterceptNext
+  const shouldShowFinalQuizNext = Boolean(nav.courseKey && nav.isOnLastLesson && nav.finalQuizRoute && !next);
+  const shouldInterceptNext = Boolean(nav.courseKey && nav.isOnLastLesson && nav.lastLessonRoute && !shouldShowFinalQuizNext && !next);
+  const nextLink = shouldShowFinalQuizNext
+    ? {
+      permalink: nav.finalQuizRoute,
+      title: translate({
+        id: 'theme.docs.paginator.finalQuiz',
+        message: 'Take final quiz',
+        description: 'The label used to navigate to the final quiz after the last lesson',
+      }),
+    }
+    : shouldInterceptNext
     ? {
       permalink: nav.lastLessonRoute,
       title: translate({
