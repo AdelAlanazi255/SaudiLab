@@ -118,27 +118,21 @@ const kaliToolsTitles = [
 const forensicsTitles = [
   'What Digital Forensics Is',
   'Evidence & Chain of Custody',
-  'Logs & Traces',
+  'Logs & Digital Traces',
   'Metadata Basics',
-  'Timelines',
-  'Browser Artifacts',
-  'File Integrity & Hashes',
-  'Incident Investigation Flow',
+  'File Integrity & Hashing',
+  'Investigation Process',
   'Fictional Case Walkthrough',
-  'Common Mistakes & Best Practices',
 ];
 
 const blueteamTitles = [
   'What Blue Team Is',
   'Defense-in-Depth',
-  'Monitoring Basics',
-  'Logs 101',
-  'Alerts & Triage',
-  'False Positives vs True Positives',
-  'Incident Response Flow',
-  'Basic Hardening Concepts',
+  'Logs & Monitoring Basics',
+  'Alerts & False Positives',
+  'Incident Response Basics',
+  'System Hardening Basics',
   'Backups & Recovery',
-  'Post-Incident Learnings',
 ];
 
 const careerTitles = [

@@ -34,7 +34,12 @@ const COURSE_META = {
     landingRoute: '/kali',
     finalQuizRoute: '/intro-to-kali/final-quiz',
   },
-  forensics: { label: 'Digital Forensics', routeBasePath: '/forensics', landingRoute: '/forensics' },
+  forensics: {
+    label: 'Digital Forensics',
+    routeBasePath: '/forensics',
+    landingRoute: '/forensics',
+    finalQuizRoute: '/digital-forensics/final-quiz',
+  },
   blueteam: { label: 'Blue Team Fundamentals', routeBasePath: '/blueteam', landingRoute: '/blueteam' },
   career: { label: 'Cyber Security Career Paths', routeBasePath: '/career', landingRoute: '/career' },
 };

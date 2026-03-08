@@ -1,35 +1,84 @@
 ---
 id: lesson7
-title: "Lesson 7: File Integrity & Hashes"
+title: "Lesson 7: Fictional Case Walkthrough"
 ---
 
 import LessonShell from '@site/src/components/LessonShell';
 
-# Lesson 7: File Integrity & Hashes
+# Lesson 7: Fictional Case Walkthrough
 
 <LessonShell
   course="forensics"
   current={7}
-  total={10}
+  total={7}
   lessonId="lesson7"
 >
 
-This lesson introduces **File Integrity & Hashes** in a beginner-safe, analytical context.
-Focus is on evidence handling, interpretation, and responsible investigation practices.
+## Introduction
 
-## Objectives
-- Understand this forensic concept at a practical, defensive level
-- Identify what evidence can support or refute a claim
-- Apply safe investigation reasoning without offensive activity
+Digital forensics investigators often reconstruct incidents by analyzing evidence and digital traces.
 
-## Key Terms
-- Evidence
-- Integrity
-- Timeline
-- Documentation
+This lesson walks through a fictional investigation example to show how investigators apply the concepts learned in this course.
 
-## Safe Disclaimer
-This course does not teach hacking, exploitation, malware, or unauthorized system access.
+## The Scenario
+
+A company notices that confidential files were downloaded from an internal system late at night.
+
+The security team suspects that someone accessed sensitive information without authorization.
+
+A digital forensics investigation begins to determine what happened.
+
+## Identifying the Evidence
+
+Investigators look for possible evidence sources, such as:
+- system login records
+- file access logs
+- employee computer activity
+- network connection logs
+
+Investigators first identify where relevant digital traces may exist.
+
+## Reviewing Logs
+
+System logs reveal that a user account logged into the system at 2:17 AM, outside normal working hours.
+
+The logs show that several sensitive files were accessed shortly after the login.
+
+This information helps investigators understand when the activity occurred.
+
+## Analyzing File Evidence
+
+Metadata from the files shows:
+- when the files were accessed
+- which account accessed them
+
+Investigators also calculate file hashes to confirm that the files have not been modified during analysis.
+
+## Reconstructing the Timeline
+
+Investigators combine all evidence to build a timeline:
+
+2:17 AM - User account logs into the system  
+2:20 AM - Sensitive files are accessed  
+2:25 AM - Files are copied to a USB device
+
+This helps investigators understand how the incident occurred.
+
+## Investigation Conclusion
+
+Based on logs, metadata, and activity records, the team determines:
+- which account accessed the system
+- when the activity occurred
+- which files were involved
+
+The findings are documented and reported to management for further action.
+
+## Key Takeaways
+
+- Digital forensics investigations combine multiple evidence sources.
+- Logs, metadata, and system records help reconstruct events.
+- Investigators build timelines to understand incidents.
+- Evidence must be preserved and documented carefully.
 
 </LessonShell>
 

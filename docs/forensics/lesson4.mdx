@@ -10,26 +10,78 @@ import LessonShell from '@site/src/components/LessonShell';
 <LessonShell
   course="forensics"
   current={4}
-  total={10}
+  total={7}
   lessonId="lesson4"
 >
 
-This lesson introduces **Metadata Basics** in a beginner-safe, analytical context.
-Focus is on evidence handling, interpretation, and responsible investigation practices.
+## Introduction
 
-## Objectives
-- Understand this forensic concept at a practical, defensive level
-- Identify what evidence can support or refute a claim
-- Apply safe investigation reasoning without offensive activity
+Many files contain hidden information that most users never see.
 
-## Key Terms
-- Evidence
-- Integrity
-- Timeline
-- Documentation
+This information is called metadata.
 
-## Safe Disclaimer
-This course does not teach hacking, exploitation, malware, or unauthorized system access.
+Metadata can help investigators understand details about files, such as when they were created or modified.
+
+## What Metadata Is
+
+Metadata means data about data.
+
+It describes information about a file rather than the file content itself.
+
+Examples of metadata include:
+- file creation date
+- file modification date
+- file size
+- file owner
+- file location on a system
+
+Metadata helps investigators understand how files were used.
+
+## Metadata in Different File Types
+
+Many types of files contain metadata.
+
+Documents may include:
+- creation date
+- last edited time
+
+Images may include:
+- camera information
+- date photo was taken
+
+System files may include:
+- access timestamps
+- user activity records
+
+This information can reveal details about how files were created or accessed.
+
+## Why Metadata Is Important
+
+Metadata helps investigators answer questions such as:
+- When was a file created?
+- Was the file modified?
+- Who last accessed the file?
+- Where was the file stored?
+
+This information can help investigators build timelines of events.
+
+## Example Scenario
+
+A suspicious document is found on a company computer.
+
+Metadata reveals:
+- the document was created two days earlier
+- it was last edited by a specific user account
+- it was accessed shortly before a security incident
+
+This information helps investigators understand how the file was involved.
+
+## Key Takeaways
+
+- Metadata is information about a file.
+- It can reveal details such as creation time and modification history.
+- Many file types store metadata automatically.
+- Investigators use metadata to understand how files were used during incidents.
 
 </LessonShell>
 

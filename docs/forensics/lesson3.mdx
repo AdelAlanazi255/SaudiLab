@@ -1,35 +1,80 @@
 ---
 id: lesson3
-title: "Lesson 3: Logs & Traces"
+title: "Lesson 3: Logs & Digital Traces"
 ---
 
 import LessonShell from '@site/src/components/LessonShell';
 
-# Lesson 3: Logs & Traces
+# Lesson 3: Logs & Digital Traces
 
 <LessonShell
   course="forensics"
   current={3}
-  total={10}
+  total={7}
   lessonId="lesson3"
 >
 
-This lesson introduces **Logs & Traces** in a beginner-safe, analytical context.
-Focus is on evidence handling, interpretation, and responsible investigation practices.
+## Introduction
 
-## Objectives
-- Understand this forensic concept at a practical, defensive level
-- Identify what evidence can support or refute a claim
-- Apply safe investigation reasoning without offensive activity
+Digital activity almost always leaves traces.
 
-## Key Terms
-- Evidence
-- Integrity
-- Timeline
-- Documentation
+Every time someone uses a computer or device, the system records certain actions.  
+These records help investigators understand what happened during an incident.
 
-## Safe Disclaimer
-This course does not teach hacking, exploitation, malware, or unauthorized system access.
+This is where logs and digital traces become important.
+
+## What Logs Are
+
+Logs are records created by systems that track activity and events.
+
+Many systems automatically create logs to monitor what happens.
+
+Examples of logs:
+- system login records
+- application activity logs
+- network connection logs
+- security alerts
+
+Logs help investigators see who accessed a system and when.
+
+## Examples of Digital Traces
+
+Digital traces appear in many places, including:
+- browser history
+- file access records
+- login attempts
+- USB device connections
+- network traffic records
+
+These traces help investigators reconstruct what actions occurred.
+
+## Why Logs Are Important in Investigations
+
+Logs help answer questions such as:
+- When did suspicious activity start?
+- Which user account was involved?
+- What systems were accessed?
+- What actions were performed?
+
+By reviewing logs, investigators can build a timeline of events.
+
+## Real-World Example
+
+A company detects unusual login activity at night.
+
+Investigators review system logs and discover:
+- a login occurred at 2:14 AM
+- the account accessed sensitive files
+- the login came from an unfamiliar location
+
+These logs help investigators understand what happened and when.
+
+## Key Takeaways
+
+- Logs are records that track system activity.
+- Many devices automatically record logs.
+- Digital traces can appear in files, logins, and network activity.
+- Logs help investigators reconstruct events during an incident.
 
 </LessonShell>
 

@@ -1,0 +1,41 @@
+---
+id: final-quiz
+title: "Final Quiz"
+---
+
+import Link from '@docusaurus/Link';
+import QuizAccessGate from '@site/src/components/Quiz/QuizAccessGate';
+
+# Final Quiz
+
+<QuizAccessGate
+  course="forensics"
+  requiredLessonId="lesson7"
+  redirectTo="/forensics"
+  fallback={<p>Checking final quiz access...</p>}
+>
+
+You have completed all lessons in the Digital Forensics course.  
+Before completing the course, test your understanding of the key concepts you learned.
+
+**Course Recap**
+
+- what digital forensics is
+- digital evidence and chain of custody
+- logs and digital traces
+- metadata information
+- hashing and file integrity
+- investigation process
+
+<div className="sl-lesson-actions-card">
+  <div className="sl-lesson-actions-row">
+    <Link to="/digital-forensics/quiz" className="sl-btn-primary sl-lesson-actions-primary">
+      Attempt Quiz
+    </Link>
+    <Link to="/forensics/lesson7" className="sl-btn-ghost">
+      Back to Lesson 7
+    </Link>
+  </div>
+</div>
+
+</QuizAccessGate>

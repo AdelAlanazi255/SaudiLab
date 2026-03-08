@@ -1,35 +1,89 @@
 ---
 id: lesson5
-title: "Lesson 5: Timelines"
+title: "Lesson 5: File Integrity & Hashing"
 ---
 
 import LessonShell from '@site/src/components/LessonShell';
 
-# Lesson 5: Timelines
+# Lesson 5: File Integrity & Hashing
 
 <LessonShell
   course="forensics"
   current={5}
-  total={10}
+  total={7}
   lessonId="lesson5"
 >
 
-This lesson introduces **Timelines** in a beginner-safe, analytical context.
-Focus is on evidence handling, interpretation, and responsible investigation practices.
+## Introduction
 
-## Objectives
-- Understand this forensic concept at a practical, defensive level
-- Identify what evidence can support or refute a claim
-- Apply safe investigation reasoning without offensive activity
+Investigators must ensure that evidence has not been changed during an investigation.
 
-## Key Terms
-- Evidence
-- Integrity
-- Timeline
-- Documentation
+Digital evidence can be modified, copied, or altered.  
+Because of this, investigators use methods to confirm that files remain exactly the same.
 
-## Safe Disclaimer
-This course does not teach hacking, exploitation, malware, or unauthorized system access.
+One of the most important methods is hashing.
+
+## What File Integrity Means
+
+File integrity means that a file has not been altered or tampered with.
+
+When investigators collect digital evidence, they must preserve the file exactly as it was found.
+
+If the file changes even slightly, the evidence could become unreliable.
+
+Maintaining file integrity ensures that investigators are analyzing the original data.
+
+## What Hashing Is
+
+A hash is like a digital fingerprint for a file.
+
+When a file is processed through a hashing algorithm, it produces a unique string of characters.
+
+This string represents the contents of that file.
+
+If even one tiny change is made to the file, the hash value will change completely.
+
+## Why Hashing Is Used in Forensics
+
+Investigators calculate the hash of a file when they first collect it.
+
+Later, they calculate the hash again.
+
+If both hashes match, the file has not been changed.
+
+If the hashes are different, the file may have been modified.
+
+This process helps confirm that the evidence remains trustworthy.
+
+## Common Hash Types
+
+Common hashing methods include:
+- MD5
+- SHA-1
+- SHA-256
+
+These algorithms generate hash values used to verify file integrity.
+
+Investigators use these methods to confirm that evidence remains unchanged during analysis.
+
+## Example Scenario
+
+An investigator collects a suspicious file from a company computer.
+
+They generate a hash value when the file is first collected.
+
+Later, when analyzing the file, they generate the hash again.
+
+Both values match.
+
+This confirms that the file was not altered during the investigation.
+
+## Key Takeaways
+
+- File integrity means ensuring evidence has not been changed.
+- Hashing creates a unique digital fingerprint for files.
+- Even a small change in a file will produce a different hash.
+- Investigators use hashes to verify that digital evidence remains trustworthy.
 
 </LessonShell>
 

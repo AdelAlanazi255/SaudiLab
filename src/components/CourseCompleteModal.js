@@ -74,6 +74,15 @@ export default function CourseCompleteModal({
       ctaLabel: 'Start Digital Forensics',
       ctaTo: '/forensics',
     },
+    '/forensics': {
+      heading: 'Digital Forensics Course Completed',
+      message: "You've completed the core concepts for investigating digital incidents and evidence.",
+      prompt: 'Ready for the next course?',
+      nextTitle: 'Blue Team Fundamentals',
+      nextSubtext: 'Learn how defenders monitor, detect, and respond to threats.',
+      ctaLabel: 'Start Blue Team Fundamentals',
+      ctaTo: '/blueteam',
+    },
   };
 
   const richContent = richContentByCourse[lessonsHref] || null;

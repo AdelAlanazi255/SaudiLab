@@ -141,7 +141,7 @@ export const COURSES = {
     id: 'forensics',
     title: 'Digital Forensics',
     hasTryPages: false,
-    totalLessons: 10,
+    totalLessons: 7,
     access: {
       freeMode: true,
       paidFromLesson: 1,
@@ -152,7 +152,7 @@ export const COURSES = {
     id: 'blueteam',
     title: 'Blue Team Fundamentals',
     hasTryPages: false,
-    totalLessons: 10,
+    totalLessons: 7,
     access: {
       freeMode: true,
       paidFromLesson: 1,
