@@ -1,0 +1,46 @@
+---
+id: final-quiz
+title: "Final Quiz"
+---
+
+import Link from '@docusaurus/Link';
+import QuizAccessGate from '@site/src/components/Quiz/QuizAccessGate';
+
+# Final Quiz
+
+<QuizAccessGate
+  course="cse"
+  requiredLessonId="cse_lesson8"
+  redirectTo="/cse"
+  fallback={<p>Checking final quiz access...</p>}
+>
+
+You finished all Cyber Security Essentials lessons.  
+You are now ready to test your understanding.
+
+**Course Recap**
+
+You covered:
+- cyber security fundamentals
+- CIA Triad (Confidentiality, Integrity, Availability)
+- cyber attacks
+- malware and ransomware
+- authentication and access control
+- encryption basics
+- network and device security
+- security best practices
+
+Take the final quiz when you are ready.
+
+<div className="sl-lesson-actions-card">
+  <div className="sl-lesson-actions-row">
+    <Link to="/cyber-security-essentials/quiz" className="sl-btn-primary sl-lesson-actions-primary">
+      Attempt Quiz
+    </Link>
+    <Link to="/cse/lesson8" className="sl-btn-ghost">
+      Back to Lesson 8
+    </Link>
+  </div>
+</div>
+
+</QuizAccessGate>

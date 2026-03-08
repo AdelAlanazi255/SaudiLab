@@ -1,38 +1,94 @@
 ---
 id: lesson5
-title: "Lesson 5: Safe Downloads & Malware Basics"
+title: "Lesson 5: Authentication and Access Control"
 ---
 
 import LessonShell from '@site/src/components/LessonShell';
 
-# Lesson 5: Safe Downloads & Malware Basics
+# Lesson 5: Authentication and Access Control
 
 <LessonShell
   course="cse"
   current={5}
-  total={10}
+  total={8}
   lessonId="cse_lesson5"
 >
 
-What you'll learn
-- The core beginner security concept for this topic
-- How common unsafe choices increase risk
-- One practical action to improve daily protection
+## 1. Why Systems Need Login Security
+
+Many systems store sensitive information, such as:
+- personal data
+- financial records
+- company documents
+
+Because of this, systems must verify who is trying to access them.
+
+Login systems help prevent unauthorized users from accessing protected information.
 
 ---
 
-Short explanation
+## 2. What is Authentication
 
-Adjust app permissions and observe privacy risk changes in real time.
-The interactive section is intentionally lightweight so beginners can focus on cause and effect.
+Authentication is the process of verifying **who someone is**.
+
+When you log into an account, the system checks your credentials to confirm your identity.
+
+Examples of authentication methods include:
+- passwords
+- PIN codes
+- verification codes
+
+Authentication helps ensure only authorized users can access accounts.
 
 ---
 
-Key takeaways
-- Verify before you trust urgent prompts
-- Prefer safer defaults and consistent habits
-- Small improvements reduce risk quickly
+## 3. Types of Authentication
+
+Common authentication methods include:
+
+- Something you know: passwords or PIN codes.
+- Something you have: a phone that receives a verification code.
+- Something you are: fingerprint or facial recognition.
+
+Many services combine methods for stronger security.
+
+Example:
+Two-factor authentication (2FA) requires both a password and a verification code.
+
+---
+
+## 4. What is Access Control
+
+Access control determines **what users are allowed to do** after they log in.
+
+Different users can have different permissions.
+
+Example:
+- a normal employee may only view certain documents
+- an administrator may be able to modify or delete them
+
+Access control helps limit damage if an account is compromised.
+
+---
+
+## 5. Why Access Control Matters
+
+Not every user should have full access to a system.
+
+Limiting access reduces security risks.
+
+Example:
+If attackers gain access to a low-privilege account, access controls can prevent access to critical systems.
+
+Organizations often use the **principle of least privilege**, meaning users only receive the permissions they need.
+
+---
+
+## 6. Key Takeaways
+
+- Authentication verifies a user's identity.
+- Access control determines what a user is allowed to do.
+- Systems often use multiple authentication methods for stronger security.
+- Limiting user permissions helps reduce security risks.
 
 </LessonShell>
-
----

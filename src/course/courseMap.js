@@ -66,7 +66,7 @@ export const COURSES = {
     id: 'cse',
     title: 'Cyber Security Essentials',
     hasTryPages: false,
-    totalLessons: 10,
+    totalLessons: 8,
     access: {
       freeMode: true,
       paidFromLesson: 1,

@@ -2,7 +2,12 @@ const COURSE_META = {
   html: { label: 'HTML', routeBasePath: '/html', landingRoute: '/html' },
   css: { label: 'CSS', routeBasePath: '/css', landingRoute: '/css' },
   javascript: { label: 'JavaScript', routeBasePath: '/javascript', landingRoute: '/javascript' },
-  cse: { label: 'Cyber Security Essentials', routeBasePath: '/cse', landingRoute: '/cse' },
+  cse: {
+    label: 'Cyber Security Essentials',
+    routeBasePath: '/cse',
+    landingRoute: '/cse',
+    finalQuizRoute: '/cyber-security-essentials/final-quiz',
+  },
   crypto: { label: 'Cryptography', routeBasePath: '/cryptography', landingRoute: '/cryptography' },
   websecurity: { label: 'Web Security', routeBasePath: '/web-security', landingRoute: '/web-security' },
   networkbasics: { label: 'Network Basics', routeBasePath: '/network-basics', landingRoute: '/network-basics' },
@@ -61,6 +66,10 @@ export function getCourseKeyFromPathname(pathname = '') {
   for (const [courseKey, meta] of Object.entries(COURSE_META)) {
     const base = meta.routeBasePath.toLowerCase();
     if (clean === base || clean.startsWith(`${base}/`)) {
+      return courseKey;
+    }
+    const quizPath = normalizePath(meta.finalQuizRoute || '').toLowerCase();
+    if (quizPath && (clean === quizPath || clean.startsWith(`${quizPath}/`))) {
       return courseKey;
     }
   }

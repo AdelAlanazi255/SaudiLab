@@ -1,38 +1,108 @@
 ---
 id: lesson2
-title: "Lesson 2: Strong Passwords & Password Managers"
+title: "Lesson 2: The CIA Triad (Confidentiality, Integrity, Availability)"
 ---
 
 import LessonShell from '@site/src/components/LessonShell';
 
-# Lesson 2: Strong Passwords & Password Managers
+# Lesson 2: The CIA Triad (Confidentiality, Integrity, Availability)
 
 <LessonShell
   course="cse"
   current={2}
-  total={10}
+  total={8}
   lessonId="cse_lesson2"
 >
 
-What you'll learn
-- The core beginner security concept for this topic
-- How common unsafe choices increase risk
-- One practical action to improve daily protection
+## 1. The Goal of Cyber Security
+
+Cyber security is not only about stopping hackers.
+
+The main goal is to protect information and systems.
+
+Security professionals often use a model called the **CIA Triad** to describe the core goals of cybersecurity.
+
+The CIA Triad stands for:
+- Confidentiality
+- Integrity
+- Availability
+
+These three principles guide how systems and data are protected.
 
 ---
 
-Short explanation
+## 2. Confidentiality
 
-Use a live password checker to understand length, numbers, and symbols.
-The interactive section is intentionally lightweight so beginners can focus on cause and effect.
+Confidentiality means information should only be available to authorized people.
+
+Examples:
+- personal email should only be accessible to the account owner
+- medical records should only be accessible to doctors and authorized staff
+- bank account information should remain private
+
+Attackers often try to break confidentiality by stealing sensitive information.
+
+Common threats to confidentiality include:
+- data breaches
+- stolen passwords
+- phishing attacks
 
 ---
 
-Key takeaways
-- Verify before you trust urgent prompts
-- Prefer safer defaults and consistent habits
-- Small improvements reduce risk quickly
+## 3. Integrity
+
+Integrity means information must remain accurate and trustworthy.
+
+Data should not be changed or deleted by unauthorized users.
+
+Example:
+If someone changes the amount in a bank transaction, the data has lost integrity.
+
+Organizations must protect important data from unauthorized changes.
+
+Examples of threats to integrity:
+- unauthorized modifications
+- malware altering files
+- attackers manipulating data
+
+---
+
+## 4. Availability
+
+Availability means systems and data must be accessible when needed.
+
+If systems are unavailable, users cannot access services or information.
+
+Examples:
+- a company website should remain accessible to customers
+- hospital systems must be available so doctors can access patient information
+
+Examples of threats to availability:
+- system failures
+- ransomware attacks
+- distributed denial-of-service (DDoS) attacks
+
+---
+
+## 5. How the CIA Triad Works Together
+
+Strong cybersecurity protects all three principles at the same time.
+
+Examples:
+- encryption helps protect confidentiality
+- access controls help protect integrity
+- reliable infrastructure helps maintain availability
+
+If one principle fails, security can be compromised.
+
+---
+
+## 6. Key Takeaways
+
+- The CIA Triad defines the core goals of cybersecurity.
+- Confidentiality protects information from unauthorized access.
+- Integrity ensures that data remains accurate and trustworthy.
+- Availability ensures systems and information remain accessible.
+- Cybersecurity systems aim to protect all three principles.
 
 </LessonShell>
-
----

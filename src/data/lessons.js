@@ -38,16 +38,14 @@ const javascriptTitles = [
 ];
 
 const cseTitles = [
-  'Protecting Your First Account',
-  'Strong Passwords & Password Managers',
-  'Multi-Factor Authentication (2FA)',
-  'Phishing & Suspicious Messages',
-  'Safe Downloads & Malware Basics',
-  'Device Updates & Patch Basics',
-  'Public Wi-Fi & Secure Browsing',
-  'Privacy & Permissions (Apps/Browser)',
-  'Backups & Account Recovery',
-  'Putting It Together (Everyday Security Checklist)',
+  'Introduction to Cyber Security',
+  'The CIA Triad (Confidentiality, Integrity, Availability)',
+  'Common Cyber Attacks',
+  'Malware and Ransomware',
+  'Authentication and Access Control',
+  'Encryption Basics',
+  'Network and Device Security',
+  'Security Best Practices',
 ];
 
 const cryptoTitles = [

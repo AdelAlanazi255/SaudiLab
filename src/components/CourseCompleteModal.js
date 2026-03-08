@@ -38,6 +38,15 @@ export default function CourseCompleteModal({
       ctaLabel: 'Start Cyber Security Essentials',
       ctaTo: '/cse',
     },
+    '/cse': {
+      heading: 'Cyber Security Essentials Course Completed',
+      message: "You've built a strong foundation in practical cybersecurity concepts.",
+      prompt: 'Ready to continue to the next course?',
+      nextTitle: 'Security Ethics',
+      nextSubtext: 'Learn the legal and ethical boundaries of security practice.',
+      ctaLabel: 'Start Security Ethics',
+      ctaTo: '/ethics',
+    },
   };
 
   const richContent = richContentByCourse[lessonsHref] || null;

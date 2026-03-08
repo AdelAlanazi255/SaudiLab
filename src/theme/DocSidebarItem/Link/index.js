@@ -1,7 +1,7 @@
 import React from 'react';
 import OriginalLink from '@theme-original/DocSidebarItem/Link';
 import useLessonAccess from '@site/src/hooks/useLessonAccess';
-import { parseDocId } from '@site/src/course/courseMap';
+import { COURSES, parseDocId } from '@site/src/course/courseMap';
 import { getCourseKeyFromPathname } from '@site/src/utils/courseMeta';
 import { isCompleted } from '@site/src/utils/progressKeys';
 import {
@@ -17,7 +17,11 @@ export default function DocSidebarItemLink(props) {
   const href = item?.href || '';
   const courseFromHref = getCourseKeyFromPathname(item?.href || '');
   const parsed = parseDocId(docId, courseFromHref);
-  const isPcsFinalQuizItem = courseFromHref === 'pcs' && /\/final-quiz\/?$/i.test(href);
+  const isFinalQuizItem = Boolean(courseFromHref && /\/final-quiz\/?$/i.test(href));
+  const courseLessons = courseFromHref ? COURSES?.[courseFromHref]?.lessons || [] : [];
+  const finalQuizRequiredLessonId = courseLessons.length > 0
+    ? courseLessons[courseLessons.length - 1]?.lessonId || null
+    : null;
 
   const access = useLessonAccess({
     course: parsed?.course || courseFromHref || null,
@@ -32,12 +36,14 @@ export default function DocSidebarItemLink(props) {
     && !isAdminRuntime(),
   );
   const isGuidedTrackedFinalQuiz = Boolean(
-    isPcsFinalQuizItem
+    isFinalQuizItem
     && isGuidedMode
     && isAuthenticatedRuntime()
     && !isAdminRuntime(),
   );
-  const finalQuizUnlocked = isGuidedTrackedFinalQuiz ? isCompleted('pcs', 'lesson6') : true;
+  const finalQuizUnlocked = isGuidedTrackedFinalQuiz && courseFromHref && finalQuizRequiredLessonId
+    ? isCompleted(courseFromHref, finalQuizRequiredLessonId)
+    : true;
   const shouldLockSidebarLesson = Boolean(
     (isGuidedTrackedLesson && !access.allowed)
     || (isGuidedTrackedFinalQuiz && !finalQuizUnlocked),
