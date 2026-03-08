@@ -130,7 +130,7 @@ export const COURSES = {
     id: 'kalitools',
     title: 'Intro to Security Tools (Kali Linux)',
     hasTryPages: false,
-    totalLessons: 10,
+    totalLessons: 8,
     access: {
       freeMode: true,
       paidFromLesson: 1,

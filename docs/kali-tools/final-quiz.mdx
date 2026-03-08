@@ -1,0 +1,46 @@
+---
+id: final-quiz
+title: "Final Quiz"
+---
+
+import Link from '@docusaurus/Link';
+import QuizAccessGate from '@site/src/components/Quiz/QuizAccessGate';
+
+# Final Quiz
+
+<QuizAccessGate
+  course="kalitools"
+  requiredLessonId="lesson8"
+  redirectTo="/kali"
+  fallback={<p>Checking final quiz access...</p>}
+>
+
+You finished all Intro to Security Tools (Kali Linux) lessons.  
+You are now ready to test your knowledge.
+
+**Course Recap**
+
+You covered:
+- what Kali Linux is
+- Kali Linux environment
+- reconnaissance mindset
+- network scanning concepts (Nmap)
+- web traffic inspection (Burp Suite)
+- network traffic analysis (Wireshark)
+- exploitation frameworks (Metasploit)
+- ethical and legal boundaries
+
+Take the final quiz when you are ready.
+
+<div className="sl-lesson-actions-card">
+  <div className="sl-lesson-actions-row">
+    <Link to="/intro-to-kali/quiz" className="sl-btn-primary sl-lesson-actions-primary">
+      Attempt Quiz
+    </Link>
+    <Link to="/kali/lesson8" className="sl-btn-ghost">
+      Back to Lesson 8
+    </Link>
+  </div>
+</div>
+
+</QuizAccessGate>

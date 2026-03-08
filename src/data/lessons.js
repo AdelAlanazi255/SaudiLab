@@ -105,16 +105,14 @@ const pcsTitles = [
 ];
 
 const kaliToolsTitles = [
-  'Kali Linux Overview',
-  'Terminal Basics for Security',
-  'Nmap Concept',
-  'Burp Suite Concept',
-  'Wireshark Basics',
-  'Password Attacks Concept',
-  'Metasploit Concept',
-  'Recon & OSINT Mindset',
-  'Putting Tools Together',
-  'Ethics & Legal Reminder',
+  'What is Kali Linux',
+  'Kali Linux Environment',
+  'Reconnaissance Mindset',
+  'Network Scanning Concept (Nmap)',
+  'Web Security Testing Concept (Burp Suite)',
+  'Network Analysis (Wireshark)',
+  'Exploitation Frameworks (Metasploit)',
+  'Ethics & Legal Boundaries',
 ];
 
 const forensicsTitles = [

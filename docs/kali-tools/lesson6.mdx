@@ -1,35 +1,94 @@
 ---
 id: lesson6
-title: "Lesson 6: Password Attacks Concept"
+title: "Lesson 6: Network Analysis (Wireshark)"
 ---
 
 import LessonShell from '@site/src/components/LessonShell';
 
-# Lesson 6: Password Attacks Concept
+# Lesson 6: Network Analysis (Wireshark)
 
 <LessonShell
   course="kalitools"
   current={6}
-  total={10}
+  total={8}
   lessonId="lesson6"
 >
 
-This lesson provides a safe conceptual introduction to **Password Attacks Concept**.
-All activities in this course are simulation-based and must only be used for authorized learning contexts.
+## 1. What is Network Traffic
 
-## Objectives
-- Understand the concept and where it fits in a defensive security workflow
-- Recognize common terminology without performing real-world testing
-- Apply safe decision-making and ethical boundaries
+When devices communicate over a network, they exchange data.
 
-## Key Terms
-- Authorization
-- Scope
-- Simulation
-- Responsible behavior
+Examples include:
+- opening a website
+- sending an email
+- streaming a video
+- logging into an online account
 
-## Safe Disclaimer
-No real scanning, exploitation, brute forcing, payloads, or targeting is performed or instructed in this lesson.
+All of these actions create network traffic.
+
+Network traffic is the flow of data between devices.
+
+---
+
+## 2. Why Network Traffic Analysis Matters
+
+Analyzing network traffic helps security professionals understand what is happening inside a network.
+
+Network analysis can help teams:
+- detect unusual activity
+- identify suspicious communication
+- troubleshoot connectivity problems
+- investigate security incidents
+
+Understanding traffic patterns helps identify potential threats.
+
+---
+
+## 3. What Are Packets
+
+Network data is split into small pieces called packets.
+
+Packets include information such as:
+- where data is coming from
+- where data is going
+- what type of data is being sent
+
+When devices communicate, they exchange many packets.
+
+---
+
+## 4. What Wireshark Does
+
+Wireshark is a network analysis tool used by security professionals.
+
+It allows users to capture and observe packets moving across a network.
+
+By analyzing packets, professionals can understand how systems communicate and spot unusual behavior.
+
+Wireshark is widely used for troubleshooting, security analysis, and research.
+
+---
+
+## 5. Why Security Professionals Analyze Network Traffic
+
+Network analysis is important for threat detection.
+
+Security teams analyze traffic to:
+- detect suspicious patterns
+- identify possible attacks
+- investigate system behavior
+- understand how systems communicate
+
+This helps organizations improve network security.
+
+---
+
+## 6. Key Takeaways
+
+- Network traffic is the flow of data between devices.
+- Data travels across networks in small pieces called packets.
+- Network traffic analysis helps detect suspicious activity.
+- Wireshark is a tool used to observe and analyze network traffic.
+- Security professionals analyze traffic to understand behavior and detect threats.
 
 </LessonShell>
-

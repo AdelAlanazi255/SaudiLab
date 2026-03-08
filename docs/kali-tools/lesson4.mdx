@@ -1,35 +1,96 @@
 ---
 id: lesson4
-title: "Lesson 4: Burp Suite Concept"
+title: "Lesson 4: Network Scanning Concept (Nmap)"
 ---
 
 import LessonShell from '@site/src/components/LessonShell';
 
-# Lesson 4: Burp Suite Concept
+# Lesson 4: Network Scanning Concept (Nmap)
 
 <LessonShell
   course="kalitools"
   current={4}
-  total={10}
+  total={8}
   lessonId="lesson4"
 >
 
-This lesson provides a safe conceptual introduction to **Burp Suite Concept**.
-All activities in this course are simulation-based and must only be used for authorized learning contexts.
+## 1. What is Network Scanning
 
-## Objectives
-- Understand the concept and where it fits in a defensive security workflow
-- Recognize common terminology without performing real-world testing
-- Apply safe decision-making and ethical boundaries
+Network scanning is the process of discovering devices and services connected to a network.
 
-## Key Terms
-- Authorization
-- Scope
-- Simulation
-- Responsible behavior
+Security professionals use scanning to understand what systems exist and how they communicate.
 
-## Safe Disclaimer
-No real scanning, exploitation, brute forcing, payloads, or targeting is performed or instructed in this lesson.
+Scanning helps answer questions like:
+- what devices are online
+- what services are running
+- which ports are open
+
+---
+
+## 2. Why Network Scanning is Important
+
+Understanding the network is a key step in security testing.
+
+Organizations need to know:
+- which systems are exposed to the internet
+- which services are running
+- whether unnecessary services are open
+
+If unnecessary services are exposed, the risk of attack can increase.
+
+---
+
+## 3. Understanding Ports and Services
+
+Ports are communication endpoints used by software services.
+
+Examples of common services include:
+- web services
+- email services
+- remote access services
+
+Each service listens on a specific port.
+
+If a port is open, a service is available to communicate.
+
+---
+
+## 4. What Nmap Does
+
+Nmap is a well-known network scanning tool used by security professionals.
+
+It helps identify:
+- active devices on a network
+- open ports
+- running services
+- potential network exposure
+
+Nmap helps teams build a clearer view of network structure.
+
+---
+
+## 5. Why Security Professionals Use Network Scanning
+
+Ethical security professionals use network scanning to identify possible risks.
+
+Network scanning helps teams:
+- discover unknown systems
+- identify exposed services
+- verify network configurations
+- improve security defenses
+
+Scanning systems without permission can be illegal.
+
+Authorization is always required before testing.
+
+---
+
+## 6. Key Takeaways
+
+- Network scanning helps discover systems and services on a network.
+- Ports are communication points used by network services.
+- Open ports indicate that services are available.
+- Tools like Nmap help security professionals understand network exposure.
+- Network scanning must always be performed with authorization.
 
 </LessonShell>
-

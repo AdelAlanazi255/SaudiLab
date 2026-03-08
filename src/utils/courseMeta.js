@@ -28,7 +28,12 @@ const COURSE_META = {
     landingRoute: '/pcs',
     finalQuizRoute: '/personal-cyber-safety/quiz',
   },
-  kalitools: { label: 'Intro to Security Tools (Kali Linux)', routeBasePath: '/kali', landingRoute: '/kali' },
+  kalitools: {
+    label: 'Intro to Security Tools (Kali Linux)',
+    routeBasePath: '/kali',
+    landingRoute: '/kali',
+    finalQuizRoute: '/intro-to-kali/final-quiz',
+  },
   forensics: { label: 'Digital Forensics', routeBasePath: '/forensics', landingRoute: '/forensics' },
   blueteam: { label: 'Blue Team Fundamentals', routeBasePath: '/blueteam', landingRoute: '/blueteam' },
   career: { label: 'Cyber Security Career Paths', routeBasePath: '/career', landingRoute: '/career' },

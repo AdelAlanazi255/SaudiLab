@@ -1,35 +1,96 @@
 ---
 id: lesson5
-title: "Lesson 5: Wireshark Basics"
+title: "Lesson 5: Web Security Testing Concept (Burp Suite)"
 ---
 
 import LessonShell from '@site/src/components/LessonShell';
 
-# Lesson 5: Wireshark Basics
+# Lesson 5: Web Security Testing Concept (Burp Suite)
 
 <LessonShell
   course="kalitools"
   current={5}
-  total={10}
+  total={8}
   lessonId="lesson5"
 >
 
-This lesson provides a safe conceptual introduction to **Wireshark Basics**.
-All activities in this course are simulation-based and must only be used for authorized learning contexts.
+## 1. How Websites Communicate
 
-## Objectives
-- Understand the concept and where it fits in a defensive security workflow
-- Recognize common terminology without performing real-world testing
-- Apply safe decision-making and ethical boundaries
+When users interact with a website, the browser sends requests to a server.
 
-## Key Terms
-- Authorization
-- Scope
-- Simulation
-- Responsible behavior
+The server processes each request and sends a response back to the browser.
 
-## Safe Disclaimer
-No real scanning, exploitation, brute forcing, payloads, or targeting is performed or instructed in this lesson.
+Examples of actions that create requests include:
+- logging into an account
+- submitting a form
+- loading a webpage
+- uploading information
+
+Every browser interaction uses this request-and-response process.
+
+---
+
+## 2. Understanding Requests and Responses
+
+A request can include information such as:
+- which page the user wants
+- data submitted through forms
+- cookies or session information
+
+The server then sends a response, which may include:
+- webpage content
+- confirmation messages
+- account data
+- error messages
+
+Understanding this flow is important for analyzing web applications.
+
+---
+
+## 3. Why Web Traffic Inspection Matters
+
+Security professionals inspect web traffic to better understand application behavior.
+
+By analyzing traffic, they can:
+- see how data is transmitted
+- identify unexpected behavior
+- detect possible security weaknesses
+
+Inspection helps teams understand how an application handles user input and requests.
+
+---
+
+## 4. What Burp Suite Does
+
+Burp Suite is a web security testing tool used by security professionals.
+
+It works as an intermediary between the browser and the web server.
+
+This allows professionals to observe how requests and responses move between the browser and the application.
+
+Burp Suite helps testers analyze web application behavior.
+
+---
+
+## 5. Why Security Professionals Use Web Proxies
+
+A proxy is a middle point between a user and a destination server.
+
+In web security testing, a proxy can help professionals:
+- observe web traffic
+- understand application behavior
+- identify unusual responses or weaknesses
+
+These tools must always be used responsibly and with authorization.
+
+---
+
+## 6. Key Takeaways
+
+- Websites communicate through requests and responses.
+- Every browser interaction sends data to a server.
+- Security professionals inspect web traffic to understand applications.
+- Burp Suite is a tool used to analyze web communication.
+- Web testing tools must always be used with proper authorization.
 
 </LessonShell>
-

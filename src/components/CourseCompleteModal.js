@@ -65,6 +65,15 @@ export default function CourseCompleteModal({
       ctaLabel: 'Start Intro to Kali',
       ctaTo: '/kali',
     },
+    '/kali': {
+      heading: 'Intro to Security Tools (Kali Linux) Course Completed',
+      message: "You've completed the core concepts behind beginner security tools and responsible use.",
+      prompt: 'Ready for the next course?',
+      nextTitle: 'Digital Forensics',
+      nextSubtext: 'Learn how investigators collect and analyze digital evidence.',
+      ctaLabel: 'Start Digital Forensics',
+      ctaTo: '/forensics',
+    },
   };
 
   const richContent = richContentByCourse[lessonsHref] || null;
