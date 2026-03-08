@@ -1,23 +1,91 @@
 ---
 id: lesson6
-title: "Lesson 6: Session Security Basics"
+title: "Lesson 6: Sessions, Cookies & HTTPS"
 ---
 
 import LessonShell from '@site/src/components/LessonShell';
 
-# Lesson 6: Session Security Basics
+# Lesson 6: Sessions, Cookies & HTTPS
 
 <LessonShell
   course="websecurity"
   current={6}
-  total={10}
+  total={7}
   lessonId="lesson6"
 >
 
-This lesson introduces the core concept of **Session Security Basics** in a beginner-friendly format.
+## 1. Why Websites Need Sessions
 
-## Interactive Demo (coming in content phase)
+When users log into a website, the server needs a way to remember who they are as they move between pages.
 
-A guided interactive demo for this lesson will be added in the content phase.
+Without this, users would need to log in again on every page.
+
+Sessions let websites remember users after authentication.
+
+---
+
+## 2. What Cookies Are
+
+Cookies are small pieces of data stored in a user's browser.
+
+Websites use cookies to store information such as:
+- session identifiers
+- user preferences
+- login status
+
+Cookies help websites recognize returning users and keep sessions active.
+
+---
+
+## 3. What Sessions Do
+
+Sessions connect a user's browser to a server-side record.
+
+A session usually works like this:
+
+User logs in  
+Server creates a session  
+Browser receives a session identifier (often in a cookie)  
+Each request sends that identifier back to the server
+
+This allows the server to identify the logged-in user.
+
+---
+
+## 4. Why HTTPS Is Important
+
+HTTPS protects communication between a user's browser and the website.
+
+HTTPS encrypts data while it travels across the internet.
+
+This helps prevent attackers from easily reading or changing information in transit.
+
+Sensitive information protected by HTTPS includes:
+- login credentials
+- personal data
+- session cookies
+- payment details
+
+---
+
+## 5. Risks of Insecure Connections
+
+If a website does not use secure connections, risks can include:
+- attackers intercepting communication
+- session identifiers being stolen
+- sensitive data being exposed
+- users being redirected to malicious content
+
+Using HTTPS helps reduce these risks.
+
+---
+
+## 6. Key Takeaways
+
+- Sessions allow websites to remember logged-in users.
+- Cookies store small pieces of information in the browser.
+- Session identifiers help connect users to server sessions.
+- HTTPS encrypts communication between browsers and websites.
+- Secure connections help protect sensitive information.
 
 </LessonShell>

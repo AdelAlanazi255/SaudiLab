@@ -1,23 +1,93 @@
 ---
 id: lesson7
-title: "Lesson 7: HTTPS and Secure Connections"
+title: "Lesson 7: Secure Website Checklist"
 ---
 
 import LessonShell from '@site/src/components/LessonShell';
 
-# Lesson 7: HTTPS and Secure Connections
+# Lesson 7: Secure Website Checklist
 
 <LessonShell
   course="websecurity"
   current={7}
-  total={10}
+  total={7}
   lessonId="lesson7"
 >
 
-This lesson introduces the core concept of **HTTPS and Secure Connections** in a beginner-friendly format.
+## 1. Why Secure Design Matters
 
-## Interactive Demo (coming in content phase)
+Web security should be considered during website design and development.
 
-A guided interactive demo for this lesson will be added in the content phase.
+Security problems often happen when protection is added too late.
+
+Building security into a system from the start helps reduce vulnerabilities.
+
+Developers should think about how attackers might misuse a system.
+
+---
+
+## 2. Secure Input Handling
+
+Websites should treat all user input carefully.
+
+Important practices include:
+- validating user input
+- sanitizing input
+- limiting unexpected characters
+- preventing unsafe data from being processed
+
+Attackers often use input fields to find weaknesses, so safe input handling is critical.
+
+---
+
+## 3. Strong Authentication and Access Control
+
+Websites must verify identities and control access correctly.
+
+Important practices include:
+- secure login systems
+- strong password policies
+- multi-factor authentication
+- proper authorization checks
+
+Users should only access resources they are allowed to use.
+
+---
+
+## 4. Protecting Sessions and Connections
+
+Websites should maintain user sessions securely.
+
+Best practices include:
+- using secure session management
+- protecting cookies
+- encrypting communication with HTTPS
+- reducing session hijacking risks
+
+Secure connections help protect sensitive data while it travels across the internet.
+
+---
+
+## 5. Keeping Systems Updated
+
+Many attacks target outdated systems.
+
+Important practices include:
+- updating software regularly
+- patching known vulnerabilities
+- monitoring systems for unusual activity
+- maintaining secure server configurations
+
+Regular updates reduce the chance of known weaknesses being exploited.
+
+---
+
+## 6. Key Takeaways
+
+- Web security should be built into systems from the beginning.
+- Websites must carefully validate and sanitize user input.
+- Authentication and authorization protect user accounts.
+- Secure sessions and HTTPS protect communication.
+- Regular updates and maintenance reduce security risks.
 
 </LessonShell>

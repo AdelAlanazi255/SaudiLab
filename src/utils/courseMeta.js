@@ -9,7 +9,12 @@ const COURSE_META = {
     finalQuizRoute: '/cyber-security-essentials/final-quiz',
   },
   crypto: { label: 'Cryptography', routeBasePath: '/cryptography', landingRoute: '/cryptography' },
-  websecurity: { label: 'Web Security', routeBasePath: '/web-security', landingRoute: '/web-security' },
+  websecurity: {
+    label: 'Web Security',
+    routeBasePath: '/web-security',
+    landingRoute: '/web-security',
+    finalQuizRoute: '/web-security/final-quiz',
+  },
   networkbasics: { label: 'Network Basics', routeBasePath: '/network-basics', landingRoute: '/network-basics' },
   ethics: {
     label: 'Security Ethics',

@@ -1,23 +1,89 @@
 ---
 id: lesson4
-title: "Lesson 4: XSS (Cross-Site Scripting) Concepts"
+title: "Lesson 4: XSS Concepts"
 ---
 
 import LessonShell from '@site/src/components/LessonShell';
 
-# Lesson 4: XSS (Cross-Site Scripting) Concepts
+# Lesson 4: XSS Concepts
 
 <LessonShell
   course="websecurity"
   current={4}
-  total={10}
+  total={7}
   lessonId="lesson4"
 >
 
-This lesson introduces the core concept of **XSS (Cross-Site Scripting) Concepts** in a beginner-friendly format.
+## 1. What is Cross-Site Scripting (XSS)
 
-## Interactive Demo (coming in content phase)
+Cross-Site Scripting, often called XSS, is a web security vulnerability where harmful scripts can run in a user's browser through a website.
 
-A guided interactive demo for this lesson will be added in the content phase.
+This can happen when a website displays user input without properly checking or cleaning it.
+
+Instead of showing normal text, the browser may treat that input as code.
+
+---
+
+## 2. How Browsers Execute Scripts
+
+Web browsers automatically run scripts that are part of webpages.
+
+Scripts are often used for:
+- interactive features
+- form validation
+- dynamic content
+- page updates
+
+If harmful scripts are allowed into a page, the browser may run them.
+
+---
+
+## 3. How Unsafe Input Leads to XSS
+
+This connects directly to safe input handling.
+
+If a website:
+- accepts user input
+- stores or displays that input
+- does not sanitize the input
+
+Then an attacker may place harmful scripts into the page.
+
+When other users open that page, their browser may execute the script.
+
+---
+
+## 4. What Can Happen During an XSS Attack
+
+Possible consequences include:
+- stealing session information
+- redirecting users to malicious websites
+- modifying website content
+- collecting user input
+
+These attacks run in the user's browser, which makes them dangerous.
+
+---
+
+## 5. How Developers Prevent XSS
+
+Developers reduce XSS risk by:
+- validating user input
+- sanitizing input
+- escaping special characters
+- using secure frameworks
+- avoiding unsafe rendering of user data
+
+Safe input handling is one of the most important protections.
+
+---
+
+## 6. Key Takeaways
+
+- XSS is a vulnerability where malicious scripts run in a user's browser.
+- It happens when websites display unsafe user input.
+- Browsers automatically execute scripts included in web pages.
+- XSS attacks can steal data or manipulate pages.
+- Proper input validation and sanitization help prevent XSS.
 
 </LessonShell>

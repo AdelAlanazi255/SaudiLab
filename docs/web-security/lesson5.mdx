@@ -10,14 +10,96 @@ import LessonShell from '@site/src/components/LessonShell';
 <LessonShell
   course="websecurity"
   current={5}
-  total={10}
+  total={7}
   lessonId="lesson5"
 >
 
-This lesson introduces the core concept of **Authentication vs Authorization** in a beginner-friendly format.
+## 1. What is Authentication
 
-## Interactive Demo (coming in content phase)
+Authentication is the process of verifying who a user is.
 
-A guided interactive demo for this lesson will be added in the content phase.
+Websites use authentication when users log in.
+
+Examples of authentication methods:
+- username and password
+- email and password
+- one-time verification codes
+- biometric authentication (such as fingerprint or face recognition)
+
+The goal of authentication is to confirm the user's identity.
+
+---
+
+## 2. What is Authorization
+
+Authorization determines what a user is allowed to access or do after authentication.
+
+Even after logging in, users may have different permissions.
+
+Examples:
+- an administrator can manage users
+- a normal user can only view their own account
+- moderators may manage content but not system settings
+
+Authorization controls access to resources and actions.
+
+---
+
+## 3. The Key Difference Between Them
+
+Authentication answers:
+
+"Who are you?"
+
+Authorization answers:
+
+"What are you allowed to do?"
+
+Both are needed to secure websites.
+
+---
+
+## 4. Real-World Website Examples
+
+Example 1:
+
+Logging into an email account.
+
+Authentication:
+Entering the correct email and password.
+
+Authorization:
+Only accessing your own emails.
+
+Example 2:
+
+A website administrator panel.
+
+Authentication:
+Logging in as an admin.
+
+Authorization:
+Access to system management tools.
+
+---
+
+## 5. Common Security Mistakes
+
+Common mistakes include:
+- allowing users to access resources without proper authorization checks
+- exposing admin features to normal users
+- trusting user roles from the browser instead of verifying them on the server
+
+These mistakes can lead to serious security vulnerabilities.
+
+---
+
+## 6. Key Takeaways
+
+- Authentication verifies the identity of a user.
+- Authorization controls what a user is allowed to access.
+- Authentication answers "Who are you?"
+- Authorization answers "What are you allowed to do?"
+- Websites must implement both correctly to stay secure.
 
 </LessonShell>

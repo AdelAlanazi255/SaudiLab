@@ -1,23 +1,103 @@
 ---
 id: lesson2
-title: "Lesson 2: How Websites Are Attacked (Conceptual)"
+title: "Lesson 2: How Websites Get Attacked"
 ---
 
 import LessonShell from '@site/src/components/LessonShell';
 
-# Lesson 2: How Websites Are Attacked (Conceptual)
+# Lesson 2: How Websites Get Attacked
 
 <LessonShell
   course="websecurity"
   current={2}
-  total={10}
+  total={7}
   lessonId="lesson2"
 >
 
-This lesson introduces the core concept of **How Websites Are Attacked (Conceptual)** in a beginner-friendly format.
+## 1. How Attackers Think
 
-## Interactive Demo (coming in content phase)
+Attackers usually look for weaknesses in websites instead of trying to break strong security directly.
 
-A guided interactive demo for this lesson will be added in the content phase.
+Instead of attacking randomly, attackers search for:
+- outdated software
+- weak authentication systems
+- poorly protected data
+- mistakes in website code
+
+If a vulnerability exists, attackers may try to use it.
+
+---
+
+## 2. Websites Are Built from Many Components
+
+Websites are made of multiple parts.
+
+Examples include:
+- the web browser
+- the website front-end
+- the server that processes requests
+- the database storing information
+- authentication systems
+
+Each component can introduce security risks if not designed and maintained carefully.
+
+---
+
+## 3. Common Types of Web Attacks (Conceptual)
+
+Some common categories include:
+
+Input attacks  
+Attackers send unexpected input to a website.
+
+Authentication attacks  
+Attackers try to bypass login systems.
+
+Session attacks  
+Attackers try to take over active user sessions.
+
+Injection-style attacks  
+Attackers try to manipulate how a website processes input.
+
+Developers need careful design and testing to reduce these risks.
+
+---
+
+## 4. Automated Attacks and Bots
+
+Many attacks today are automated.
+
+Attackers often use tools that:
+- scan thousands of websites
+- test login pages
+- search for common vulnerabilities
+
+These automated attacks run continuously across the internet.
+
+This means any website can become a target.
+
+---
+
+## 5. Why Security Mistakes Happen
+
+Security problems often come from simple mistakes.
+
+Examples include:
+- not validating user input
+- weak password rules
+- outdated software
+- poor access control
+
+Web security focuses on finding and fixing these weaknesses before attackers find them.
+
+---
+
+## 6. Key Takeaways
+
+- Attackers search for weaknesses rather than attacking randomly.
+- Websites include many components that must be secured.
+- Web attacks often target input, authentication, or sessions.
+- Automated bots constantly scan the internet for vulnerabilities.
+- Many security problems happen because of simple mistakes.
 
 </LessonShell>

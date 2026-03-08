@@ -64,14 +64,11 @@ const cryptoTitles = [
 
 const webSecurityTitles = [
   'What Web Security Means',
-  'How Websites Are Attacked (Conceptual)',
+  'How Websites Get Attacked',
   'Input Validation Basics',
-  'XSS (Cross-Site Scripting) Concepts',
+  'XSS Concepts',
   'Authentication vs Authorization',
-  'Session Security Basics',
-  'HTTPS and Secure Connections',
-  'Secure Forms and User Input',
-  'Common Developer Security Mistakes',
+  'Sessions, Cookies & HTTPS',
   'Secure Website Checklist',
 ];
 

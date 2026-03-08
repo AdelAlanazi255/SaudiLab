@@ -87,7 +87,7 @@ export const COURSES = {
     id: 'websecurity',
     title: 'Web Security',
     hasTryPages: false,
-    totalLessons: 10,
+    totalLessons: 7,
     access: {
       freeMode: true,
       paidFromLesson: 1,

@@ -56,6 +56,15 @@ export default function CourseCompleteModal({
       ctaLabel: 'Start Web Security',
       ctaTo: '/web-security',
     },
+    '/web-security': {
+      heading: 'Web Security Course Completed',
+      message: "You've learned the core ideas needed to secure websites and web applications.",
+      prompt: 'Ready for the next course?',
+      nextTitle: 'Intro to Kali',
+      nextSubtext: 'Learn security tools and safe workflows in a beginner-friendly way.',
+      ctaLabel: 'Start Intro to Kali',
+      ctaTo: '/kali',
+    },
   };
 
   const richContent = richContentByCourse[lessonsHref] || null;

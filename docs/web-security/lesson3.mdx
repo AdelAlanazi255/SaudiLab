@@ -10,14 +10,90 @@ import LessonShell from '@site/src/components/LessonShell';
 <LessonShell
   course="websecurity"
   current={3}
-  total={10}
+  total={7}
   lessonId="lesson3"
 >
 
-This lesson introduces the core concept of **Input Validation Basics** in a beginner-friendly format.
+## 1. What is User Input
 
-## Interactive Demo (coming in content phase)
+User input is any data a user sends to a website.
 
-A guided interactive demo for this lesson will be added in the content phase.
+Examples include:
+- login forms
+- search bars
+- contact forms
+- comment sections
+- registration forms
+- file uploads
+
+Any place where users type or submit information is user input.
+
+---
+
+## 2. Why User Input Can Be Dangerous
+
+Websites should never fully trust user input.
+
+Attackers can submit unexpected or harmful data into input fields.
+
+If a website processes that data without checks, it can create security problems.
+
+Possible risks include:
+- executing unintended actions
+- exposing sensitive data
+- breaking application logic
+
+User input is one of the most common sources of web vulnerabilities.
+
+---
+
+## 3. What is Input Validation
+
+Input validation means checking whether user input follows expected rules.
+
+Examples of validation rules:
+- an email field must match email format
+- an age field should accept only numbers
+- usernames should follow allowed character rules
+- file uploads must match allowed file types
+
+Validation helps websites accept only appropriate data.
+
+---
+
+## 4. What is Input Sanitization
+
+Validation and sanitization are different but both are important.
+
+Sanitization means cleaning or changing input so it cannot be interpreted as harmful.
+
+Examples include:
+- removing dangerous characters
+- escaping special characters
+- filtering unexpected input
+
+Sanitization helps prevent harmful input from causing problems.
+
+---
+
+## 5. Examples of Unsafe Input Handling
+
+Common mistakes include:
+- trusting input directly from forms
+- displaying user input without checks
+- allowing unexpected characters in fields
+- not filtering uploaded files
+
+These mistakes can create vulnerabilities in websites.
+
+---
+
+## 6. Key Takeaways
+
+- User input is any data submitted by users through a website.
+- Websites should never fully trust user input.
+- Input validation checks whether input follows expected rules.
+- Input sanitization removes or neutralizes dangerous input.
+- Many web vulnerabilities happen because user input is not handled safely.
 
 </LessonShell>

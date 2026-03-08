@@ -1,0 +1,45 @@
+---
+id: final-quiz
+title: "Final Quiz"
+---
+
+import Link from '@docusaurus/Link';
+import QuizAccessGate from '@site/src/components/Quiz/QuizAccessGate';
+
+# Final Quiz
+
+<QuizAccessGate
+  course="websecurity"
+  requiredLessonId="lesson7"
+  redirectTo="/web-security"
+  fallback={<p>Checking final quiz access...</p>}
+>
+
+You finished all Web Security lessons.  
+You are now ready to test your knowledge.
+
+**Course Recap**
+
+You covered:
+- what web security means
+- how websites get attacked
+- input validation basics
+- XSS concepts
+- authentication vs authorization
+- sessions, cookies, and HTTPS
+- secure website checklist
+
+Take the final quiz when you are ready.
+
+<div className="sl-lesson-actions-card">
+  <div className="sl-lesson-actions-row">
+    <Link to="/web-security/quiz" className="sl-btn-primary sl-lesson-actions-primary">
+      Attempt Quiz
+    </Link>
+    <Link to="/web-security/lesson7" className="sl-btn-ghost">
+      Back to Lesson 7
+    </Link>
+  </div>
+</div>
+
+</QuizAccessGate>
