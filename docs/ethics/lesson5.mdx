@@ -1,34 +1,90 @@
 ---
 id: lesson5
-title: "Lesson 5: Privacy, Consent, and Data Responsibility"
+title: "Lesson 5: Responsible Disclosure"
 ---
 
 import LessonShell from '@site/src/components/LessonShell';
 
-# Lesson 5: Privacy, Consent, and Data Responsibility
+# Lesson 5: Responsible Disclosure
 
 <LessonShell
   course="ethics"
   current={5}
-  total={10}
+  total={7}
   lessonId="lesson5"
 >
 
-This lesson explains **Privacy, Consent, and Data Responsibility** with a clear, beginner-friendly ethics focus.
-It emphasizes legal boundaries, responsibility, and safe learning behavior.
+## 1. What is a Vulnerability
 
-## You will learn
-- The core ethical principle behind this topic
-- One common mistake to avoid
-- How to make safer, responsible security decisions
-- Why clear boundaries protect both learners and systems
+A vulnerability is a weakness in a system, application, or network that attackers could exploit.
 
-## Quick Check
-Privacy and consent mean you should: `n- A) Collect all data possible`n- B) Limit data and respect permission`n- C) Ignore user preferences
+Examples of vulnerabilities include:
+- weak authentication systems
+- software bugs
+- misconfigured servers
+- outdated software
 
-<details>
-  <summary>Answer</summary>
-  Correct answer: **B**
-</details>
+Security researchers often discover vulnerabilities during testing or analysis.
+
+---
+
+## 2. What is Responsible Disclosure
+
+Responsible disclosure is the process of reporting a vulnerability to the organization that owns the system.
+
+Instead of exploiting or publicly sharing the vulnerability, researchers notify the organization privately so it can be fixed.
+
+This approach helps protect users and systems from harm.
+
+---
+
+## 3. Why Responsible Disclosure Matters
+
+Responsible disclosure helps prevent vulnerabilities from being abused.
+
+If vulnerabilities are shared publicly before they are fixed, attackers may use them.
+
+Responsible disclosure gives organizations time to patch the issue before details are made public.
+
+This protects both users and organizations.
+
+---
+
+## 4. How Vulnerabilities Are Reported
+
+A common responsible disclosure process looks like this:
+
+A researcher discovers a vulnerability.
+
+The researcher reports it through:
+- a security contact email
+- a responsible disclosure policy
+- a bug bounty platform
+
+The organization investigates the report and works to fix the vulnerability.
+
+After the issue is resolved, the researcher may be credited for the discovery.
+
+---
+
+## 5. Bug Bounty Programs
+
+Some organizations run bug bounty programs that reward security researchers for responsibly reporting vulnerabilities.
+
+Researchers follow the program rules and test only systems within the defined scope.
+
+If a valid vulnerability is found and reported responsibly, the researcher may receive recognition or financial rewards.
+
+Bug bounty programs support ethical security research.
+
+---
+
+## 6. Key Takeaways
+
+- A vulnerability is a weakness that attackers could exploit.
+- Responsible disclosure means reporting vulnerabilities privately to the system owner.
+- Publicly sharing vulnerabilities too early can put users at risk.
+- Organizations use responsible disclosure processes to fix security problems.
+- Bug bounty programs reward ethical vulnerability reporting.
 
 </LessonShell>

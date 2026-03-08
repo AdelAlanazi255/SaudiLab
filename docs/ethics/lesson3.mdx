@@ -1,34 +1,97 @@
 ---
 id: lesson3
-title: "Lesson 3: Authorization & Scope (The #1 Rule)"
+title: "Lesson 3: Authorization and Scope (The #1 Rule)"
 ---
 
 import LessonShell from '@site/src/components/LessonShell';
 
-# Lesson 3: Authorization & Scope (The #1 Rule)
+# Lesson 3: Authorization and Scope (The #1 Rule)
 
 <LessonShell
   course="ethics"
   current={3}
-  total={10}
+  total={7}
   lessonId="lesson3"
 >
 
-This lesson explains **Authorization & Scope (The #1 Rule)** with a clear, beginner-friendly ethics focus.
-It emphasizes legal boundaries, responsibility, and safe learning behavior.
+## 1. The Golden Rule of Security Testing
 
-## You will learn
-- The core ethical principle behind this topic
-- One common mistake to avoid
-- How to make safer, responsible security decisions
-- Why clear boundaries protect both learners and systems
+The most important rule in security testing is:
 
-## Quick Check
-If scope says only one domain is allowed, you should: `n- A) Test related domains too`n- B) Stay strictly in listed scope`n- C) Test employee accounts
+"Never touch what you don't own or don't have permission to test."
 
-<details>
-  <summary>Answer</summary>
-  Correct answer: **B**
-</details>
+This means security professionals must always have authorization before testing any system, website, or application.
+
+Even if someone finds a vulnerability, they must respect system boundaries.
+
+---
+
+## 2. What is Authorization
+
+Authorization means having clear permission to test or access a system.
+
+In professional security work, this permission usually comes from:
+- written agreements
+- security testing contracts
+- bug bounty program rules
+- official testing authorization
+
+Without authorization, accessing systems can be illegal.
+
+---
+
+## 3. What is Scope
+
+Authorization usually includes a defined scope.
+
+Scope defines:
+- which systems can be tested
+- what actions are allowed
+- which methods are permitted
+- which systems are off-limits
+
+Example:
+
+A security tester may be allowed to test a company website but not the company's internal servers.
+
+Testing outside the defined scope is a violation of the rules.
+
+---
+
+## 4. Why Permission Matters
+
+Permission is critical in cyber security.
+
+Reasons include:
+- legal protection
+- respecting system owners
+- avoiding accidental damage
+- maintaining professional trust
+
+Ethical hackers always work within approved boundaries.
+
+---
+
+## 5. Real-World Example
+
+A security researcher discovers a vulnerability on a website.
+
+Incorrect action:
+Attempting to access user data or explore internal systems.
+
+Correct action:
+Reporting the vulnerability through the company's official reporting process or bug bounty program.
+
+This approach respects authorization and scope.
+
+---
+
+## 6. Key Takeaways
+
+- Ethical security testing always requires permission.
+- Authorization is official approval to test a system.
+- Scope defines what systems and actions are allowed.
+- Testing outside approved scope can be illegal.
+- Responsible professionals always respect system boundaries.
 
 </LessonShell>

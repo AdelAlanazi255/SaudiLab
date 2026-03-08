@@ -47,6 +47,15 @@ export default function CourseCompleteModal({
       ctaLabel: 'Start Security Ethics',
       ctaTo: '/ethics',
     },
+    '/ethics': {
+      heading: 'Security Ethics Course Completed',
+      message: "You've learned the ethical and responsible mindset expected in cybersecurity.",
+      prompt: 'Ready for the next course?',
+      nextTitle: 'Web Security',
+      nextSubtext: 'Learn how to identify and prevent common website security risks.',
+      ctaLabel: 'Start Web Security',
+      ctaTo: '/web-security',
+    },
   };
 
   const richContent = richContentByCourse[lessonsHref] || null;

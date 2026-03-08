@@ -1,0 +1,46 @@
+---
+id: final-quiz
+title: "Final Quiz"
+---
+
+import Link from '@docusaurus/Link';
+import QuizAccessGate from '@site/src/components/Quiz/QuizAccessGate';
+
+# Final Quiz
+
+<QuizAccessGate
+  course="ethics"
+  requiredLessonId="lesson7"
+  redirectTo="/ethics"
+  fallback={<p>Checking final quiz access...</p>}
+>
+
+You finished all Security Ethics lessons.  
+You are now ready to test your understanding.
+
+**Course Recap**
+
+You covered:
+- cyber security ethics
+- legal vs illegal hacking
+- white hat, black hat, and gray hat hackers
+- authorization and scope
+- privacy and responsible data handling
+- responsible disclosure
+- ethical security research
+- professional conduct
+
+Take the final quiz when you are ready.
+
+<div className="sl-lesson-actions-card">
+  <div className="sl-lesson-actions-row">
+    <Link to="/security-ethics/quiz" className="sl-btn-primary sl-lesson-actions-primary">
+      Attempt Quiz
+    </Link>
+    <Link to="/ethics/lesson7" className="sl-btn-ghost">
+      Back to Lesson 7
+    </Link>
+  </div>
+</div>
+
+</QuizAccessGate>

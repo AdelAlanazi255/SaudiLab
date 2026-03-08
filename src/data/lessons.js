@@ -89,16 +89,13 @@ const networkBasicsTitles = [
 ];
 
 const ethicsTitles = [
-  'Why Ethics Matters in Cyber Security',
-  'Legal vs Illegal (Clear Boundaries)',
-  'Authorization & Scope (The #1 Rule)',
-  'Responsible Disclosure Basics',
+  'Why Ethics Matter in Cyber Security',
+  'Legal vs Illegal Hacking',
+  'Authorization and Scope (The #1 Rule)',
   'Privacy, Consent, and Data Responsibility',
-  'Security Research vs "Hacking" Myths',
-  'Safe Learning: Labs, Simulations, and What Not To Do',
-  'Real-World Case Studies (Simplified)',
-  'Security Mindset: Attacker vs Defender Thinking',
-  'Personal Code of Conduct + Next Steps',
+  'Responsible Disclosure',
+  'Ethical Security Research',
+  'Professional Conduct and Security Mindset',
 ];
 
 const pcsTitles = [
